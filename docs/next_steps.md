@@ -4,35 +4,35 @@
 
 1. **[UI] Agregar favicon y meta tags**
    - Archivos: `frontend/public/`, `frontend/index.html`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `frontend`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `frontend`
 
 2. **[Docs] Mejorar README con badges**
    - Archivos: `README.md`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `documentation`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `documentation`
 
 3. **[UI] Crear componente Loading spinner**
    - Archivos: `frontend/src/components/ui/Loading.jsx`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `frontend`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `frontend`
 
 4. **[UI] Crear página 404 personalizada**
    - Archivos: `frontend/src/pages/NotFound.jsx`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `frontend`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `frontend`
 
 5. **[Docs] Traducir README al inglés**
    - Archivos: `README.en.md`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `documentation`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `documentation`
 
 6. **[UI] Agregar footer con links a redes sociales**
    - Archivos: `frontend/src/components/layout/Footer.jsx`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `frontend`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `frontend`
 
 7. **[Docs] Crear CULTURAL_CONTEXT.md con historia del certamen**
    - Archivos: `docs/CULTURAL_CONTEXT.md`
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `documentation`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `documentation`
 
 8. **[UI] Agregar animaciones de entrada a las páginas**
    - Archivos: CSS/Tailwind configs
-   - Etiquetas: `good-first-issue`, `hacktoberfest`, `frontend`
+   - Etiquetas: `good first issue`, `hacktoberfest`, `frontend`
 
 ### Intermediate Issues (8-10)
 
