@@ -1,0 +1,39 @@
+{
+  "name": "vota-flor-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Sistema de votación comunitaria para eventos culturales - Backend API",
+  "author": "Dev Night Talk Villahermosa",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:seed": "node prisma/seed.js",
+    "prisma:reset": "prisma migrate reset",
+    "lint": "eslint src --ext js",
+    "lint:fix": "eslint src --ext js --fix",
+    "format": "prettier --write \"src/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\""
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8",
+    "@prisma/client": "^5.18.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "prisma": "^5.18.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.3"
+  }
+}

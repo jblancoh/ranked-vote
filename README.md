@@ -84,7 +84,21 @@ cd ..
 npm run dev
 ```
 
-El frontend estará disponible en http://localhost:5173 y el backend en http://localhost:3000.
+### Ejecución con Script
+
+Para facilitar el desarrollo, puedes usar el script `start-dev.sh` que se crea al ejecutar `scripts/setup.sh`.
+
+Este script inicia tanto el frontend como el backend.
+
+```bash
+# Otorga permisos de ejecución si es necesario
+chmod +x scripts/start-dev.sh
+
+# Inicia el entorno de desarrollo
+./scripts/start-dev.sh
+```
+
+El frontend estará disponible en http://localhost:5173 y el backend en http://localhost:5001.
 Para instrucciones detalladas, consulta nuestra Guía de Instalación.
 
 📁 Estructura del Proyecto
