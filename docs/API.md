@@ -2,7 +2,7 @@
 
 API RESTful para el sistema de votación comunitaria Vota Flor.
 
-**Base URL:** `http://localhost:5000/api` (desarrollo)  
+**Base URL:** `http://localhost:5001/api` (desarrollo)  
 **Producción:** URL pendiente
 
 ---
@@ -441,11 +441,11 @@ Obtiene tendencias de votación en tiempo real.
 
 ```javascript
 // Obtener candidatas
-const response = await fetch('http://localhost:5000/api/candidates?eventId=clxxx123')
+const response = await fetch('http://localhost:5001/api/candidates?eventId=clxxx123')
 const data = await response.json()
 
 // Votar
-const voteResponse = await fetch('http://localhost:5000/api/votes', {
+const voteResponse = await fetch('http://localhost:5001/api/votes', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -465,10 +465,10 @@ const voteResponse = await fetch('http://localhost:5000/api/votes', {
 
 ```bash
 # Obtener resultados
-curl http://localhost:5000/api/results?eventId=clxxx123
+curl http://localhost:5001/api/results?eventId=clxxx123
 
 # Votar
-curl -X POST http://localhost:5000/api/votes \
+curl -X POST http://localhost:5001/api/votes \
   -H "Content-Type: application/json" \
   -d '{
     "eventId": "clxxx123",
