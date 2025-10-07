@@ -27,13 +27,12 @@ const Results = () => {
 
   // Preparar datos para gráfica
   const getChartData = () => {
-    if (!results || !results.topCandidates) return []
+    if (!results || !results.results) return []
 
-    return results.topCandidates.slice(0, 8).map(item => ({
-      name: item.candidate.name.split(' ')[0], // Solo primer nombre
+    return results.results.slice(0, 8).map(item => ({
+      name: item.candidateName.split(' ')[1] || item.candidateName, // Segundo nombre o nombre completo
       puntos: item.totalPoints,
-      votos: item.breakdown.first + item.breakdown.second + item.breakdown.third +
-        item.breakdown.fourth + item.breakdown.fifth,
+      votos: item.votes.total,
     }))
   }
 
@@ -41,13 +40,15 @@ const Results = () => {
   const getPieData = () => {
     if (!results || !results.results) return []
 
-    const positionKey = selectedPosition === 'all' ? 'first' : selectedPosition
-    const positionData = results.results[`${positionKey}Place`] || []
+    const positionKey = selectedPosition === 'all' ? 'firstPlace' : `${selectedPosition}Place`
 
-    return positionData.slice(0, 5).map(item => ({
-      name: item.candidate.name,
-      value: item.votes,
-    }))
+    return results.results
+      .filter(item => item.votes[positionKey] > 0)
+      .slice(0, 5)
+      .map(item => ({
+        name: item.candidateName,
+        value: item.votes[positionKey],
+      }))
   }
 
   if (loading) {
@@ -114,7 +115,7 @@ const Results = () => {
               <div>
                 <p className="text-sm text-gray-600 mb-1">Candidatas</p>
                 <p className="text-3xl font-display font-bold text-secondary-600">
-                  {results?.topCandidates?.length || 0}
+                  {results?.results?.length || 0}
                 </p>
               </div>
               <div className="w-12 h-12 bg-secondary-100 rounded-full flex items-center justify-center">
@@ -128,8 +129,8 @@ const Results = () => {
               <div>
                 <p className="text-sm text-gray-600 mb-1">Última Actualización</p>
                 <p className="text-sm font-medium text-gray-900">
-                  {results?.lastUpdated
-                    ? new Date(results.lastUpdated).toLocaleString('es-MX')
+                  {results?.calculatedAt
+                    ? new Date(results.calculatedAt).toLocaleString('es-MX')
                     : 'Hace un momento'}
                 </p>
               </div>
@@ -161,7 +162,7 @@ const Results = () => {
               </p>
 
               <div className="space-y-3">
-                {results?.topCandidates?.slice(0, 10).map((item, index) => (
+                {results?.results?.slice(0, 10).map((item, index) => (
                   <div
                     key={item.candidateId}
                     className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -172,14 +173,14 @@ const Results = () => {
                             index === 2 ? 'bg-orange-600' :
                               'bg-primary-500'
                         }`}>
-                        {index + 1}
+                        {item.position}
                       </div>
                       <div className="flex-grow">
                         <h3 className="font-bold text-gray-900">
-                          {item.candidate.name}
+                          {item.candidateName}
                         </h3>
                         <p className="text-xs text-gray-600">
-                          {item.candidate.municipality}
+                          {item.municipality}
                         </p>
                       </div>
                       <div className="text-right">
@@ -192,7 +193,7 @@ const Results = () => {
 
                     {/* Breakdown */}
                     <div className="mt-3 grid grid-cols-5 gap-1">
-                      {['first', 'second', 'third', 'fourth', 'fifth'].map((pos, idx) => (
+                      {['firstPlace', 'secondPlace', 'thirdPlace', 'fourthPlace', 'fifthPlace'].map((pos, idx) => (
                         <div key={pos} className="text-center">
                           <div className={`text-xs font-bold ${idx === 0 ? 'text-yellow-600' :
                               idx === 1 ? 'text-gray-600' :
@@ -200,7 +201,7 @@ const Results = () => {
                                   idx === 3 ? 'text-blue-600' :
                                     'text-green-600'
                             }`}>
-                            {item.breakdown[pos]}
+                            {item.votes[pos]}
                           </div>
                           <div className="text-[10px] text-gray-500">
                             {idx + 1}°
@@ -295,34 +296,34 @@ const Results = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {results?.topCandidates?.map((item, index) => (
+                    {results?.results?.map((item) => (
                       <tr
                         key={item.candidateId}
                         className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                       >
                         <td className="py-3 px-2 text-sm font-bold text-gray-700">
-                          {index + 1}
+                          {item.position}
                         </td>
                         <td className="py-3 px-2 text-sm font-medium text-gray-900">
-                          {item.candidate.name}
+                          {item.candidateName}
                         </td>
                         <td className="py-3 px-2 text-sm text-gray-600">
-                          {item.candidate.municipality}
+                          {item.municipality}
                         </td>
                         <td className="py-3 px-2 text-center text-sm text-yellow-600 font-medium">
-                          {item.breakdown.first}
+                          {item.votes.firstPlace}
                         </td>
                         <td className="py-3 px-2 text-center text-sm text-gray-600 font-medium">
-                          {item.breakdown.second}
+                          {item.votes.secondPlace}
                         </td>
                         <td className="py-3 px-2 text-center text-sm text-orange-600 font-medium">
-                          {item.breakdown.third}
+                          {item.votes.thirdPlace}
                         </td>
                         <td className="py-3 px-2 text-center text-sm text-blue-600 font-medium">
-                          {item.breakdown.fourth}
+                          {item.votes.fourthPlace}
                         </td>
                         <td className="py-3 px-2 text-center text-sm text-green-600 font-medium">
-                          {item.breakdown.fifth}
+                          {item.votes.fifthPlace}
                         </td>
                         <td className="py-3 px-2 text-right text-sm font-bold text-primary-600">
                           {item.totalPoints}
