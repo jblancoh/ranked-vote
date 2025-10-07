@@ -36,9 +36,14 @@ export const calculateResults = async (req, res, next) => {
     });
 
     if (votes.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'No hay votos registrados aún'
+      return res.json({
+        success: true,
+        data: {
+          totalVotes: 0,
+          maxPossiblePoints: 0,
+          calculatedAt: new Date(),
+          results: []
+        }
       });
     }
 

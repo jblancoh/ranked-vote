@@ -10,7 +10,7 @@ export const candidatesApi = {
   getAll: async (params = {}) => {
     try {
       const response = await api.get('/candidates', { params })
-      return response // Interceptor already returns response.data
+      return response.data // Extract the candidates array from response.data
     } catch (error) {
       throw error
     }
@@ -24,7 +24,7 @@ export const candidatesApi = {
       const response = await api.get('/candidates', {
         params: { active: true }
       })
-      return response // Interceptor already returns response.data
+      return response.data // Extract the candidates array from response.data
     } catch (error) {
       throw error
     }
@@ -36,7 +36,7 @@ export const candidatesApi = {
   getById: async (id) => {
     try {
       const response = await api.get(`/candidates/${id}`)
-      return response // Interceptor already returns response.data
+      return response.data // Extract the candidate object from response.data
     } catch (error) {
       throw error
     }
@@ -48,7 +48,7 @@ export const candidatesApi = {
   create: async (candidateData) => {
     try {
       const response = await api.post('/candidates', candidateData)
-      return response // Interceptor already returns response.data
+      return response.data // Extract the created candidate from response.data
     } catch (error) {
       throw error
     }
@@ -60,7 +60,7 @@ export const candidatesApi = {
   update: async (id, candidateData) => {
     try {
       const response = await api.put(`/candidates/${id}`, candidateData)
-      return response // Interceptor already returns response.data
+      return response.data // Extract the updated candidate from response.data
     } catch (error) {
       throw error
     }
@@ -72,7 +72,7 @@ export const candidatesApi = {
   delete: async (id) => {
     try {
       const response = await api.delete(`/candidates/${id}`)
-      return response // Interceptor already returns response.data
+      return response.data // Extract the result from response.data
     } catch (error) {
       throw error
     }
@@ -84,7 +84,7 @@ export const candidatesApi = {
   toggleStatus: async (id) => {
     try {
       const response = await api.patch(`/candidates/${id}/toggle`)
-      return response // Interceptor already returns response.data
+      return response.data // Extract the updated candidate from response.data
     } catch (error) {
       throw error
     }
