@@ -19,7 +19,28 @@ const getClientIp = (req) => {
  */
 export const submitVote = async (req, res, next) => {
   try {
-    const { firstPlace, secondPlace, thirdPlace, fourthPlace, fifthPlace, voterEmail } = req.body;
+    // Accept both formats: firstPlace/first, secondPlace/second, etc.
+    const {
+      firstPlace: fp,
+      secondPlace: sp,
+      thirdPlace: tp,
+      fourthPlace: fop,
+      fifthPlace: fip,
+      first,
+      second,
+      third,
+      fourth,
+      fifth,
+      voterEmail,
+      voterName
+    } = req.body;
+
+    const firstPlace = fp || first;
+    const secondPlace = sp || second;
+    const thirdPlace = tp || third;
+    const fourthPlace = fop || fourth;
+    const fifthPlace = fip || fifth;
+
     const voterIp = getClientIp(req);
 
     // Check if IP has already voted

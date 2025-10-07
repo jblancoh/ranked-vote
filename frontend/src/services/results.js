@@ -10,7 +10,7 @@ export const resultsApi = {
   getResults: async () => {
     try {
       const response = await api.get('/results/calculate')
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -24,7 +24,7 @@ export const resultsApi = {
       const response = await api.get('/results/top', {
         params: { limit }
       })
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -36,7 +36,7 @@ export const resultsApi = {
   getCandidateResult: async (candidateId) => {
     try {
       const response = await api.get(`/results/candidate/${candidateId}`)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -48,7 +48,7 @@ export const resultsApi = {
   getSavedResults: async () => {
     try {
       const response = await api.get('/results')
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }

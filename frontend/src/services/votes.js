@@ -10,7 +10,7 @@ export const votesApi = {
   submit: async (voteData) => {
     try {
       const response = await api.post('/votes', voteData)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -22,7 +22,7 @@ export const votesApi = {
   checkVote: async () => {
     try {
       const response = await api.get('/votes/check')
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -34,7 +34,7 @@ export const votesApi = {
   getCount: async () => {
     try {
       const response = await api.get('/votes/count')
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }

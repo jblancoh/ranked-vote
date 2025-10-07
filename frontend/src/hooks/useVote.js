@@ -11,9 +11,10 @@ export const useVote = (eventId = null) => {
 
   const checkIfVoted = useCallback(async () => {
     try {
-      const result = await votesApi.checkVote(eventId)
-      setHasVoted(result.hasVoted)
-      return result
+      const response = await votesApi.checkVote(eventId)
+      // API returns { success: true, hasVoted: boolean, voteDate: date }
+      setHasVoted(response.hasVoted)
+      return response
     } catch (err) {
       console.error('Error checking vote:', err)
       return { hasVoted: false }
@@ -25,13 +26,13 @@ export const useVote = (eventId = null) => {
       setLoading(true)
       setError(null)
 
-      const result = await votesApi.submit({
+      const response = await votesApi.submit({
         eventId: eventId || voteData.eventId,
         ...voteData,
       })
 
       setHasVoted(true)
-      return result
+      return response
     } catch (err) {
       setError(err.message || 'Error al enviar el voto')
       throw err

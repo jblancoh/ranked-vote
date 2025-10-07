@@ -10,7 +10,7 @@ export const eventsApi = {
   getAll: async (params = {}) => {
     try {
       const response = await api.get('/events', { params })
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -22,7 +22,7 @@ export const eventsApi = {
   getCurrent: async () => {
     try {
       const response = await api.get('/events/current')
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -34,7 +34,7 @@ export const eventsApi = {
   getById: async (id) => {
     try {
       const response = await api.get(`/events/${id}`)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -46,7 +46,7 @@ export const eventsApi = {
   create: async (eventData) => {
     try {
       const response = await api.post('/events', eventData)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -58,7 +58,7 @@ export const eventsApi = {
   update: async (id, eventData) => {
     try {
       const response = await api.put(`/events/${id}`, eventData)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -70,7 +70,7 @@ export const eventsApi = {
   delete: async (id) => {
     try {
       const response = await api.delete(`/events/${id}`)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }
@@ -82,7 +82,7 @@ export const eventsApi = {
   toggleVoting: async (id) => {
     try {
       const response = await api.patch(`/events/${id}/voting`)
-      return response.data
+      return response // Interceptor already returns response.data
     } catch (error) {
       throw error
     }

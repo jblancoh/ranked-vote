@@ -13,8 +13,9 @@ export const useResults = (eventId = null) => {
     try {
       setLoading(true)
       setError(null)
-      const data = await resultsApi.getResults(eventId)
-      setResults(data)
+      const response = await resultsApi.getResults(eventId)
+      // API returns { success: true, data: { results: [...], totalVotes: N, ... } }
+      setResults(response.data)
     } catch (err) {
       setError(err.message || 'Error al cargar resultados')
       console.error('Error fetching results:', err)
