@@ -324,7 +324,7 @@ const About = () => {
         <div className="container-custom text-center">
           <Calendar className="mx-auto mb-4" size={48} />
           <h2 className="text-3xl font-display font-bold mb-4">
-            Flor de Tabasco 2025
+            Flor de Tabasco 2026
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Forma parte de esta hermosa tradición tabasqueña

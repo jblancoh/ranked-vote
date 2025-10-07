@@ -53,7 +53,7 @@ const handlePrismaError = (err, res) => {
         field: err.meta?.target
       });
 
-    case 'P2025':
+    case 'P2026':
       return res.status(404).json({
         success: false,
         message: 'Registro no encontrado'

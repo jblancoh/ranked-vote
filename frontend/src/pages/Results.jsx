@@ -89,7 +89,7 @@ const Results = () => {
             📊 Resultados en Tiempo Real
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Predicciones de la comunidad para el Certamen Flor de Tabasco 2025
+            Predicciones de la comunidad para el Certamen Flor de Tabasco 2026
           </p>
         </div>
 
@@ -342,7 +342,7 @@ const Results = () => {
             ¿Aún no has votado?
           </h3>
           <p className="text-gray-600 mb-6">
-            Participa en la predicción del Certamen Flor de Tabasco 2025
+            Participa en la predicción del Certamen Flor de Tabasco 2026
           </p>
           <a href="/vote" className="btn-primary text-lg px-8 py-4">
             Hacer mi Predicción

@@ -484,4 +484,4 @@ Tu tiempo y esfuerzo son muy apreciados. Juntos estamos construyendo algo especi
 
 ---
 
-*Última actualización: Octubre 2025*
+*Última actualización: Octubre 2026*

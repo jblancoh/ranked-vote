@@ -57,7 +57,7 @@ const Footer = () => {
                 <h3 className="text-lg font-display font-bold text-gradient">
                   Vota Flor
                 </h3>
-                <p className="text-xs text-gray-500">Tabasco 2025</p>
+                <p className="text-xs text-gray-500">Tabasco 2026</p>
               </div>
             </div>
             <p className="text-gray-600 text-sm mb-4">

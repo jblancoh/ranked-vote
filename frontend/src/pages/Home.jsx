@@ -9,7 +9,7 @@ const Home = () => {
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
-              🌺 Vota Flor 2025
+              🌺 Vota Flor 2026
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-white/90">
               Participa en las predicciones del Certamen Flor de Tabasco
@@ -116,7 +116,7 @@ const Home = () => {
           </h2>
           <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
             Únete a la comunidad y comparte tu predicción para el
-            Certamen Flor de Tabasco 2025
+            Certamen Flor de Tabasco 2026
           </p>
           <Link to="/vote" className="btn-primary text-lg px-8 py-4">
             Hacer mi Predicción Ahora

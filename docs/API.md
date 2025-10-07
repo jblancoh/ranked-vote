@@ -45,16 +45,16 @@ Obtiene todos los eventos.
   "data": [
     {
       "id": "clxxx123",
-      "name": "Flor de Tabasco 2025",
+      "name": "Flor de Tabasco 2026",
       "description": "Certamen anual...",
-      "year": 2025,
-      "startDate": "2025-04-01T00:00:00.000Z",
-      "endDate": "2025-04-30T23:59:59.999Z",
-      "votingStart": "2025-04-01T00:00:00.000Z",
-      "votingEnd": "2025-04-25T23:59:59.999Z",
+      "year": 2026,
+      "startDate": "2026-04-01T00:00:00.000Z",
+      "endDate": "2026-04-30T23:59:59.999Z",
+      "votingStart": "2026-04-01T00:00:00.000Z",
+      "votingEnd": "2026-04-25T23:59:59.999Z",
       "active": true,
-      "createdAt": "2025-01-01T00:00:00.000Z",
-      "updatedAt": "2025-01-01T00:00:00.000Z"
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
     }
   ],
   "count": 1
@@ -73,17 +73,17 @@ Obtiene un evento específico por ID.
   "success": true,
   "data": {
     "id": "clxxx123",
-    "name": "Flor de Tabasco 2025",
+    "name": "Flor de Tabasco 2026",
     "description": "Certamen anual...",
-    "year": 2025,
-    "startDate": "2025-04-01T00:00:00.000Z",
-    "endDate": "2025-04-30T23:59:59.999Z",
-    "votingStart": "2025-04-01T00:00:00.000Z",
-    "votingEnd": "2025-04-25T23:59:59.999Z",
+    "year": 2026,
+    "startDate": "2026-04-01T00:00:00.000Z",
+    "endDate": "2026-04-30T23:59:59.999Z",
+    "votingStart": "2026-04-01T00:00:00.000Z",
+    "votingEnd": "2026-04-25T23:59:59.999Z",
     "active": true,
     "candidates": [...],
-    "createdAt": "2025-01-01T00:00:00.000Z",
-    "updatedAt": "2025-01-01T00:00:00.000Z"
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
   }
 }
 ```
@@ -116,8 +116,8 @@ Obtiene todas las candidatas.
       "bio": "Representante del municipio...",
       "orderNumber": 1,
       "active": true,
-      "createdAt": "2025-01-15T00:00:00.000Z",
-      "updatedAt": "2025-01-15T00:00:00.000Z"
+      "createdAt": "2026-01-15T00:00:00.000Z",
+      "updatedAt": "2026-01-15T00:00:00.000Z"
     }
   ],
   "count": 17
@@ -144,8 +144,8 @@ Obtiene una candidata específica por ID.
     "bio": "Representante del municipio...",
     "orderNumber": 1,
     "active": true,
-    "createdAt": "2025-01-15T00:00:00.000Z",
-    "updatedAt": "2025-01-15T00:00:00.000Z"
+    "createdAt": "2026-01-15T00:00:00.000Z",
+    "updatedAt": "2026-01-15T00:00:00.000Z"
   }
 }
 ```
@@ -189,7 +189,7 @@ Crea un nuevo voto.
     "voterIp": "192.168.1.1",
     "voterEmail": "opcional@example.com",
     "voterName": "Juan Pérez",
-    "createdAt": "2025-10-06T19:30:00.000Z"
+    "createdAt": "2026-10-06T19:30:00.000Z"
   }
 }
 ```
@@ -242,7 +242,7 @@ Verifica si un usuario ya votó.
 {
   "success": true,
   "hasVoted": true,
-  "voteDate": "2025-10-06T19:30:00.000Z"
+  "voteDate": "2026-10-06T19:30:00.000Z"
 }
 ```
 
@@ -299,7 +299,7 @@ Obtiene los resultados agregados de un evento.
         }
       }
     ],
-    "lastUpdated": "2025-10-06T20:00:00.000Z"
+    "lastUpdated": "2026-10-06T20:00:00.000Z"
   }
 }
 ```
@@ -323,12 +323,12 @@ Obtiene tendencias de votación en tiempo real.
     "interval": "day",
     "trends": [
       {
-        "date": "2025-10-01",
+        "date": "2026-10-01",
         "votes": 43,
         "cumulative": 43
       },
       {
-        "date": "2025-10-02",
+        "date": "2026-10-02",
         "votes": 87,
         "cumulative": 130
       }
@@ -488,4 +488,4 @@ curl -X POST http://localhost:5001/api/votes \
 
 ---
 
-*Última actualización: Octubre 2025*
+*Última actualización: Octubre 2026*

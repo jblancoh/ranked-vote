@@ -47,7 +47,7 @@ model Vote {
 
 model Event {
   id          String   @id @default(cuid())
-  name        String   // "Flor de Tabasco 2025"
+  name        String   // "Flor de Tabasco 2026"
   description String?
   startDate   DateTime
   endDate     DateTime

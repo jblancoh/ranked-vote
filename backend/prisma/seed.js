@@ -8,10 +8,10 @@ async function main() {
   // 1. Crear un evento
   const event = await prisma.event.create({
     data: {
-      name: 'Flor de Tabasco 2025',
-      description: 'Elección de la Flor de Tabasco 2025',
-      startDate: new Date('2025-04-01T00:00:00Z'),
-      endDate: new Date('2025-04-30T23:59:59Z'),
+      name: 'Flor de Tabasco 2026',
+      description: 'Elección de la Flor de Tabasco 2026',
+      startDate: new Date('2026-04-01T00:00:00Z'),
+      endDate: new Date('2026-04-30T23:59:59Z'),
       active: true,
       votingOpen: true,
     },
