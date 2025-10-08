@@ -54,52 +54,40 @@ Esta plataforma fue creada por [Dev Night Talk Villahermosa](https://www.meetup.
 
 ## 📖 Inicio Rápido
 
-### Prerequisitos
+### 🎯 Instalación Automática (Recomendado)
 
-- Node.js 18+
-- npm o yarn
-- Cuenta de Supabase (tier gratuito disponible)
+La forma más fácil de empezar. Solo necesitas **Node.js 18+** instalado.
 
-### Instalación
 ```bash
-# Clonar el repositorio
+# 1. Clonar el repositorio
 git clone https://github.com/dev-night-talk/ranked-vote.git
 cd ranked-vote
 
-# Instalar dependencias para todos los paquetes
-npm install
-
-# Configurar variables de entorno
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
-
-# Configura tus credenciales de Supabase en backend/.env
-
-# Ejecutar migraciones de base de datos
-cd backend
-npm run prisma:migrate
-
-# Iniciar servidores de desarrollo (desde la raíz)
-cd ..
-npm run dev
+# 2. Ejecutar instalación automática
+./scripts/setup.sh
 ```
 
-### Ejecución con Script
+El script te guiará paso a paso para:
+- ✅ Instalar todas las dependencias
+- ✅ Configurar la base de datos (Supabase gratis o PostgreSQL local)
+- ✅ Crear los archivos de configuración
+- ✅ Preparar todo para funcionar
 
-Para facilitar el desarrollo, puedes usar el script `start-dev.sh` que se crea al ejecutar `scripts/setup.sh`.
-
-Este script inicia tanto el frontend como el backend.
+### 🚀 Iniciar el Proyecto
 
 ```bash
-# Otorga permisos de ejecución si es necesario
-chmod +x scripts/start-dev.sh
-
-# Inicia el entorno de desarrollo
 ./scripts/start-dev.sh
 ```
 
-El frontend estará disponible en http://localhost:5173 y el backend en http://localhost:5001.
-Para instrucciones detalladas, consulta nuestra Guía de Instalación.
+¡Eso es todo! Abre tu navegador en:
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:5001
+
+### 📚 Más Información
+
+- **Guía Rápida**: [`INICIO_RAPIDO.md`](INICIO_RAPIDO.md) - Instrucciones paso a paso
+- **Documentación Completa**: [`docs/SETUP_MULTITENANT.md`](docs/SETUP_MULTITENANT.md) - Detalles técnicos
+- **Contribuir**: [`CONTRIBUTING.md`](CONTRIBUTING.md) - Cómo colaborar
 
 📁 Estructura del Proyecto
 ```

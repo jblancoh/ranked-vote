@@ -1,18 +1,20 @@
 #!/bin/bash
 
-# 🌺 Vota Flor - Setup Script
-# Este script configura el proyecto completo automáticamente
+# 🌺 Vota Flor - Configuración Automática
+# Este script instala y configura TODO automáticamente
+# Solo necesitas ejecutarlo una vez
 
-set -e  # Exit on error
+set -e  # Detener si hay errores
 
-# Colors for output
+# Colores para mensajes bonitos
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+PURPLE='\033[0;35m'
+NC='\033[0m' # Sin color
 
-# Function to print colored output
+# Funciones para imprimir mensajes
 print_info() {
     echo -e "${BLUE}ℹ️  $1${NC}"
 }
@@ -29,224 +31,300 @@ print_error() {
     echo -e "${RED}❌ $1${NC}"
 }
 
-print_header() {
-    echo -e "${GREEN}"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "  🌺 Vota Flor - Setup Automático"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo -e "${NC}"
+print_step() {
+    echo -e "${PURPLE}▶️  $1${NC}"
 }
 
-# Check if Node.js is installed
+print_header() {
+    clear
+    echo -e "${GREEN}"
+    echo "╔════════════════════════════════════════════╗"
+    echo "║                                            ║"
+    echo "║      🌺 VOTA FLOR - Instalación Fácil     ║"
+    echo "║                                            ║"
+    echo "╚════════════════════════════════════════════╝"
+    echo -e "${NC}"
+    echo ""
+}
+
+# Verificar Node.js
 check_node() {
-    print_info "Verificando Node.js..."
+    print_step "Paso 1/6: Verificando Node.js..."
     if ! command -v node &> /dev/null; then
-        print_error "Node.js no está instalado. Por favor instala Node.js 18+ primero."
+        print_error "Node.js NO está instalado"
+        echo ""
+        echo "Por favor descarga e instala Node.js desde:"
+        echo "👉 https://nodejs.org (versión LTS recomendada)"
+        echo ""
         exit 1
     fi
-    
+
     NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
     if [ "$NODE_VERSION" -lt 18 ]; then
-        print_error "Node.js versión 18 o superior es requerida. Versión actual: $(node -v)"
+        print_error "Necesitas Node.js versión 18 o superior"
+        echo "Tienes: $(node -v)"
+        echo "Descarga la última versión desde: https://nodejs.org"
         exit 1
     fi
-    
-    print_success "Node.js $(node -v) detectado"
+
+    print_success "Node.js $(node -v) instalado correctamente"
 }
 
-# Check if npm is installed
+# Verificar npm
 check_npm() {
-    print_info "Verificando npm..."
     if ! command -v npm &> /dev/null; then
-        print_error "npm no está instalado."
+        print_error "npm no está instalado"
         exit 1
     fi
-    print_success "npm $(npm -v) detectado"
+    print_success "npm $(npm -v) disponible"
 }
 
-# Setup Frontend
+# Configurar Frontend
 setup_frontend() {
-    print_info "Configurando Frontend..."
-    
+    print_step "Paso 2/6: Instalando Frontend (interfaz web)..."
+
     cd frontend
-    
-    # Install dependencies
-    print_info "Instalando dependencias del frontend..."
-    npm install
-    
-    # Copy env file
+
+    print_info "Descargando dependencias del frontend..."
+    npm install --silent
+
+    # Crear archivo .env si no existe
     if [ ! -f .env ]; then
-        print_info "Creando archivo .env..."
         cp .env.example .env
-        print_warning "Por favor edita frontend/.env con tus variables de entorno"
+        print_success "Archivo de configuración frontend creado"
     else
-        print_warning "frontend/.env ya existe, saltando..."
+        print_info "Configuración frontend ya existe ✓"
     fi
-    
+
     cd ..
-    print_success "Frontend configurado"
+    print_success "Frontend instalado correctamente"
 }
 
-# Setup Backend
+# Configurar Backend
 setup_backend() {
-    print_info "Configurando Backend..."
-    
+    print_step "Paso 3/6: Instalando Backend (servidor)..."
+
     cd backend
-    
-    # Install dependencies
-    print_info "Instalando dependencias del backend..."
-    npm install
-    
-    # Copy env file
+
+    print_info "Descargando dependencias del backend..."
+    npm install --silent
+
+    # Crear archivo .env si no existe
     if [ ! -f .env ]; then
-        print_info "Creando archivo .env..."
         cp .env.example .env
-        print_warning "Por favor edita backend/.env con tu DATABASE_URL de Supabase"
+        print_success "Archivo de configuración backend creado"
+        print_warning "Necesitarás configurar tu base de datos en: backend/.env"
     else
-        print_warning "backend/.env ya existe, saltando..."
+        print_info "Configuración backend ya existe ✓"
     fi
-    
-    # Generate Prisma Client
-    print_info "Generando Prisma Client..."
-    npm run prisma:generate
-    
+
+    # Generar Prisma Client
+    print_info "Preparando base de datos..."
+    npm run prisma:generate --silent
+
     cd ..
-    print_success "Backend configurado"
+    print_success "Backend instalado correctamente"
 }
 
-# Setup Database
+# Configurar Base de Datos
 setup_database() {
-    print_info "¿Deseas configurar la base de datos ahora? (y/n)"
-    read -r response
-    
-    if [[ "$response" =~ ^[Yy]$ ]]; then
-        cd backend
-        
-        print_warning "Asegúrate de tener tu DATABASE_URL configurada en backend/.env"
-        print_info "Presiona Enter para continuar o Ctrl+C para cancelar..."
-        read -r
-        
-        # Run migrations
-        print_info "Ejecutando migraciones..."
-        npm run prisma:migrate
-        
-        # Seed database
-        print_info "¿Deseas poblar la base de datos con datos de ejemplo? (y/n)"
-        read -r seed_response
-        
-        if [[ "$seed_response" =~ ^[Yy]$ ]]; then
-            print_info "Poblando base de datos..."
+    print_step "Paso 4/6: Configurando Base de Datos..."
+    echo ""
+    print_warning "⚠️  IMPORTANTE: Necesitas una base de datos PostgreSQL"
+    echo ""
+    echo "Opciones disponibles:"
+    echo "  1. Usar Supabase (gratis, en la nube) - RECOMENDADO"
+    echo "  2. Usar PostgreSQL local (si ya lo tienes instalado)"
+    echo "  3. Configurar más tarde"
+    echo ""
+    echo -n "¿Qué opción prefieres? (1/2/3): "
+    read -r db_option
+
+    case $db_option in
+        1)
+            echo ""
+            print_info "📚 Para usar Supabase (GRATIS):"
+            echo "   1. Abre: https://supabase.com"
+            echo "   2. Crea una cuenta (gratis)"
+            echo "   3. Crea un nuevo proyecto"
+            echo "   4. Ve a Settings → Database"
+            echo "   5. Copia la 'Connection String' (URI mode)"
+            echo ""
+            echo -n "¿Ya tienes tu URL de Supabase? (y/n): "
+            read -r has_url
+
+            if [[ "$has_url" =~ ^[Yy]$ ]]; then
+                echo -n "Pega tu DATABASE_URL aquí: "
+                read -r db_url
+
+                cd backend
+                # Actualizar .env con la URL
+                if grep -q "^DATABASE_URL=" .env; then
+                    sed -i.bak "s|^DATABASE_URL=.*|DATABASE_URL=\"$db_url\"|" .env
+                else
+                    echo "DATABASE_URL=\"$db_url\"" >> .env
+                fi
+                rm -f .env.bak
+
+                print_success "URL de base de datos configurada"
+
+                # Ejecutar migraciones
+                print_info "Creando tablas en la base de datos..."
+                npm run prisma:migrate dev --name init_setup
+
+                print_info "Agregando datos de ejemplo..."
+                npm run prisma:seed
+
+                cd ..
+                print_success "Base de datos lista para usar"
+            else
+                print_warning "Configura tu DATABASE_URL en backend/.env cuando estés listo"
+            fi
+            ;;
+        2)
+            echo ""
+            print_info "Para PostgreSQL local:"
+            echo "   Tu URL será algo como:"
+            echo "   postgresql://postgres:tu_password@localhost:5432/ranked_vote"
+            echo ""
+            echo -n "¿Ya creaste la base de datos 'ranked_vote'? (y/n): "
+            read -r db_exists
+
+            if [[ ! "$db_exists" =~ ^[Yy]$ ]]; then
+                print_info "Ejecuta estos comandos primero:"
+                echo "   psql -U postgres"
+                echo "   CREATE DATABASE ranked_vote;"
+                echo "   \\q"
+                echo ""
+                print_warning "Luego ejecuta este script de nuevo"
+                exit 0
+            fi
+
+            echo -n "Pega tu DATABASE_URL: "
+            read -r db_url
+
+            cd backend
+            if grep -q "^DATABASE_URL=" .env; then
+                sed -i.bak "s|^DATABASE_URL=.*|DATABASE_URL=\"$db_url\"|" .env
+            else
+                echo "DATABASE_URL=\"$db_url\"" >> .env
+            fi
+            rm -f .env.bak
+
+            print_info "Creando tablas..."
+            npm run prisma:migrate dev --name init_setup
+
+            print_info "Agregando datos de ejemplo..."
             npm run prisma:seed
-            print_success "Base de datos poblada con datos de ejemplo"
-        fi
-        
-        cd ..
-        print_success "Base de datos configurada"
+
+            cd ..
+            print_success "Base de datos configurada"
+            ;;
+        3)
+            print_warning "Base de datos no configurada"
+            echo ""
+            print_info "Cuando estés listo, sigue la guía en:"
+            echo "   docs/SETUP_MULTITENANT.md"
+            ;;
+        *)
+            print_error "Opción inválida"
+            exit 1
+            ;;
+    esac
+}
+
+# Crear script de inicio
+create_start_script() {
+    print_step "Paso 5/6: Creando script de inicio rápido..."
+
+    # El script ya existe en scripts/start-dev.sh
+    if [ -f "scripts/start-dev.sh" ]; then
+        chmod +x scripts/start-dev.sh
+        print_success "Script de inicio listo"
     else
-        print_warning "Saltando configuración de base de datos"
-        print_info "Puedes configurarla más tarde con:"
-        echo "  cd backend"
-        echo "  npm run prisma:migrate"
-        echo "  npm run prisma:seed"
+        print_warning "Script de inicio no encontrado"
     fi
 }
 
-# Create helpful scripts
-create_dev_scripts() {
-    print_info "Creando scripts de desarrollo..."
-    
-    # Create start-dev.sh
-    cat > start-dev.sh << 'EOF'
-#!/bin/bash
-# Start both frontend and backend in development mode
-
-echo "🌺 Starting Vota Flor in development mode..."
-
-# Start backend
-echo "Starting Backend..."
-cd backend
-npm run dev &
-BACKEND_PID=$!
-
-# Wait a bit for backend to start
-sleep 3
-
-# Start frontend
-echo "Starting Frontend..."
-cd ../frontend
-npm run dev &
-FRONTEND_PID=$!
-
-# Wait for both processes
-wait $BACKEND_PID $FRONTEND_PID
-EOF
-    
-    chmod +x start-dev.sh
-    print_success "Script start-dev.sh creado"
-}
-
-# Final instructions
+# Instrucciones finales
 print_final_instructions() {
+    print_step "Paso 6/6: ¡Todo listo! 🎉"
     echo ""
-    echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}  🎉 ¡Setup Completado!${NC}"
-    echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${GREEN}╔════════════════════════════════════════════╗${NC}"
+    echo -e "${GREEN}║                                            ║${NC}"
+    echo -e "${GREEN}║         ✨ INSTALACIÓN COMPLETADA ✨       ║${NC}"
+    echo -e "${GREEN}║                                            ║${NC}"
+    echo -e "${GREEN}╚════════════════════════════════════════════╝${NC}"
     echo ""
-    echo -e "${BLUE}📋 Próximos Pasos:${NC}"
+
+    # Verificar si la BD está configurada
+    if grep -q "^DATABASE_URL=\"postgresql://" backend/.env 2>/dev/null; then
+        DB_CONFIGURED=true
+    else
+        DB_CONFIGURED=false
+    fi
+
+    if [ "$DB_CONFIGURED" = true ]; then
+        echo -e "${GREEN}✅ Todo configurado y listo para usar${NC}"
+        echo ""
+        echo -e "${BLUE}🚀 Para iniciar el proyecto:${NC}"
+        echo ""
+        echo -e "   ${YELLOW}./scripts/start-dev.sh${NC}"
+        echo ""
+        echo -e "${BLUE}📱 Luego abre tu navegador en:${NC}"
+        echo -e "   ${YELLOW}http://localhost:5173${NC}"
+        echo ""
+    else
+        echo -e "${YELLOW}⚠️  Falta configurar la base de datos${NC}"
+        echo ""
+        echo -e "${BLUE}Pasos finales:${NC}"
+        echo ""
+        echo "1. Configura tu base de datos en:"
+        echo -e "   ${YELLOW}backend/.env${NC}"
+        echo ""
+        echo "2. Ejecuta las migraciones:"
+        echo -e "   ${YELLOW}cd backend${NC}"
+        echo -e "   ${YELLOW}npm run prisma:migrate dev${NC}"
+        echo -e "   ${YELLOW}npm run prisma:seed${NC}"
+        echo ""
+        echo "3. Inicia el proyecto:"
+        echo -e "   ${YELLOW}cd ..${NC}"
+        echo -e "   ${YELLOW}./scripts/start-dev.sh${NC}"
+        echo ""
+    fi
+
+    echo -e "${BLUE}📚 Ayuda adicional:${NC}"
+    echo -e "   Documentación completa: ${YELLOW}docs/SETUP_MULTITENANT.md${NC}"
+    echo -e "   Script de inicio: ${YELLOW}./scripts/start-dev.sh${NC}"
     echo ""
-    echo -e "1. Configura tus variables de entorno:"
-    echo -e "   - Edita: ${YELLOW}frontend/.env${NC}"
-    echo -e "   - Edita: ${YELLOW}backend/.env${NC}"
-    echo ""
-    echo -e "2. Si no lo hiciste, configura la base de datos:"
-    echo -e "   ${YELLOW}cd backend${NC}"
-    echo -e "   ${YELLOW}npm run prisma:migrate${NC}"
-    echo -e "   ${YELLOW}npm run prisma:seed${NC}"
-    echo ""
-    echo -e "3. Inicia el proyecto en modo desarrollo:"
-    echo ""
-    echo -e "   Opción A - Todo junto:"
-    echo -e "   ${YELLOW}./start-dev.sh${NC}"
-    echo ""
-    echo -e "   Opción B - Separado (2 terminales):"
-    echo -e "   Terminal 1: ${YELLOW}cd backend && npm run dev${NC}"
-    echo -e "   Terminal 2: ${YELLOW}cd frontend && npm run dev${NC}"
-    echo ""
-    echo -e "4. Abre tu navegador:"
-    echo -e "   Frontend: ${YELLOW}http://localhost:5173${NC}"
-    echo -e "   Backend API: ${YELLOW}http://localhost:5001${NC}"
-    echo ""
-    echo -e "${BLUE}📚 Recursos:${NC}"
-    echo -e "   - Documentación: ${YELLOW}./docs/${NC}"
-    echo -e "   - Contribuir: ${YELLOW}./CONTRIBUTING.md${NC}"
-    echo -e "   - Issues: ${YELLOW}https://github.com/dev-night-talk/vota-flor/issues${NC}"
-    echo ""
-    echo -e "${GREEN}Happy coding! 🚀${NC}"
+    echo -e "${GREEN}¡Gracias por usar Vota Flor! 🌺${NC}"
     echo ""
 }
 
-# Main execution
+# Ejecución principal
 main() {
     print_header
-    
-    # Check prerequisites
+
+    # Verificar prerequisitos
     check_node
     check_npm
-    
+
     echo ""
-    
-    # Setup components
+
+    # Instalar componentes
     setup_frontend
     echo ""
     setup_backend
     echo ""
     setup_database
     echo ""
-    create_dev_scripts
-    
-    # Final instructions
+    create_start_script
+
+    echo ""
+
+    # Instrucciones finales
     print_final_instructions
 }
 
-# Run main function
+# Ejecutar
 main

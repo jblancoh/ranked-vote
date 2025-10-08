@@ -30,6 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 pnpm-debug.log*
+backend.log
+frontend.log
 
 # Runtime data
 pids/
@@ -141,6 +143,3 @@ Thumbs.db
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Scripts temporales
-start-dev.sh
