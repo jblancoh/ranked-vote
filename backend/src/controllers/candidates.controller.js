@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { getPrisma } from '../utils/prisma.js';
 
 /**
  * Get all candidates
@@ -8,6 +6,7 @@ const prisma = new PrismaClient();
  */
 export const getAllCandidates = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { active } = req.query;
 
     const whereClause = active !== undefined
@@ -51,6 +50,7 @@ export const getAllCandidates = async (req, res, next) => {
  */
 export const getCandidateById = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     const candidate = await prisma.candidate.findUnique({
@@ -84,6 +84,7 @@ export const getCandidateById = async (req, res, next) => {
  */
 export const createCandidate = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { name, municipality, photoUrl, bio, order } = req.body;
 
     const candidate = await prisma.candidate.create({
@@ -112,6 +113,7 @@ export const createCandidate = async (req, res, next) => {
  */
 export const updateCandidate = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
     const { name, municipality, photoUrl, bio, order, active } = req.body;
 
@@ -155,6 +157,7 @@ export const updateCandidate = async (req, res, next) => {
  */
 export const deleteCandidate = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     // Check if candidate exists
@@ -188,6 +191,7 @@ export const deleteCandidate = async (req, res, next) => {
  */
 export const toggleCandidateStatus = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     const candidate = await prisma.candidate.findUnique({

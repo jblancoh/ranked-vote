@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { getPrisma } from '../utils/prisma.js';
 
 /**
  * Get client IP address
@@ -19,6 +17,7 @@ const getClientIp = (req) => {
  */
 export const submitVote = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     // Accept both formats: firstPlace/first, secondPlace/second, etc.
     const {
       firstPlace: fp,
@@ -45,7 +44,12 @@ export const submitVote = async (req, res, next) => {
 
     // Check if IP has already voted
     const existingVote = await prisma.vote.findUnique({
-      where: { voterIp }
+      where: {
+        tenantId_voterIp: {
+          tenantId: req.tenantId,
+          voterIp
+        }
+      }
     });
 
     if (existingVote) {
@@ -113,10 +117,16 @@ export const submitVote = async (req, res, next) => {
  */
 export const checkVoteStatus = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const voterIp = getClientIp(req);
 
     const existingVote = await prisma.vote.findUnique({
-      where: { voterIp },
+      where: {
+        tenantId_voterIp: {
+          tenantId: req.tenantId,
+          voterIp
+        }
+      },
       select: {
         id: true,
         createdAt: true
@@ -139,6 +149,7 @@ export const checkVoteStatus = async (req, res, next) => {
  */
 export const getVoteCount = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const totalVotes = await prisma.vote.count();
 
     res.json({
@@ -158,6 +169,7 @@ export const getVoteCount = async (req, res, next) => {
  */
 export const getAllVotes = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { limit = 100, offset = 0 } = req.query;
 
     const votes = await prisma.vote.findMany({

@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: rankedvote-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-rankedvote}
+      POSTGRES_USER: ${DB_USER:-rankedvote}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme123}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    networks:
+      - rankedvote-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-rankedvote}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rankedvote-api
+    restart: unless-stopped
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${DB_USER:-rankedvote}:${DB_PASSWORD:-changeme123}@database:5432/${DB_NAME:-rankedvote}
+
+      # Server
+      PORT: ${API_PORT:-4000}
+      NODE_ENV: ${NODE_ENV:-production}
+
+      # JWT & Security
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-this}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+
+      # CORS
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+
+      # Tenant
+      DEFAULT_TENANT: ${DEFAULT_TENANT:-default}
+
+      # Rate Limiting
+      RATE_LIMIT_WINDOW_MS: ${RATE_LIMIT_WINDOW_MS:-900000}
+      RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-100}
+    ports:
+      - "${API_PORT:-4000}:4000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - rankedvote-network
+    volumes:
+      - ./backend/config:/app/config:ro
+      - ./backend/uploads:/app/uploads
+    command: sh -c "npx prisma migrate deploy && npm start"
+
+  # Frontend Web App
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:4000}
+    container_name: rankedvote-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-3000}:80"
+    depends_on:
+      - backend
+    networks:
+      - rankedvote-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  rankedvote-network:
+    driver: bridge

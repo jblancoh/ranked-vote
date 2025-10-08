@@ -11,6 +11,7 @@ dotenv.config();
 // Import routes
 import routes from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { extractTenantMiddleware } from './middleware/tenant.vercel.js';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -40,7 +41,7 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-Slug', 'X-Tenant-Id']
 };
 app.use(cors(corsOptions));
 
@@ -63,15 +64,20 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('combined'));
 }
 
-// Health check endpoint
+// Health check endpoint (no tenant required)
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
-    message: 'Vota Flor API is running',
+    message: 'Ranked Vote API is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    multiTenant: true
   });
 });
+
+// Tenant middleware (extract tenant from request)
+// This runs BEFORE all API routes
+app.use('/api', extractTenantMiddleware);
 
 // API routes
 app.use('/api', routes);
@@ -90,12 +96,16 @@ app.use(errorHandler);
 // Start server
 app.listen(PORT, () => {
   console.log(`
-  🌺 Vota Flor API Server
+  🗳️  Ranked Vote API Server (Multi-Tenant)
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Environment: ${process.env.NODE_ENV || 'development'}
   Server running on: http://${process.env.HOST || 'localhost'}:${PORT}
   Health check: http://${process.env.HOST || 'localhost'}:${PORT}/health
   API Base URL: http://${process.env.HOST || 'localhost'}:${PORT}/api
+  Default Tenant: ${process.env.DEFAULT_TENANT || 'default'}
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Multi-tenant enabled!
+  Use header: X-Tenant-Slug: default
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   `);
 });

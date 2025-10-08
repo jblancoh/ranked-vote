@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { getPrisma } from '../utils/prisma.js';
 
 /**
  * Get all events
@@ -8,6 +6,7 @@ const prisma = new PrismaClient();
  */
 export const getAllEvents = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { active } = req.query;
 
     const whereClause = active !== undefined
@@ -37,6 +36,7 @@ export const getAllEvents = async (req, res, next) => {
  */
 export const getCurrentEvent = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const now = new Date();
 
     const currentEvent = await prisma.event.findFirst({
@@ -72,6 +72,7 @@ export const getCurrentEvent = async (req, res, next) => {
  */
 export const getEventById = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     const event = await prisma.event.findUnique({
@@ -100,6 +101,7 @@ export const getEventById = async (req, res, next) => {
  */
 export const createEvent = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { name, description, startDate, endDate, votingOpen } = req.body;
 
     const event = await prisma.event.create({
@@ -128,6 +130,7 @@ export const createEvent = async (req, res, next) => {
  */
 export const updateEvent = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
     const { name, description, startDate, endDate, active, votingOpen } = req.body;
 
@@ -170,6 +173,7 @@ export const updateEvent = async (req, res, next) => {
  */
 export const deleteEvent = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     const existingEvent = await prisma.event.findUnique({
@@ -202,6 +206,7 @@ export const deleteEvent = async (req, res, next) => {
  */
 export const toggleVotingStatus = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     const event = await prisma.event.findUnique({

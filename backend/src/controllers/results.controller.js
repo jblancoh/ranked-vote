@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { getPrisma } from '../utils/prisma.js';
 
 /**
  * Point system for ranked voting
@@ -24,6 +22,7 @@ const POINTS = {
  */
 export const calculateResults = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     // Get all votes
     const votes = await prisma.vote.findMany({
       select: {
@@ -154,7 +153,7 @@ export const getTopCandidates = async (req, res, next) => {
 
     // Reuse calculate logic
     const calculationResult = await calculateResults(
-      { query: {} },
+      { query: {}, tenantId: req.tenantId },
       {
         json: (data) => data,
         status: () => ({ json: (data) => data })
@@ -189,6 +188,7 @@ export const getTopCandidates = async (req, res, next) => {
  */
 export const getCandidateResult = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
 
     // Check if candidate exists
@@ -205,7 +205,7 @@ export const getCandidateResult = async (req, res, next) => {
 
     // Calculate all results
     const calculationResult = await calculateResults(
-      { query: {} },
+      { query: {}, tenantId: req.tenantId },
       {
         json: (data) => data,
         status: () => ({ json: (data) => data })
@@ -250,9 +250,10 @@ export const getCandidateResult = async (req, res, next) => {
  */
 export const saveResults = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     // Calculate current results
     const calculationResult = await calculateResults(
-      { query: {} },
+      { query: {}, tenantId: req.tenantId },
       {
         json: (data) => data,
         status: () => ({ json: (data) => data })
@@ -300,6 +301,7 @@ export const saveResults = async (req, res, next) => {
  */
 export const getSavedResults = async (req, res, next) => {
   try {
+    const prisma = getPrisma(req.tenantId);
     const results = await prisma.result.findMany({
       orderBy: {
         position: 'asc'

@@ -1,0 +1,70 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Candidate {
+  id          String   @id @default(cuid())
+  name        String
+  municipality String
+  photoUrl    String?
+  bio         String?
+  order       Int      @default(autoincrement())
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  votes       Vote[]
+  
+  @@map("candidates")
+}
+
+model Vote {
+  id          String   @id @default(cuid())
+  voterIp     String   // Para evitar duplicados
+  voterEmail  String?  // Opcional para notificaciones
+  
+  // Posiciones (1-5)
+  firstPlace  String
+  secondPlace String
+  thirdPlace  String
+  fourthPlace String
+  fifthPlace  String
+  
+  createdAt   DateTime @default(now())
+  
+  candidate   Candidate? @relation(fields: [firstPlace], references: [id])
+  
+  @@unique([voterIp]) // Una persona, un voto
+  @@map("votes")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  name        String   // "Flor de Tabasco 2026"
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  active      Boolean  @default(true)
+  votingOpen  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  @@map("events")
+}
+
+model Result {
+  id          String   @id @default(cuid())
+  candidateId String
+  position    Int      // 1-5
+  votes       Int      @default(0)
+  percentage  Float    @default(0)
+  calculatedAt DateTime @default(now())
+  
+  @@map("results")
+}
