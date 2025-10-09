@@ -278,10 +278,6 @@ El frontend **NO requiere cambios** para funcionar con el sistema multi-tenant. 
 
 2. **Abrir en el navegador:**
    ```
-   http://localhost:3000
-   ```
-   o
-   ```
    http://localhost:5173
    ```
    (depende de tu configuración)
@@ -511,7 +507,7 @@ curl http://localhost:5001/health
 
 # 2. Verificar CORS en .env
 cat .env | grep CORS_ORIGIN
-# Debe coincidir con la URL del frontend (ej: http://localhost:3000)
+# Debe coincidir con la URL del frontend (ej: http://localhost:5173)
 
 # 3. Reiniciar el backend después de cambiar .env
 ```
