@@ -39,7 +39,7 @@ const Footer = () => {
     {
       name: 'Email',
       icon: Mail,
-      href: 'mailto:devnighttalk@gmail.com',
+      href: 'mailto:jblancoh26@gmail.com',
       color: 'hover:text-red-500'
     },
   ]

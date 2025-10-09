@@ -35,7 +35,7 @@ Este Código de Conducta aplica tanto dentro de los espacios del proyecto como e
 
 ## Aplicación
 
-Instancias de comportamiento abusivo, acosador o de otro modo inaceptable pueden ser reportadas contactando al equipo del proyecto en **devnighttalk@gmail.com**. Todas las quejas serán revisadas e investigadas y resultarán en una respuesta que se considere necesaria y apropiada a las circunstancias. El equipo del proyecto está obligado a mantener confidencialidad con respecto al reportero de un incidente. Más detalles de políticas de aplicación específicas pueden ser publicados por separado.
+Instancias de comportamiento abusivo, acosador o de otro modo inaceptable pueden ser reportadas contactando al equipo del proyecto en **jblancoh26@gmail.com**. Todas las quejas serán revisadas e investigadas y resultarán en una respuesta que se considere necesaria y apropiada a las circunstancias. El equipo del proyecto está obligado a mantener confidencialidad con respecto al reportero de un incidente. Más detalles de políticas de aplicación específicas pueden ser publicados por separado.
 
 Mantenedores del proyecto que no sigan o hagan cumplir el Código de Conducta de buena fe pueden enfrentar repercusiones temporales o permanentes según lo determinen otros miembros del liderazgo del proyecto.
 

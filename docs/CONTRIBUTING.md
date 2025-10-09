@@ -16,7 +16,7 @@
 
 ## 📜 Código de Conducta
 
-Este proyecto y todos los participantes están gobernados por nuestro [Código de Conducta](code_of_conduct.md). Al participar, se espera que mantengas este código. Por favor reporta comportamiento inaceptable a devnighttalk@gmail.com.
+Este proyecto y todos los participantes están gobernados por nuestro [Código de Conducta](code_of_conduct.md). Al participar, se espera que mantengas este código. Por favor reporta comportamiento inaceptable a jblancoh26@gmail.com.
 
 ---
 
@@ -455,7 +455,7 @@ Antes de crear tu PR, verifica:
 - **Issues de GitHub** - Para bugs y features
 - **Discussions** - Para preguntas generales
 - **WhatsApp Dev Night Talk** - Para chat en tiempo real
-- **Email** - devnighttalk@gmail.com
+- **Email** - jblancoh26@gmail.com
 
 ### Recursos Útiles
 
@@ -479,7 +479,7 @@ Tu tiempo y esfuerzo son muy apreciados. Juntos estamos construyendo algo especi
 
 - **Proyecto:** https://github.com/dev-night-talk/vota-flor
 - **Comunidad:** Dev Night Talk Villahermosa
-- **Email:** devnighttalk@gmail.com
+- **Email:** jblancoh26@gmail.com
 - **Twitter:** [@DevNightTalkVh](https://twitter.com/devnighttalkvh)
 
 ---

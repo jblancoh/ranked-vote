@@ -484,7 +484,7 @@ curl -X POST http://localhost:5001/api/votes \
 
 ## 📞 Soporte
 
-¿Preguntas sobre la API? Abre un issue en GitHub o contacta a devnighttalk@gmail.com
+¿Preguntas sobre la API? Abre un issue en GitHub o contacta a jblancoh26@gmail.com
 
 ---
 
