@@ -9,19 +9,19 @@
 
 ## 📋 Tabla de Contenidos
 
-- [🟢 Nivel Principiante](#-nivel-principiante-good first issue) (8 issues)
+- [🟢 Nivel Principiante](#-nivel-principiante-good-first-issue) (8 issues)
 - [🟡 Nivel Intermedio](#-nivel-intermedio-hacktoberfest) (8 issues)
 - [🔴 Nivel Avanzado](#-nivel-avanzado-help-wanted) (4 issues)
 - [📝 Plantilla para Issues](#-plantilla-para-crear-issues)
 
 ---
 
-## 🟢 Nivel Principiante (good first issue)
+## 🟢 Nivel Principiante (good-first-issue)
 
 ### **Backend - Prioridad 1**
 
 #### Issue #1: Agregar validación de datos en endpoint de votos
-**Labels**: `good first issue`, `backend`, `validation`, `hacktoberfest`
+**Labels**: `good-first-issue`, `backend`, `validation`, `hacktoberfest`
 **Tiempo estimado**: 1-2 horas
 **Prioridad**: Alta (Backend = 1)
 
@@ -52,7 +52,7 @@ El endpoint `POST /api/votes` actualmente acepta datos sin validaciones robustas
 ---
 
 #### Issue #2: Mejorar mensajes de error del middleware de tenant
-**Labels**: `good first issue`, `backend`, `error-handling`, `hacktoberfest`
+**Labels**: `good-first-issue`, `backend`, `error-handling`, `hacktoberfest`
 **Tiempo estimado**: 1 hora
 **Prioridad**: Alta (Backend = 1)
 
@@ -80,7 +80,7 @@ Los mensajes de error del middleware de tenant son técnicos y en inglés. Neces
 ### **Frontend - Prioridad 2**
 
 #### Issue #3: Agregar indicador de carga en botón de votación
-**Labels**: `good first issue`, `frontend`, `ux`, `hacktoberfest`
+**Labels**: `good-first-issue`, `frontend`, `ux`, `hacktoberfest`
 **Tiempo estimado**: 1-2 horas
 **Prioridad**: Media (Frontend = 2)
 
@@ -106,7 +106,7 @@ Cuando el usuario envía su voto, no hay feedback visual durante el proceso de e
 ---
 
 #### Issue #4: Mejorar diseño responsive de tarjetas de candidatos
-**Labels**: `good first issue`, `frontend`, `css`, `responsive`, `hacktoberfest`
+**Labels**: `good-first-issue`, `frontend`, `css`, `responsive`, `hacktoberfest`
 **Tiempo estimado**: 1-2 horas
 **Prioridad**: Media (Frontend = 2)
 
@@ -135,7 +135,7 @@ Las tarjetas de candidatos se ven bien en desktop pero necesitan mejoras en móv
 ### **Documentación - Prioridad 3**
 
 #### Issue #5: Crear guía de contribución para principiantes
-**Labels**: `good first issue`, `documentation`, `hacktoberfest`
+**Labels**: `good-first-issue`, `documentation`, `hacktoberfest`
 **Tiempo estimado**: 2 horas
 **Prioridad**: Media (Documentación = 3)
 
@@ -162,7 +162,7 @@ Necesitamos una guía clara para que nuevos contribuyentes sepan cómo empezar a
 ---
 
 #### Issue #6: Documentar API endpoints con ejemplos
-**Labels**: `good first issue`, `documentation`, `api`, `hacktoberfest`
+**Labels**: `good-first-issue`, `documentation`, `api`, `hacktoberfest`
 **Tiempo estimado**: 2 horas
 **Prioridad**: Media (Documentación = 3)
 
@@ -189,7 +189,7 @@ Los endpoints de la API necesitan documentación clara con ejemplos de requests 
 ---
 
 #### Issue #7: Traducir README al inglés
-**Labels**: `good first issue`, `documentation`, `i18n`, `hacktoberfest`
+**Labels**: `good-first-issue`, `documentation`, `i18n`, `hacktoberfest`
 **Tiempo estimado**: 1-2 horas
 **Prioridad**: Baja (Documentación = 3)
 
@@ -218,7 +218,7 @@ El README actual está en español. Necesitamos una versión en inglés para atr
 ---
 
 #### Issue #8: Agregar comentarios JSDoc a funciones principales
-**Labels**: `good first issue`, `documentation`, `code-quality`, `hacktoberfest`
+**Labels**: `good-first-issue`, `documentation`, `code-quality`, `hacktoberfest`
 **Tiempo estimado**: 2 horas
 **Prioridad**: Media (Documentación = 3)
 
@@ -684,7 +684,7 @@ Usa esta plantilla al crear los issues en GitHub:
 - [Link a ejemplo]
 
 ## 🏷️ Labels
-- `good first issue` / `hacktoberfest` / `help-wanted`
+- `good-first-issue` / `hacktoberfest` / `help-wanted`
 - `backend` / `frontend` / `documentation` / `testing`
 - `priority-high` / `priority-medium` / `priority-low`
 
