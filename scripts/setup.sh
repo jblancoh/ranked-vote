@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🌺 Vota Flor - Configuración Automática
+# 🗳️ Ranked Vote - Configuración Automática
 # Este script instala y configura TODO automáticamente
 # Solo necesitas ejecutarlo una vez
 
@@ -40,7 +40,7 @@ print_header() {
     echo -e "${GREEN}"
     echo "╔════════════════════════════════════════════╗"
     echo "║                                            ║"
-    echo "║      🌺 VOTA FLOR - Instalación Fácil     ║"
+    echo "║      🗳️ Ranked Vote - Instalación Fácil     ║"
     echo "║                                            ║"
     echo "╚════════════════════════════════════════════╝"
     echo -e "${NC}"
@@ -297,7 +297,7 @@ print_final_instructions() {
     echo -e "   Documentación completa: ${YELLOW}docs/SETUP_MULTITENANT.md${NC}"
     echo -e "   Script de inicio: ${YELLOW}./scripts/start-dev.sh${NC}"
     echo ""
-    echo -e "${GREEN}¡Gracias por usar Vota Flor! 🌺${NC}"
+    echo -e "${GREEN}¡Gracias por usar Ranked Vote! 🗳️${NC}"
     echo ""
 }
 
