@@ -2,6 +2,8 @@
 
 ¡Gracias por tu interés en contribuir a Ranked Vote! Este proyecto celebra la cultura de Tabasco mientras ayudamos a digitalizar tradiciones locales. Cada contribución, grande o pequeña, hace la diferencia.
 
+> 🎃 **Hacktoberfest 2025**: Este proyecto participa en Hacktoberfest. ¡Buscamos contribuyentes de todos los niveles!
+
 ## 📋 Tabla de Contenidos
 
 - [Código de Conducta](#código-de-conducta)
@@ -83,56 +85,83 @@ Este proyecto y todos los participantes están gobernados por nuestro [Código d
 
 ### Prerequisitos
 
-- Node.js 18+
-- npm o yarn
-- Git
-- Cuenta de Supabase (para desarrollo con DB)
+- **Node.js 18+** ([Descargar aquí](https://nodejs.org/))
+- **Git** (para clonar el repositorio)
+- **Base de datos PostgreSQL**:
+  - **Opción 1 (Recomendada)**: Cuenta de Supabase gratuita ([Crear cuenta](https://supabase.com))
+  - **Opción 2**: PostgreSQL instalado localmente
 
-### Setup Paso a Paso
+### Setup Rápido (Recomendado) ⚡
 
 1. **Fork el repositorio**
    - Haz clic en "Fork" en la esquina superior derecha de GitHub
 
 2. **Clonar tu fork**
 ```bash
-git clone https://github.com/TU-USUARIO/vota-flor.git
-cd vota-flor
+git clone https://github.com/TU-USUARIO/ranked-vote.git
+cd ranked-vote
 ```
 
 3. **Agregar upstream remote**
 ```bash
-git remote add upstream https://github.com/dev-night-talk/vota-flor.git
+git remote add upstream https://github.com/jblancoh/ranked-vote.git
 ```
 
-4. **Instalar dependencias**
+4. **Ejecutar script de instalación automática**
+```bash
+./scripts/setup.sh
+```
 
-Frontend:
+Este script hará **TODO** por ti:
+- ✅ Verificará que tienes Node.js instalado
+- ✅ Instalará dependencias del frontend y backend
+- ✅ Te guiará para configurar la base de datos (Supabase o local)
+- ✅ Creará archivos de configuración (.env)
+- ✅ Ejecutará migraciones y seed de datos
+
+5. **Iniciar el proyecto en desarrollo**
+```bash
+./scripts/start-dev.sh
+```
+
+Este script:
+- ✅ Inicia el backend en `http://localhost:5001`
+- ✅ Inicia el frontend en `http://localhost:5173`
+- ✅ Muestra mensajes claros de estado
+- ✅ Presiona `Ctrl+C` para detener ambos servicios
+
+### Setup Manual (Alternativo)
+
+Si prefieres configurar manualmente o el script automático falla:
+
+<details>
+<summary>Ver pasos manuales</summary>
+
+**Frontend:**
 ```bash
 cd frontend
 npm install
 cp .env.example .env
+# Edita frontend/.env si es necesario
 ```
 
-Backend:
+**Backend:**
 ```bash
 cd backend
 npm install
 cp .env.example .env
+# Edita backend/.env con tu DATABASE_URL
 ```
 
-5. **Configurar variables de entorno**
-
-Edita los archivos `.env` con tus credenciales de Supabase.
-
-6. **Ejecutar migraciones de base de datos**
+**Base de datos:**
 ```bash
 cd backend
 npm run prisma:generate
-npm run prisma:migrate
+npm run prisma:migrate dev
 npm run prisma:seed
 ```
 
-7. **Ejecutar en desarrollo**
+**Ejecutar en desarrollo:**
 
 Terminal 1 (Backend):
 ```bash
@@ -146,32 +175,66 @@ cd frontend
 npm run dev
 ```
 
+</details>
+
+### Verificar que Todo Funciona ✅
+
+1. Abre `http://localhost:5173` en tu navegador
+2. Deberías ver la lista de candidatos
+3. El backend API está en `http://localhost:5001`
+4. Para ver la base de datos visualmente: `cd backend && npx prisma studio`
+
 ---
 
 ## 🔄 Proceso de Contribución
 
 ### 1. Encuentra o Crea un Issue
 
-- Busca en [Issues existentes](https://github.com/dev-night-talk/vota-flor/issues)
+**Para Hacktoberfest 2025:**
+- 🎃 Ver [Issues de Hacktoberfest](https://github.com/jblancoh/ranked-vote/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest)
+- 📋 Consulta la [Guía Completa de Issues](../docs/HACKTOBERFEST_ISSUES_2025.md)
+
+**Para contribuciones generales:**
+- Busca en [Issues existentes](https://github.com/jblancoh/ranked-vote/issues)
 - Para bugs: usa la plantilla de bug report
 - Para features: usa la plantilla de feature request
-- Para dudas: crea un issue de tipo "Question"
 
-Etiquetas útiles:
-- `good-first-issue` - Perfecto para empezar
-- `help-wanted` - Necesitamos ayuda
-- `hacktoberfest` - Para Hacktoberfest
-- `bug` - Algo no funciona
-- `enhancement` - Nueva feature
+**Etiquetas por Nivel:**
+- 🟢 `good-first-issue` - **Principiantes** (1-2 horas, perfecto para empezar)
+- 🟡 `hacktoberfest` - **Intermedios** (2-4 horas, conoces React/Node)
+- 🔴 `help-wanted` - **Avanzados** (6-8 horas, arquitectura/testing)
+
+**Etiquetas por Tipo:**
+- `backend` - Node.js, Express, Prisma
+- `frontend` - React, Tailwind, UI/UX
+- `documentation` - Docs, guías, traducciones
+- `testing` - Tests unitarios, E2E, calidad
+- `priority-high` - Crítico para el evento
 
 ### 2. Comenta en el Issue
 
-Antes de empezar a trabajar, comenta en el issue para que otros sepan que lo estás tomando.
+**Antes de empezar a trabajar**, comenta en el issue para:
+- ✅ Evitar trabajo duplicado
+- ✅ Recibir orientación del equipo
+- ✅ Confirmar que el issue sigue disponible
 
-Ejemplo:
+**Ejemplos de buenos comentarios:**
+
+```markdown
+¡Hola! Me gustaría trabajar en este issue.
+Soy [principiante/intermedio/avanzado] en [tecnología].
+¿Puedo tomarlo?
 ```
-Hola! Me gustaría trabajar en esto. ¿Puedo tomarlo?
+
+```markdown
+Tengo una idea para resolver esto usando [enfoque].
+¿Les parece bien antes de empezar?
 ```
+
+**Para Hacktoberfest:**
+- Si eres **principiante**, elige issues `good-first-issue`
+- Si trabajas en **equipo**, menciona a tus compañeros
+- Respeta el tiempo de los demás: si tomas un issue, trabaja en él activamente
 
 ### 3. Crea una Branch
 
@@ -450,20 +513,35 @@ Antes de crear tu PR, verifica:
 
 ## 🆘 ¿Necesitas Ayuda?
 
+### Documentación del Proyecto
+
+- 📖 [Guía de Inicio Rápido](../INICIO_RAPIDO.md) - Para empezar rápido
+- 📋 [Setup Multi-Tenant](../docs/SETUP_MULTITENANT.md) - Guía técnica completa
+- 🎃 [Issues de Hacktoberfest](../docs/HACKTOBERFEST_ISSUES_2025.md) - Todos los issues explicados
+- 📚 [Referencia API](../docs/API_REFERENCE.md) - Documentación de endpoints (próximamente)
+
 ### Dónde Preguntar
 
-- **Issues de GitHub** - Para bugs y features
-- **Discussions** - Para preguntas generales
-- **WhatsApp Dev Night Talk** - Para chat en tiempo real
+- **Issues de GitHub** - Para bugs y features específicas
+- **Discussions** - Para preguntas generales sobre el proyecto
+- **Dev Night Talk** - Comunidad de Villahermosa (todos los jueves 7-10 PM)
 - **Email** - jblancoh26@gmail.com
 
 ### Recursos Útiles
 
-- [Documentación de React](https://react.dev)
-- [Documentación de Prisma](https://www.prisma.io/docs)
-- [Documentación de Tailwind](https://tailwindcss.com/docs)
-- [Guía de Git](https://www.atlassian.com/git)
-- [Primeros Pasos en Open Source](https://opensource.guide/how-to-contribute/)
+**Tecnologías del Proyecto:**
+- [React 18](https://react.dev) - Framework frontend
+- [Vite](https://vitejs.dev) - Build tool
+- [Prisma](https://www.prisma.io/docs) - ORM para base de datos
+- [Tailwind CSS](https://tailwindcss.com/docs) - Estilos
+- [Express](https://expressjs.com/) - Backend framework
+- [Zod](https://zod.dev) - Validación de schemas
+
+**Git y Open Source:**
+- [Guía de Git](https://www.atlassian.com/git) - Conceptos básicos
+- [Primeros Pasos en Open Source](https://opensource.guide/how-to-contribute/) - Para principiantes
+- [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) - Workflow colaborativo
+- [Conventional Commits](https://www.conventionalcommits.org/) - Formato de commits
 
 ---
 
@@ -471,17 +549,51 @@ Antes de crear tu PR, verifica:
 
 Tu tiempo y esfuerzo son muy apreciados. Juntos estamos construyendo algo especial para la comunidad de Tabasco y más allá.
 
+### Reconocimientos
+
+Todos los contribuyentes serán:
+- ✅ Agregados a la sección de contributors en el README
+- ✅ Mencionados en los release notes
+- ✅ Invitados a presentar su contribución en Dev Night Talk Villahermosa
+
+### Hacktoberfest 2025
+
+Si participas en Hacktoberfest:
+- 🎃 Completa 4 PRs válidos durante octubre
+- ✅ Asegúrate de que tus PRs sean aceptados
+- 🎁 Recibirás reconocimiento digital de Hacktoberfest
+
 **¡Feliz Hacktoberfest! 🎃**
 
 ---
 
 ## 📞 Contacto
 
-- **Proyecto:** https://github.com/dev-night-talk/vota-flor
-- **Comunidad:** Dev Night Talk Villahermosa
+- **Proyecto:** https://github.com/jblancoh/ranked-vote
+- **Issues:** https://github.com/jblancoh/ranked-vote/issues
+- **Hacktoberfest Issues:** [Ver aquí](https://github.com/jblancoh/ranked-vote/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest)
+- **Comunidad:** Dev Night Talk Villahermosa (Todos los jueves 7-10 PM)
 - **Email:** jblancoh26@gmail.com
-- **Twitter:** [@DevNightTalkVh](https://twitter.com/devnighttalkvh)
 
 ---
 
-*Última actualización: Octubre 2026*
+## 🗺️ Roadmap del Proyecto
+
+**Prioridades Actuales (Octubre 2025):**
+
+1. **Sistema de Verificación por Email** (#43, #46) - CRÍTICO
+2. **Panel de Administración** (#26-#35) - ALTA
+3. **Exportación de Resultados** (#32) - MEDIA
+4. **Suite de Tests** (#18, #49) - MEDIA
+5. **Documentación Completa** (#40, #41) - MEDIA
+
+**Próximas Features:**
+- Multi-idioma completo
+- App móvil (React Native)
+- Analytics avanzados
+- Compartir en redes sociales
+
+---
+
+*Última actualización: Octubre 2025*
+*Versión: 1.0.0-beta*
