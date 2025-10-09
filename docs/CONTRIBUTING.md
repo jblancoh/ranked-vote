@@ -16,7 +16,7 @@
 
 ## 📜 Código de Conducta
 
-Este proyecto y todos los participantes están gobernados por nuestro [Código de Conducta](CODE_OF_CONDUCT.md). Al participar, se espera que mantengas este código. Por favor reporta comportamiento inaceptable a devnighttalk@gmail.com.
+Este proyecto y todos los participantes están gobernados por nuestro [Código de Conducta](code_of_conduct.md). Al participar, se espera que mantengas este código. Por favor reporta comportamiento inaceptable a devnighttalk@gmail.com.
 
 ---
 

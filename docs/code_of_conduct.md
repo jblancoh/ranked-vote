@@ -55,7 +55,3 @@ Como parte de **Dev Night Talk Villahermosa**, también valoramos:
 * **Cultura local** - Respetamos y celebramos nuestras tradiciones
 * **Colaboración** - Juntos logramos más que solos
 * **Diversión** - Disfrutamos lo que hacemos
-
----
-
-*Si tienes dudas sobre este código de conducta o necesitas reportar un incidente, por favor contáctanos a devnighttalk@gmail.com*
