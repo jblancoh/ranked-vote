@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🌺 Vota Flor - Inicio Rápido
+# 🗳️ Ranked Vote - Inicio Rápido
 # Este script inicia el frontend y backend automáticamente
 
 # Colores
@@ -41,7 +41,7 @@ clear
 echo -e "${GREEN}"
 echo "╔════════════════════════════════════════════╗"
 echo "║                                            ║"
-echo "║      🌺 VOTA FLOR - Inicio en Desarrollo  ║"
+echo "║      🗳️ Ranked Vote - Inicio en Desarrollo  ║"
 echo "║                                            ║"
 echo "╚════════════════════════════════════════════╝"
 echo -e "${NC}"

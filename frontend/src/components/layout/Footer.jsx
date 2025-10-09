@@ -52,10 +52,10 @@ const Footer = () => {
           {/* About Section */}
           <div className="md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <span className="text-3xl">🌺</span>
+              <span className="text-3xl">🗳️</span>
               <div>
                 <h3 className="text-lg font-display font-bold text-gradient">
-                  Vota Flor
+                  Ranked Vote
                 </h3>
                 <p className="text-xs text-gray-500">Tabasco 2026</p>
               </div>
@@ -169,7 +169,7 @@ const Footer = () => {
             {/* Copyright */}
             <div className="text-sm text-gray-600 text-center md:text-left">
               <p className="flex items-center justify-center md:justify-start flex-wrap">
-                © {currentYear} Vota Flor. Creado con{' '}
+                © {currentYear} Ranked Vote. Creado con{' '}
                 <Heart size={14} className="mx-1 text-red-500 fill-current animate-pulse" />
                 {' '}por{' '}
                 <a

@@ -11,7 +11,7 @@ const NotFound = () => {
             404
           </div>
           <div className="text-6xl mb-4">
-            🌺💔
+            🗳️💔
           </div>
         </div>
 
@@ -99,7 +99,7 @@ const NotFound = () => {
 
         {/* Fun Message */}
         <p className="mt-8 text-sm text-gray-500">
-          Error 404: Esta flor no floreció aquí 🌺
+          Error 404: Esta flor no floreció aquí 🗳️
         </p>
       </div>
     </div>

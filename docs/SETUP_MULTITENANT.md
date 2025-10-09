@@ -1,4 +1,4 @@
-# 🚀 Guía de Instalación - Vota Flor
+# 🚀 Guía de Instalación - Ranked Vote
 
 Esta guía te ayudará a instalar y configurar Ranked Vote **paso a paso**, de la forma más simple posible.
 

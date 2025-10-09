@@ -1,6 +1,6 @@
-# 📡 Documentación de API - Vota Flor
+# 📡 Documentación de API - Ranked Vote
 
-API RESTful para el sistema de votación comunitaria Vota Flor.
+API RESTful para el sistema de votación comunitaria Ranked Vote.
 
 **Base URL:** `http://localhost:5001/api` (desarrollo)  
 **Producción:** URL pendiente

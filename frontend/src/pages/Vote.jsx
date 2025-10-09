@@ -161,7 +161,7 @@ const Vote = () => {
             </h2>
             <p className="text-gray-600 mb-6">
               Tu predicción ha sido guardada exitosamente.
-              Gracias por participar en Vota Flor 2026.
+              Gracias por participar en Ranked Vote 2026.
             </p>
             <div className="space-y-3">
               <a href="/results" className="btn-primary w-full">
@@ -183,7 +183,7 @@ const Vote = () => {
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            🌺 Haz tu Predicción
+            🗳️ Haz tu Predicción
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Selecciona tus 5 candidatas favoritas del 1er al 5to lugar para el

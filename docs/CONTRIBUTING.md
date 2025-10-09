@@ -1,6 +1,6 @@
-# 🤝 Guía de Contribución - Vota Flor
+# 🤝 Guía de Contribución - Ranked Vote
 
-¡Gracias por tu interés en contribuir a Vota Flor! Este proyecto celebra la cultura de Tabasco mientras ayudamos a digitalizar tradiciones locales. Cada contribución, grande o pequeña, hace la diferencia.
+¡Gracias por tu interés en contribuir a Ranked Vote! Este proyecto celebra la cultura de Tabasco mientras ayudamos a digitalizar tradiciones locales. Cada contribución, grande o pequeña, hace la diferencia.
 
 ## 📋 Tabla de Contenidos
 

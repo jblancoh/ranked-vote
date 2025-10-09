@@ -19,7 +19,7 @@ const About = () => {
       year: '1990s-2000s',
       title: 'Era Moderna',
       description: 'Mayor cobertura mediática y participación de todos los municipios del estado.',
-      icon: '🌺'
+      icon: '🗳️'
     },
     {
       year: '2010s-Presente',
@@ -42,7 +42,7 @@ const About = () => {
       <section className="gradient-primary text-white py-20">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <div className="text-6xl mb-6">🌺</div>
+            <div className="text-6xl mb-6">🗳️</div>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">
               Certamen Flor de Tabasco
             </h1>
@@ -223,16 +223,16 @@ const About = () => {
         </div>
       </section>
 
-      {/* Sobre Vota Flor */}
+      {/* Sobre Ranked Vote */}
       <section className="py-16 bg-primary-50">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <Award className="mx-auto text-primary-600 mb-4" size={48} />
             <h2 className="text-3xl font-display font-bold mb-6">
-              Sobre Vota Flor
+              Sobre Ranked Vote
             </h2>
             <p className="text-lg text-gray-700 mb-4">
-              <strong>Vota Flor</strong> es una plataforma comunitaria de código
+              <strong>Ranked Vote</strong> es una plataforma comunitaria de código
               abierto que permite a los tabasqueños participar activamente haciendo
               sus predicciones sobre el resultado del certamen.
             </p>

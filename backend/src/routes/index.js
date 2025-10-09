@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.json({
     success: true,
-    message: 'Vota Flor API v1.0',
+    message: 'Ranked Vote API v1.0',
     version: '1.0.0',
     endpoints: {
       events: '/api/events',

@@ -9,7 +9,7 @@ const Home = () => {
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
-              🌺 Vota Flor 2026
+              🗳️ Ranked Vote 2026
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-white/90">
               Participa en las predicciones del Certamen Flor de Tabasco

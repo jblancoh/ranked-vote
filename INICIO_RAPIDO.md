@@ -1,4 +1,4 @@
-# 🌺 Vota Flor - Inicio Rápido
+# 🗳️ Ranked Vote - Inicio Rápido
 
 Sistema de votación comunitaria para eventos culturales
 
@@ -168,4 +168,4 @@ Si quieres contribuir al proyecto, lee: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
 
-**¡Gracias por usar Vota Flor! 🌺**
+**¡Gracias por usar Ranked Vote! 🗳️**
