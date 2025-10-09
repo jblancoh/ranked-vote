@@ -91,9 +91,9 @@ setup_frontend() {
     # Crear archivo .env si no existe
     if [ ! -f .env ]; then
         cp .env.example .env
-        print_success "Archivo de configuración frontend creado"
+        print_success "Archivo Environment de configuración frontend creado"
     else
-        print_info "Configuración frontend ya existe ✓"
+        print_info "Environment de configuración frontend ya existe ✓"
     fi
 
     cd ..
@@ -112,10 +112,10 @@ setup_backend() {
     # Crear archivo .env si no existe
     if [ ! -f .env ]; then
         cp .env.example .env
-        print_success "Archivo de configuración backend creado"
+        print_success "Archivo Environment de configuración backend creado"
         print_warning "Necesitarás configurar tu base de datos en: backend/.env"
     else
-        print_info "Configuración backend ya existe ✓"
+        print_info "Environment de configuración de backend ya existe ✓"
     fi
 
     # Generar Prisma Client
