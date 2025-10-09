@@ -41,7 +41,7 @@ Ranked Vote es una aplicación web moderna que permite a las comunidades organiz
 
 ## 🎯 Casos de Uso
 
-Esta plataforma fue creada por [Dev Night Talk Villahermosa](https://www.meetup.com/es-ES/dev-night-talks/) y se implementó por primera vez para el evento comunitario "Flor de Tabasco". Puede adaptarse para:
+Esta plataforma fue creada por [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/) y se implementará por primera vez para el evento comunitario "Flor de Tabasco". Puede adaptarse para:
 
 - 🌸 Selección de símbolos culturales
 - 🍕 Concursos de mejor comida/restaurante local
@@ -85,9 +85,8 @@ El script te guiará paso a paso para:
 
 ### 📚 Más Información
 
-- **Guía Rápida**: [`INICIO_RAPIDO.md`](INICIO_RAPIDO.md) - Instrucciones paso a paso
-- **Documentación Completa**: [`docs/SETUP_MULTITENANT.md`](docs/SETUP_MULTITENANT.md) - Detalles técnicos
-- **Contribuir**: [`CONTRIBUTING.md`](CONTRIBUTING.md) - Cómo colaborar
+- **Documentación Completa**: [`SETUP_MULTITENANT.md`](docs/SETUP_MULTITENANT.md) - Detalles técnicos
+- **Contribuir**: [`CONTRIBUTING.md`](docs/CONTRIBUTING.md) - Cómo colaborar
 
 📁 Estructura del Proyecto
 ```
@@ -119,14 +118,15 @@ ranked-vote/
 ¡Damos la bienvenida a contribuciones de desarrolladores de todos los niveles! Este proyecto es parte de Hacktoberfest 2025.
 Cómo Contribuir
 
-Haz fork del repositorio
-Crea tu rama de feature (git checkout -b feature/CaracteristicaIncreible)
-Haz commit de tus cambios (git commit -m 'Agregar CaracteristicaIncreible')
-Push a la rama (git push origin feature/CaracteristicaIncreible)
-Abre un Pull Request
+- Haz fork del repositorio
+- Crea tu rama de feature (git checkout -b feature/CaracteristicaIncreible)
+- Haz commit de tus cambios (git commit -m 'Agregar CaracteristicaIncreible')
+- Push a la rama (git push origin feature/CaracteristicaIncreible)
+- Abre un Pull Request
 
-Revisa nuestra [Guía de Contribución](CONTRIBUTING.md) para instrucciones detalladas.
-Buenos Primeros Issues
+Revisa nuestra [Guía de Contribución](docs/CONTRIBUTING.md) para instrucciones detalladas.
+
+Buenos Primeros Issues (Good First Issues)
 ¿Nuevo en open source? Busca issues etiquetados con:
 
 good-first-issue - Perfecto para principiantes
@@ -135,21 +135,11 @@ documentation - Ayuda a mejorar nuestra documentación
 help-wanted - ¡Necesitamos tu experiencia!
 
 🌟 Primera Implementación: Flor de Tabasco
-Nuestro evento inaugural ayuda a la comunidad de Tabasco a elegir su flor representativa a través de votación ranqueada democrática. Esta implementación real muestra las capacidades de la plataforma.
+
+Nuestro evento inaugural ayuda a la comunidad de Tabasco a predecir el ganador de su flor representativa a través de votación ranqueada democrática. Esta implementación real muestra las capacidades de la plataforma.
+
 Conoce más: Caso de Estudio [Flor de Tabasco](docs/examples/flor-tabasco)
 
-📸 Capturas de Pantalla
-
-Próximamente
-
-🧪 Testing
-bash# Ejecutar tests del frontend
-cd frontend
-npm test
-
-# Ejecutar tests del backend
-cd backend
-npm test
 🚀 Despliegue
 La aplicación puede desplegarse en:
 Frontend:
@@ -168,13 +158,13 @@ Base de Datos:
 
 Supabase (tier gratuito)
 
-Ver [Guía de Despliegue](docs/DEPLOYMENT.md) para instrucciones detalladas.
+<!-- Ver [Guía de Despliegue](docs/DEPLOYMENT.md) para instrucciones detalladas. -->
 
 📄 Licencia
 Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para detalles.
 🙏 Agradecimientos
 
-Creado por la comunidad [Dev Night Talk Villahermosa](https://www.meetup.com/es-ES/dev-night-talks/)
+Creado por la comunidad [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/)
 Agradecimiento especial a todos nuestros [contribuidores](https://github.com/jblancoh/ranked-vote/graphs/contributors)
 Potenciado por tecnologías open-source
 
@@ -182,18 +172,18 @@ Potenciado por tecnologías open-source
 
 GitHub: [@jblancoh](https://github.com/jblancoh)
 Issues: [Reporta un bug o solicita una función]([URL](https://github.com/jblancoh/ranked-vote/issues))
-Comunidad: Dev Night Talk Villahermosa - Todos los jueves 7-10 PM
+Comunidad: Dev Night Talk - Todos los jueves 7-10 PM
 
 🗺️ Hoja de Ruta
 
- Verificación por email para votos
- Dashboard de administración
- Múltiples métodos de votación (ranqueada, aprobación, puntaje)
- Exportar resultados a PDF/CSV
- Internacionalización (más idiomas)
- App móvil (React Native)
- Compartir en redes sociales
- Fecha límite/programación de votación
+- Verificación por email para votos
+- Dashboard de administración
+- Múltiples métodos de votación (ranqueada, aprobación, puntaje)
+- Exportar resultados a PDF/CSV
+- Internacionalización (más idiomas)
+- App móvil (React Native)
+- Compartir en redes sociales
+- Fecha límite/programación de votación
 
 ❤️ Apoyo
 Si encuentras útil este proyecto, por favor considera:
