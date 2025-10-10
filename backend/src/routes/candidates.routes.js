@@ -12,14 +12,17 @@ const router = express.Router();
 
 /**
  * @route   GET /api/candidates
- * @desc    Get all candidates
+ * @desc    Get all candidates with optional filters
+ * @query   filter - Search text that applies to name OR municipality (partial match)
  * @access  Public
+ * @example GET /api/candidates?filter=juan (searches in name OR municipality)
  */
 router.get('/', getAllCandidates);
 
 /**
  * @route   GET /api/candidates/:id
- * @desc    Get candidate by ID
+ * @desc    Get candidate by ID with optional filter
+ * @query   filter - (optional) Search text that applies to name OR municipality (partial match)
  * @access  Public
  */
 router.get('/:id', getCandidateById);
