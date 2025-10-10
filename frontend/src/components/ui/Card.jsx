@@ -21,8 +21,8 @@ const Card = ({
 
   const paddings = {
     none: '',
-    sm: 'p-2 sm:p-3',
-    md: 'p-4 sm:p-6',
+    sm: 'p-2 sm:p-3', // Responsive padding: smaller on mobile
+    md: 'p-4 sm:p-6', // Responsive padding: compact on mobile, normal on larger screens
     lg: 'p-6 sm:p-8',
     xl: 'p-8 sm:p-12',
   }
