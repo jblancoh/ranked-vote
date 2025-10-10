@@ -157,6 +157,12 @@ setup_database() {
                 echo -n "Pega tu DATABASE_URL aquí: "
                 read -r db_url
 
+                # Añadir ?sslmode=require si no lo tiene
+                if [[ "$db_url" != *"?sslmode=require"* ]]; then
+                    db_url="${db_url}?sslmode=require"
+                    print_info "Añadido parámetro ?sslmode=require a la URL"
+                fi
+
                 cd backend
                 # Actualizar .env con la URL
                 if grep -q "^DATABASE_URL=" .env; then
@@ -170,7 +176,7 @@ setup_database() {
 
                 # Ejecutar migraciones
                 print_info "Creando tablas en la base de datos..."
-                npm run prisma:migrate dev --name init_setup
+                npm run prisma:migrate -- dev --name init_setup
 
                 print_info "Agregando datos de ejemplo..."
                 npm run prisma:seed
@@ -212,7 +218,7 @@ setup_database() {
             rm -f .env.bak
 
             print_info "Creando tablas..."
-            npm run prisma:migrate dev --name init_setup
+            npm run prisma:migrate -- dev --name init_setup
 
             print_info "Agregando datos de ejemplo..."
             npm run prisma:seed
