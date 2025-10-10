@@ -1,25 +1,25 @@
 # 🗳️ Ranked Vote
 
-> Plataforma open-source de votación ranqueada para eventos y concursos comunitarios
+> Open-source ranked voting platform for community events and contests
 
-[![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-orange.svg)](https://hacktoberfest.com)
-[![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-Ranked Vote es una aplicación web moderna que permite a las comunidades organizar votaciones con ranking para cualquier tipo de evento o concurso. Ya sea que estés eligiendo el mejor platillo local, representante comunitario o símbolo cultural, Ranked Vote lo hace fácil y transparente.
+Ranked Vote is a modern web application that allows communities to organize ranked voting for any type of event or contest. Whether you're choosing the best local dish, community representative, or cultural symbol, Ranked Vote makes it easy and transparent.
 
-## ✨ Características
+## ✨ Features
 
-- 🎯 **Votación Ranqueada** - Los votantes ordenan sus 5 opciones favoritas por preferencia
-- 📊 **Resultados en Tiempo Real** - Conteo de votos en vivo y visualización con gráficas interactivas
-- 🔒 **Integridad del Voto** - Un voto por persona (basado en IP o verificación por email)
-- 📱 **Diseño Responsivo** - Funciona perfectamente en escritorio, tablet y móvil
-- 🎨 **Personalizable** - Fácil de adaptar para diferentes eventos y temas
-- 🌐 **Soporte Multi-eventos** - Ejecuta múltiples campañas de votación simultáneamente
-- 📈 **Dashboard de Analíticas** - Rastrea participación, tendencias y patrones de votación
-- 🌍 **Bilingüe** - Soporte completo para inglés y español
+- 🎯 **Ranked Voting** - Voters rank their 5 favorite options by preference
+- 📊 **Real-Time Results** - Live vote counting and visualization with interactive charts
+- 🔒 **Vote Integrity** - One vote per person (based on IP or email verification)
+- 📱 **Responsive Design** - Works perfectly on desktop, tablet, and mobile
+- 🎨 **Customizable** - Easy to adapt for different events and themes
+- 🌐 **Multi-event Support** - Run multiple voting campaigns simultaneously
+- 📈 **Analytics Dashboard** - Track participation, trends, and voting patterns
+- 🌍 **Bilingual** - Full support for English and Spanish
 
-## 🚀 Construido Con
+## 🚀 Built With
 
 **Frontend:**
 - React 18 + Vite
@@ -31,74 +31,78 @@ Ranked Vote es una aplicación web moderna que permite a las comunidades organiz
 **Backend:**
 - Node.js + Express
 - Prisma ORM
-- Validación con Zod
-- Rate limiting y seguridad
+- Validation with Zod
+- Rate limiting and security
 
-**Base de Datos:**
+**Database:**
 - Supabase (PostgreSQL)
-- Autenticación
-- Suscripciones en tiempo real
+- Authentication
+- Real-time subscriptions
 
-## 🎯 Casos de Uso
+## 🎯 Use Cases
 
-Esta plataforma fue creada por [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/) y se implementará por primera vez para el evento comunitario "Flor de Tabasco". Puede adaptarse para:
+This platform was created by [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/) and will be implemented for the first time for the community event "Flor de Tabasco". It can be adapted for:
 
-- 🌸 Selección de símbolos culturales
-- 🍕 Concursos de mejor comida/restaurante local
-- 🏆 Premios y reconocimientos comunitarios
-- 📚 Selecciones de club de lectura
-- 🎬 Votación de películas
-- 🎨 Competencias de arte y diseño
-- 🎵 Concursos de música o bandas
-- ¡Y cualquier decisión que requiera ranking!
+- 🌸 Cultural symbol selection
+- 🍕 Best local food/restaurant contests
+- 🏆 Community awards and recognitions
+- 📚 Book club selections
+- 🎬 Movie voting
+- 🎨 Art and design competitions
+- 🎵 Music or band contests
+- And any decision that requires ranking!
 
-## 📖 Inicio Rápido
+## 📖 Quick Start
 
-### 🎯 Instalación Automática (Recomendado)
+### 🎯 Automatic Installation (Recommended)
 
-La forma más fácil de empezar. Solo necesitas **Node.js 18+** instalado.
+The easiest way to get started. You only need **Node.js 18+** installed.
 
 ```bash
-# 1. Clonar el repositorio
+# 1. Clone the repository
 git clone https://github.com/dev-night-talk/ranked-vote.git
 cd ranked-vote
 
-# 2. Ejecutar instalación automática
+# 2. Run automatic installation
 ./scripts/setup.sh
 ```
 
-El script te guiará paso a paso para:
-- ✅ Instalar todas las dependencias
-- ✅ Configurar la base de datos (Supabase gratis o PostgreSQL local)
-- ✅ Crear los archivos de configuración
-- ✅ Preparar todo para funcionar
+The script will guide you step by step to:
 
-### 🚀 Iniciar el Proyecto
+- ✅ Install all dependencies
+- ✅ Configure the database (free Supabase or local PostgreSQL)
+- ✅ Create configuration files
+- ✅ Prepare everything to work
+
+### 🚀 Start the Project
 
 ```bash
 ./scripts/start-dev.sh
 ```
 
-¡Eso es todo! Abre tu navegador en:
+That's it! Open your browser at:
+
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:5001
 
-### 📚 Más Información
+### 📚 More Information
 
-- **Documentación Completa**: [`SETUP_MULTITENANT.md`](docs/SETUP_MULTITENANT.md) - Detalles técnicos
-- **Contribuir**: [`CONTRIBUTING.md`](docs/CONTRIBUTING.md) - Cómo colaborar
+- **Complete Documentation**: [`SETUP_MULTITENANT.md`](docs/SETUP_MULTITENANT.md) - Technical details
+- **Contribute**: [`CONTRIBUTING.md`](docs/CONTRIBUTING.md) - How to collaborate
 
-📁 Estructura del Proyecto
-```
+📁 Project Structure
+
+```text
+
 ranked-vote/
-├── frontend/          # Aplicación React + Vite
+├── frontend/          # React + Vite application
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
 │   │   ├── hooks/
 │   │   └── utils/
 │   └── package.json
-├── backend/           # API Node.js + Express
+├── backend/           # Node.js + Express API
 │   ├── src/
 │   │   ├── controllers/
 │   │   ├── routes/
@@ -106,93 +110,93 @@ ranked-vote/
 │   │   └── config/
 │   ├── prisma/
 │   └── package.json
-├── shared/            # Tipos y utilidades compartidas
-├── docs/              # Documentación
+├── shared/            # Shared types and utilities
+├── docs/              # Documentation
 │   ├── INSTALLATION.md
 │   └── examples/
 │       └── flor-tabasco/
-└── package.json       # Package raíz con scripts
+└── package.json       # Root package with scripts
 ```
 
-🤝 Contribuir
-¡Damos la bienvenida a contribuciones de desarrolladores de todos los niveles! Este proyecto es parte de Hacktoberfest 2025.
-Cómo Contribuir
+🤝 Contribute
+We welcome contributions from developers of all levels! This project is part of Hacktoberfest 2025.
+How to Contribute
 
-- Haz fork del repositorio
-- Crea tu rama de feature (git checkout -b feature/CaracteristicaIncreible)
-- Haz commit de tus cambios (git commit -m 'Agregar CaracteristicaIncreible')
-- Push a la rama (git push origin feature/CaracteristicaIncreible)
-- Abre un Pull Request
+- Fork the repository
+- Create your feature branch (git checkout -b feature/IncredibleFeature)
+- Commit your changes (git commit -m 'Add IncredibleFeature')
+- Push to the branch (git push origin feature/IncredibleFeature)
+- Open a Pull Request
 
-Revisa nuestra [Guía de Contribución](docs/CONTRIBUTING.md) para instrucciones detalladas.
+Check our [Contribution Guide](docs/CONTRIBUTING.md) for detailed instructions.
 
-Buenos Primeros Issues (Good First Issues)
-¿Nuevo en open source? Busca issues etiquetados con:
+Good First Issues
+New to open source? Look for issues labeled with:
 
-good-first-issue - Perfecto para principiantes
-hacktoberfest - Issues listos para Hacktoberfest
-documentation - Ayuda a mejorar nuestra documentación
-help-wanted - ¡Necesitamos tu experiencia!
+good-first-issue - Perfect for beginners
+hacktoberfest - Issues ready for Hacktoberfest
+documentation - Help improve our documentation
+help-wanted - We need your expertise!
 
-🌟 Primera Implementación: Flor de Tabasco
+🌟 First Implementation: Flor de Tabasco
 
-Nuestro evento inaugural ayuda a la comunidad de Tabasco a predecir el ganador de su flor representativa a través de votación ranqueada democrática. Esta implementación real muestra las capacidades de la plataforma.
+Our inaugural event helps the Tabasco community predict the winner of their representative flower through democratic ranked voting. This real implementation showcases the platform's capabilities.
 
-Conoce más: Caso de Estudio [Flor de Tabasco](docs/examples/flor-tabasco)
+Learn more: Case Study [Flor de Tabasco](docs/examples/flor-tabasco)
 
-🚀 Despliegue
-La aplicación puede desplegarse en:
+🚀 Deployment
+The application can be deployed on:
 Frontend:
 
-Vercel (recomendado)
+Vercel (recommended)
 Netlify
 GitHub Pages
 
 Backend:
 
-Render (tier gratuito)
+Render (free tier)
 Railway
 Heroku
 
-Base de Datos:
+Database:
 
-Supabase (tier gratuito)
+Supabase (free tier)
 
-<!-- Ver [Guía de Despliegue](docs/DEPLOYMENT.md) para instrucciones detalladas. -->
+<!-- See [Deployment Guide](docs/DEPLOYMENT.md) for detailed instructions. -->
 
-📄 Licencia
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para detalles.
-🙏 Agradecimientos
+📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+🙏 Acknowledgments
 
-Creado por la comunidad [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/)
-Agradecimiento especial a todos nuestros [contribuidores](https://github.com/jblancoh/ranked-vote/graphs/contributors)
-Potenciado por tecnologías open-source
+Created by the [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/) community
+Special thanks to all our [contributors](https://github.com/jblancoh/ranked-vote/graphs/contributors)
+Powered by open-source technologies
 
-📞 Contacto y Comunidad
+📞 Contact and Community
 
 GitHub: [@jblancoh](https://github.com/jblancoh)
-Issues: [Reporta un bug o solicita una función]([URL](https://github.com/jblancoh/ranked-vote/issues))
-Comunidad: Dev Night Talk - Todos los jueves 7-10 PM
+Issues: [Report a bug or request a feature](https://github.com/jblancoh/ranked-vote/issues)
+Community: Dev Night Talk - Every Thursday 7-10 PM
 
-🗺️ Hoja de Ruta
+🗺️ Roadmap
 
-- Verificación por email para votos
-- Dashboard de administración
-- Múltiples métodos de votación (ranqueada, aprobación, puntaje)
-- Exportar resultados a PDF/CSV
-- Internacionalización (más idiomas)
-- App móvil (React Native)
-- Compartir en redes sociales
-- Fecha límite/programación de votación
+- Email verification for votes
+- Admin dashboard
+- Multiple voting methods (ranked, approval, scoring)
+- Export results to PDF/CSV
+- Internationalization (more languages)
+- Mobile app (React Native)
+- Social media sharing
+- Voting deadline/scheduling
 
-❤️ Apoyo
-Si encuentras útil este proyecto, por favor considera:
+❤️ Support
+If you find this project useful, please consider:
 
-⭐ Dar una estrella al repositorio
-🐛 Reportar bugs
-💡 Sugerir nuevas características
-🤝 Contribuir código
-📢 Compartir con tu comunidad
+⭐ Starring the repository
+🐛 Reporting bugs
+💡 Suggesting new features
+🤝 Contributing code
+📢 Sharing with your community
 
-Hecho con ❤️ por la comunidad Dev Night Talk en Villahermosa, Tabasco 🇲🇽
+Made with ❤️ by the Dev Night Talk community in Villahermosa, Tabasco 🇲🇽
 
