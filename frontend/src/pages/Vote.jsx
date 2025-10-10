@@ -16,8 +16,9 @@ const Vote = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [error, setError] = useState(null)
+  const [filterText, setFilterText] = useState('')
 
-  const { candidates, loading, error: candidatesError } = useCandidates()
+  const { candidates, loading, filtering, error: candidatesError } = useCandidates(null, filterText)
   const { submitVote, hasVoted, checkIfVoted } = useVote()
 
   useEffect(() => {
@@ -204,75 +205,102 @@ const Vote = () => {
             {/* Candidatas List */}
             <div className="lg:col-span-2">
               <div className="card p-6 mb-6">
-                <h2 className="text-xl font-display font-bold mb-4">
-                  Candidatas
-                </h2>
-                <p className="text-sm text-gray-600 mb-4">
-                  Haz clic en una candidata para seleccionarla en tu top 5
-                </p>
+                <div className="flex justify-between items-center mb-4 flex-wrap">
+                  <div className="flex flex-1 flex-col justify-between">
+                    <h2 className="text-xl font-display font-bold mb-4">
+                      Candidatas
+                    </h2>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Haz clic en una candidata para seleccionarla en tu top 5
+                    </p>
+                  </div>
+                  <div className="flex flex-[0.7] items-center justify-end">
+                    <input
+                      type="text"
+                      placeholder="Filtrar candidatas..."
+                      className="input w-full max-w-xs"
+                      value={filterText}
+                      onChange={e => setFilterText(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {candidates?.map((candidate) => {
-                    const selected = isSelected(candidate.id)
-                    const position = getPosition(candidate.id)
-
-                    return (
-                      <div
-                        key={candidate.id}
-                        onClick={() => {
-                          // Select in first available position
-                          const firstAvailable = positions.find(
-                            p => !selectedCandidates[p.key]
-                          )
-                          if (firstAvailable && !selected) {
-                            handleSelectCandidate(firstAvailable.key, candidate.id)
-                          }
-                        }}
-                        className={`card p-4 cursor-pointer transition-all duration-200 ${selected
-                            ? 'ring-2 ring-primary-500 bg-primary-50'
-                            : 'hover:shadow-lg hover:scale-[1.02]'
-                          }`}
+                <div className={`grid sm:grid-cols-2 gap-4 transition-opacity duration-200 ${filtering ? 'opacity-70' : 'opacity-100'}`}>
+                  {candidates?.length === 0 && !filtering && filterText ? (
+                    <div className="col-span-2 text-center py-8">
+                      <p className="text-gray-500 mb-2">
+                        No se encontraron candidatas con "{filterText}"
+                      </p>
+                      <button
+                        onClick={() => setFilterText('')}
+                        className="text-primary-600 hover:text-primary-700 text-sm"
                       >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                            {candidate.name.charAt(0)}
-                          </div>
-                          <div className="flex-grow">
-                            <h3 className="font-display font-bold text-gray-900">
-                              {candidate.name}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {candidate.municipality}
-                            </p>
-                          </div>
-                          {selected && (
-                            <div className="flex items-center space-x-2">
-                              <span className="badge badge-primary text-xs">
-                                {position}
-                              </span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  const pos = Object.keys(selectedCandidates).find(
-                                    key => selectedCandidates[key] === candidate.id
-                                  )
-                                  if (pos) {
-                                    setSelectedCandidates(prev => ({
-                                      ...prev,
-                                      [pos]: null
-                                    }))
-                                  }
-                                }}
-                                className="p-1 hover:bg-red-100 rounded-full transition-colors"
-                              >
-                                <X size={16} className="text-red-500" />
-                              </button>
+                        Limpiar filtro
+                      </button>
+                    </div>
+                  ) : (
+                    candidates?.map((candidate) => {
+                      const selected = isSelected(candidate.id)
+                      const position = getPosition(candidate.id)
+
+                      return (
+                        <div
+                          key={candidate.id}
+                          onClick={() => {
+                            // Select in first available position
+                            const firstAvailable = positions.find(
+                              p => !selectedCandidates[p.key]
+                            )
+                            if (firstAvailable && !selected) {
+                              handleSelectCandidate(firstAvailable.key, candidate.id)
+                            }
+                          }}
+                          className={`card p-4 cursor-pointer transition-all duration-200 ${selected
+                              ? 'ring-2 ring-primary-500 bg-primary-50'
+                              : 'hover:shadow-lg hover:scale-[1.02]'
+                            }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                              {candidate.name.charAt(0)}
                             </div>
-                          )}
+                            <div className="flex-grow">
+                              <h3 className="font-display font-bold text-gray-900">
+                                {candidate.name}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {candidate.municipality}
+                              </p>
+                            </div>
+                            {selected && (
+                              <div className="flex items-center space-x-2">
+                                <span className="badge badge-primary text-xs">
+                                  {position}
+                                </span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    const pos = Object.keys(selectedCandidates).find(
+                                      key => selectedCandidates[key] === candidate.id
+                                    )
+                                    if (pos) {
+                                      setSelectedCandidates(prev => ({
+                                        ...prev,
+                                        [pos]: null
+                                      }))
+                                    }
+                                  }}
+                                  className="p-1 hover:bg-red-100 rounded-full transition-colors"
+                                >
+                                  <X size={16} className="text-red-500" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    })
+                  )}
                 </div>
               </div>
             </div>
