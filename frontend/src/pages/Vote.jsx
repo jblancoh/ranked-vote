@@ -229,7 +229,7 @@ const Vote = () => {
                   {candidates?.length === 0 && !filtering && filterText ? (
                     <div className="col-span-2 text-center py-8">
                       <p className="text-gray-500 mb-2">
-                        No se encontraron candidatas con "{filterText}"
+                        No se encontraron candidatas con &quot;{filterText}&quot;
                       </p>
                       <button
                         onClick={() => setFilterText('')}
