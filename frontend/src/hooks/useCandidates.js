@@ -56,6 +56,7 @@ export const useCandidates = (eventId = null, filter = null) => {
 
   useEffect(() => {
     fetchCandidates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId, filter])
 
   return {
