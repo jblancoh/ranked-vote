@@ -1,8 +1,45 @@
 import { getPrisma } from '../utils/prisma.js';
 
 /**
- * Get all events
- * @route GET /api/events
+ * @swagger
+ * /api/events:
+ *   get:
+ *     summary: Obtener todos los eventos
+ *     description: Retorna una lista de eventos con opción de filtrar por estado activo
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: query
+ *         name: active
+ *         schema:
+ *           type: boolean
+ *         description: Filtrar eventos por estado activo (true/false)
+ *         example: true
+ *     responses:
+ *       200:
+ *         description: Lista de eventos obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 3
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getAllEvents = async (req, res, next) => {
   try {
@@ -31,8 +68,39 @@ export const getAllEvents = async (req, res, next) => {
 };
 
 /**
- * Get current/active event
- * @route GET /api/events/current
+ * @swagger
+ * /api/events/current:
+ *   get:
+ *     summary: Obtener evento actual
+ *     description: Retorna el evento que está actualmente activo y dentro del rango de fechas
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Evento actual encontrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: No hay eventos activos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getCurrentEvent = async (req, res, next) => {
   try {
@@ -67,8 +135,48 @@ export const getCurrentEvent = async (req, res, next) => {
 };
 
 /**
- * Get event by ID
- * @route GET /api/events/:id
+ * @swagger
+ * /api/events/{id}:
+ *   get:
+ *     summary: Obtener evento por ID
+ *     description: Retorna los detalles de un evento específico por su ID
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Evento encontrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getEventById = async (req, res, next) => {
   try {
@@ -96,8 +204,75 @@ export const getEventById = async (req, res, next) => {
 };
 
 /**
- * Create new event
- * @route POST /api/events
+ * @swagger
+ * /api/events:
+ *   post:
+ *     summary: Crear nuevo evento
+ *     description: Crea un nuevo evento en el sistema
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - startDate
+ *               - endDate
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nombre del evento
+ *                 example: 'Festival Cultural 2024'
+ *               description:
+ *                 type: string
+ *                 description: Descripción del evento
+ *                 example: 'Evento cultural con votación comunitaria'
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de inicio del evento
+ *                 example: '2024-01-01T00:00:00.000Z'
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de fin del evento
+ *                 example: '2024-01-31T23:59:59.000Z'
+ *               votingOpen:
+ *                 type: boolean
+ *                 description: Estado de la votación
+ *                 example: true
+ *     responses:
+ *       201:
+ *         description: Evento creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Evento creado exitosamente'
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Datos de entrada inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const createEvent = async (req, res, next) => {
   try {
@@ -125,8 +300,90 @@ export const createEvent = async (req, res, next) => {
 };
 
 /**
- * Update event
- * @route PUT /api/events/:id
+ * @swagger
+ * /api/events/{id}:
+ *   put:
+ *     summary: Actualizar evento
+ *     description: Actualiza los datos de un evento existente
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nombre del evento
+ *                 example: 'Festival Cultural 2024'
+ *               description:
+ *                 type: string
+ *                 description: Descripción del evento
+ *                 example: 'Evento cultural con votación comunitaria'
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de inicio del evento
+ *                 example: '2024-01-01T00:00:00.000Z'
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de fin del evento
+ *                 example: '2024-01-31T23:59:59.000Z'
+ *               active:
+ *                 type: boolean
+ *                 description: Estado activo del evento
+ *                 example: true
+ *               votingOpen:
+ *                 type: boolean
+ *                 description: Estado de la votación
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Evento actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Evento actualizado exitosamente'
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       400:
+ *         description: Datos de entrada inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const updateEvent = async (req, res, next) => {
   try {
@@ -168,8 +425,49 @@ export const updateEvent = async (req, res, next) => {
 };
 
 /**
- * Delete event
- * @route DELETE /api/events/:id
+ * @swagger
+ * /api/events/{id}:
+ *   delete:
+ *     summary: Eliminar evento
+ *     description: Elimina un evento del sistema
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Evento eliminado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Evento eliminado exitosamente'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const deleteEvent = async (req, res, next) => {
   try {
@@ -201,8 +499,51 @@ export const deleteEvent = async (req, res, next) => {
 };
 
 /**
- * Toggle voting status
- * @route PATCH /api/events/:id/voting
+ * @swagger
+ * /api/events/{id}/voting:
+ *   patch:
+ *     summary: Cambiar estado de votación del evento
+ *     description: Alterna el estado de votación (abierta/cerrada) de un evento
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Estado de votación actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Votación abierta exitosamente'
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const toggleVotingStatus = async (req, res, next) => {
   try {
