@@ -29,11 +29,61 @@ import { getPrisma } from '../utils/prisma.js';
  *                   example: true
  *                 count:
  *                   type: integer
- *                   example: 3
+ *                   example: 1
+ *                   description: Número de eventos en la respuesta
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Event'
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "cmgk803u00010sajt87w66zpv"
+ *                         description: ID único del evento
+ *                       tenantId:
+ *                         type: string
+ *                         example: "cmgk803t00000sajte670dar0"
+ *                         description: ID del tenant (multi-tenant)
+ *                       name:
+ *                         type: string
+ *                         example: "Certamen Flor de Tabasco 2026"
+ *                         description: Nombre del evento
+ *                       description:
+ *                         type: string
+ *                         example: "Elección de la representante floral de Tabasco"
+ *                         description: Descripción del evento
+ *                       startDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2026-04-01T00:00:00.000Z"
+ *                         description: Fecha y hora de inicio del evento
+ *                       endDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2026-04-30T23:59:59.000Z"
+ *                         description: Fecha y hora de fin del evento
+ *                       active:
+ *                         type: boolean
+ *                         example: true
+ *                         description: Estado activo del evento
+ *                       votingOpen:
+ *                         type: boolean
+ *                         example: true
+ *                         description: Estado de la votación (abierta/cerrada)
+ *                       config:
+ *                         type: object
+ *                         example: {}
+ *                         description: Configuración adicional del evento
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-10-10T02:21:32.904Z"
+ *                         description: Fecha de creación del evento
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-10-10T02:21:32.904Z"
+ *                         description: Fecha de última actualización del evento
  *       500:
  *         description: Error interno del servidor
  *         content:
