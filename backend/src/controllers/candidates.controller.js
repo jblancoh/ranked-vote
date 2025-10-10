@@ -46,16 +46,96 @@ import { getPrisma } from '../utils/prisma.js';
  *                   example: true
  *                 count:
  *                   type: integer
- *                   example: 10
+ *                   example: 5
+ *                   description: Número de candidatos en la página actual
  *                 totalCount:
  *                   type: integer
- *                   example: 50
+ *                   example: 17
+ *                   description: Número total de candidatos
  *                 pagination:
- *                   $ref: '#/components/schemas/Pagination'
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 2
+ *                       description: Página actual
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 4
+ *                       description: Total de páginas
+ *                     limit:
+ *                       type: integer
+ *                       example: 5
+ *                       description: Elementos por página
+ *                     hasNextPage:
+ *                       type: boolean
+ *                       example: true
+ *                       description: Indica si hay página siguiente
+ *                     hasPrevPage:
+ *                       type: boolean
+ *                       example: true
+ *                       description: Indica si hay página anterior
+ *                     nextPage:
+ *                       type: integer
+ *                       nullable: true
+ *                       example: 3
+ *                       description: Número de página siguiente (null si no hay)
+ *                     prevPage:
+ *                       type: integer
+ *                       nullable: true
+ *                       example: 1
+ *                       description: Número de página anterior (null si no hay)
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Candidate'
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "cmgk803tm000csajt6o5g9vem"
+ *                         description: ID único del candidato
+ *                       name:
+ *                         type: string
+ *                         example: "Embajadora Nacajuca"
+ *                         description: Nombre del candidato
+ *                       municipality:
+ *                         type: string
+ *                         example: "Nacajuca"
+ *                         description: Municipio del candidato
+ *                       photoUrl:
+ *                         type: string
+ *                         nullable: true
+ *                         example: null
+ *                         description: URL de la foto del candidato
+ *                       bio:
+ *                         type: string
+ *                         example: "Representante del municipio de Nacajuca"
+ *                         description: Biografía del candidato
+ *                       order:
+ *                         type: integer
+ *                         example: 6
+ *                         description: Orden de aparición del candidato
+ *                       active:
+ *                         type: boolean
+ *                         example: true
+ *                         description: Estado activo del candidato
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-10-10T02:21:32.891Z"
+ *                         description: Fecha de creación
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-10-10T02:21:32.891Z"
+ *                         description: Fecha de última actualización
+ *                       _count:
+ *                         type: object
+ *                         properties:
+ *                           votes:
+ *                             type: integer
+ *                             example: 0
+ *                             description: Número de votos recibidos
  *       400:
  *         description: Parámetros de paginación inválidos
  *         content:
