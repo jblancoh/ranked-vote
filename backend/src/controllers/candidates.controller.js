@@ -1,4 +1,4 @@
-import { getPrisma } from '../utils/prisma.js';
+import { getPrisma } from "../utils/prisma.js";
 
 /**
  * Get all candidates
@@ -9,14 +9,13 @@ export const getAllCandidates = async (req, res, next) => {
     const prisma = getPrisma(req.tenantId);
     const { active } = req.query;
 
-    const whereClause = active !== undefined
-      ? { active: active === 'true' }
-      : {};
+    const whereClause =
+      active !== undefined ? { active: active === "true" } : {};
 
     const candidates = await prisma.candidate.findMany({
       where: whereClause,
       orderBy: {
-        order: 'asc'
+        order: "asc",
       },
       select: {
         id: true,
@@ -29,15 +28,15 @@ export const getAllCandidates = async (req, res, next) => {
         createdAt: true,
         updatedAt: true,
         _count: {
-          select: { votes: true }
-        }
-      }
+          select: { votes: true },
+        },
+      },
     });
 
     res.json({
       success: true,
       count: candidates.length,
-      data: candidates
+      data: candidates,
     });
   } catch (error) {
     next(error);
@@ -57,21 +56,21 @@ export const getCandidateById = async (req, res, next) => {
       where: { id },
       include: {
         _count: {
-          select: { votes: true }
-        }
-      }
+          select: { votes: true },
+        },
+      },
     });
 
     if (!candidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
     res.json({
       success: true,
-      data: candidate
+      data: candidate,
     });
   } catch (error) {
     next(error);
@@ -93,14 +92,14 @@ export const createCandidate = async (req, res, next) => {
         municipality,
         photoUrl,
         bio,
-        order: order || undefined
-      }
+        order: order || undefined,
+      },
     });
 
     res.status(201).json({
       success: true,
-      message: 'Candidato creado exitosamente',
-      data: candidate
+      message: "Candidato creado exitosamente",
+      data: candidate,
     });
   } catch (error) {
     next(error);
@@ -119,13 +118,13 @@ export const updateCandidate = async (req, res, next) => {
 
     // Check if candidate exists
     const existingCandidate = await prisma.candidate.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingCandidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
@@ -137,14 +136,14 @@ export const updateCandidate = async (req, res, next) => {
         ...(photoUrl !== undefined && { photoUrl }),
         ...(bio !== undefined && { bio }),
         ...(order !== undefined && { order }),
-        ...(active !== undefined && { active })
-      }
+        ...(active !== undefined && { active }),
+      },
     });
 
     res.json({
       success: true,
-      message: 'Candidato actualizado exitosamente',
-      data: candidate
+      message: "Candidato actualizado exitosamente",
+      data: candidate,
     });
   } catch (error) {
     next(error);
@@ -162,23 +161,23 @@ export const deleteCandidate = async (req, res, next) => {
 
     // Check if candidate exists
     const existingCandidate = await prisma.candidate.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingCandidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
     await prisma.candidate.delete({
-      where: { id }
+      where: { id },
     });
 
     res.json({
       success: true,
-      message: 'Candidato eliminado exitosamente'
+      message: "Candidato eliminado exitosamente",
     });
   } catch (error) {
     next(error);
@@ -195,27 +194,27 @@ export const toggleCandidateStatus = async (req, res, next) => {
     const { id } = req.params;
 
     const candidate = await prisma.candidate.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!candidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
     const updatedCandidate = await prisma.candidate.update({
       where: { id },
       data: {
-        active: !candidate.active
-      }
+        active: !candidate.active,
+      },
     });
 
     res.json({
       success: true,
-      message: `Candidato ${updatedCandidate.active ? 'activado' : 'desactivado'} exitosamente`,
-      data: updatedCandidate
+      message: `Candidato ${updatedCandidate.active ? "activado" : "desactivado"} exitosamente`,
+      data: updatedCandidate,
     });
   } catch (error) {
     next(error);

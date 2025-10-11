@@ -90,6 +90,36 @@ Obtiene un evento específico por ID.
 
 ---
 
+#### GET /api/events/:id/stats
+
+Obtiene estadisticas del evento (total votos, votos por hora, top 5 candidatos)
+
+```json
+{
+  {
+    "success": true,
+    "data": {
+        "totalVotes": 1,
+        "votesByHour": {
+            "19": 1
+        },
+        "topCandidates": [
+            {
+                "id": "cmgk7w7hv0002ac4jbhux8m2j",
+                "name": "Embajadora Centro",
+                "municipality": "Centro",
+                "photoUrl": null,
+                "bio": "Representante del municipio de Centro",
+                "points": 5
+            },
+            ...
+        ]
+    }
+  }
+}
+```
+---
+
 ### Candidates
 
 #### GET /api/candidates

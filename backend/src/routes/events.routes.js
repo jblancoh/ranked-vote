@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   getAllEvents,
   getCurrentEvent,
@@ -6,8 +6,9 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-  toggleVotingStatus
-} from '../controllers/events.controller.js';
+  toggleVotingStatus,
+  getEventStats,
+} from "../controllers/events.controller.js";
 
 const router = express.Router();
 
@@ -16,48 +17,55 @@ const router = express.Router();
  * @desc    Get current/active event
  * @access  Public
  */
-router.get('/current', getCurrentEvent);
+router.get("/current", getCurrentEvent);
 
 /**
  * @route   GET /api/events
  * @desc    Get all events
  * @access  Public
  */
-router.get('/', getAllEvents);
+router.get("/", getAllEvents);
 
 /**
  * @route   GET /api/events/:id
  * @desc    Get event by ID
  * @access  Public
  */
-router.get('/:id', getEventById);
+router.get("/:id", getEventById);
 
 /**
  * @route   POST /api/events
  * @desc    Create new event
  * @access  Private (should add auth middleware)
  */
-router.post('/', createEvent);
+router.post("/", createEvent);
 
 /**
  * @route   PUT /api/events/:id
  * @desc    Update event
  * @access  Private (should add auth middleware)
  */
-router.put('/:id', updateEvent);
+router.put("/:id", updateEvent);
 
 /**
  * @route   DELETE /api/events/:id
  * @desc    Delete event
  * @access  Private (should add auth middleware)
  */
-router.delete('/:id', deleteEvent);
+router.delete("/:id", deleteEvent);
 
 /**
  * @route   PATCH /api/events/:id/voting
  * @desc    Toggle voting status
  * @access  Private (should add auth middleware)
  */
-router.patch('/:id/voting', toggleVotingStatus);
+router.patch("/:id/voting", toggleVotingStatus);
+
+/**
+ * @route   GET /api/events/:eventId/stats
+ * @desc    Get stats (total votes, hourly turnout, top 5 candidates.)
+ * @access  Private (should add auth middleware)
+ */
+router.get("/:eventId/stats", getEventStats);
 
 export default router;

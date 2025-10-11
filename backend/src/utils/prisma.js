@@ -3,7 +3,7 @@
  * Centralized Prisma client management
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 // Single Prisma instance
 const prisma = new PrismaClient();
@@ -44,7 +44,7 @@ export function getPrisma(tenantId) {
         },
         async createMany({ args, query }) {
           if (Array.isArray(args.data)) {
-            args.data = args.data.map(item => ({ ...item, tenantId }));
+            args.data = args.data.map((item) => ({ ...item, tenantId }));
           }
           return query(args);
         },
@@ -67,7 +67,7 @@ export function getPrisma(tenantId) {
         async count({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
+        },
       },
       // Votes
       vote: {
@@ -94,7 +94,7 @@ export function getPrisma(tenantId) {
         async count({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
+        },
       },
       // Events
       event: {
@@ -113,7 +113,7 @@ export function getPrisma(tenantId) {
         async update({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
+        },
       },
       // Results
       result: {
@@ -127,16 +127,16 @@ export function getPrisma(tenantId) {
         },
         async createMany({ args, query }) {
           if (Array.isArray(args.data)) {
-            args.data = args.data.map(item => ({ ...item, tenantId }));
+            args.data = args.data.map((item) => ({ ...item, tenantId }));
           }
           return query(args);
         },
         async deleteMany({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
-      }
-    }
+        },
+      },
+    },
   });
 }
 
