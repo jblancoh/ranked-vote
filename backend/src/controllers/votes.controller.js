@@ -1,14 +1,16 @@
-import { getPrisma } from '../utils/prisma.js';
+import { getPrisma } from "../utils/prisma.js";
 
 /**
  * Get client IP address
  */
 const getClientIp = (req) => {
-  return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
-         req.headers['x-real-ip'] ||
-         req.connection.remoteAddress ||
-         req.socket.remoteAddress ||
-         req.ip;
+  return (
+    req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
+    req.headers["x-real-ip"] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.ip
+  );
 };
 
 /**
@@ -31,7 +33,7 @@ export const submitVote = async (req, res, next) => {
       fourth,
       fifth,
       voterEmail,
-      voterName
+      voterName,
     } = req.body;
 
     const firstPlace = fp || first;
@@ -47,26 +49,34 @@ export const submitVote = async (req, res, next) => {
       where: {
         tenantId_voterIp: {
           tenantId: req.tenantId,
-          voterIp
-        }
-      }
+          voterIp,
+        },
+      },
     });
 
     if (existingVote) {
       return res.status(400).json({
         success: false,
-        message: 'Ya has votado anteriormente. Solo se permite un voto por persona.'
+        message:
+          "Ya has votado anteriormente. Solo se permite un voto por persona.",
       });
     }
 
     // Validate all positions are different candidates
-    const positions = [firstPlace, secondPlace, thirdPlace, fourthPlace, fifthPlace];
+    const positions = [
+      firstPlace,
+      secondPlace,
+      thirdPlace,
+      fourthPlace,
+      fifthPlace,
+    ];
     const uniquePositions = new Set(positions);
 
     if (uniquePositions.size !== positions.length) {
       return res.status(400).json({
         success: false,
-        message: 'No puedes votar por el mismo candidato en múltiples posiciones'
+        message:
+          "No puedes votar por el mismo candidato en múltiples posiciones",
       });
     }
 
@@ -74,14 +84,15 @@ export const submitVote = async (req, res, next) => {
     const candidates = await prisma.candidate.findMany({
       where: {
         id: { in: positions },
-        active: true
-      }
+        active: true,
+      },
     });
 
     if (candidates.length !== positions.length) {
       return res.status(400).json({
         success: false,
-        message: 'Uno o más candidatos seleccionados no son válidos o están inactivos'
+        message:
+          "Uno o más candidatos seleccionados no son válidos o están inactivos",
       });
     }
 
@@ -94,17 +105,17 @@ export const submitVote = async (req, res, next) => {
         secondPlace,
         thirdPlace,
         fourthPlace,
-        fifthPlace
-      }
+        fifthPlace,
+      },
     });
 
     res.status(201).json({
       success: true,
-      message: '¡Voto registrado exitosamente! Gracias por participar.',
+      message: "¡Voto registrado exitosamente! Gracias por participar.",
       data: {
         id: vote.id,
-        createdAt: vote.createdAt
-      }
+        createdAt: vote.createdAt,
+      },
     });
   } catch (error) {
     next(error);
@@ -124,19 +135,19 @@ export const checkVoteStatus = async (req, res, next) => {
       where: {
         tenantId_voterIp: {
           tenantId: req.tenantId,
-          voterIp
-        }
+          voterIp,
+        },
       },
       select: {
         id: true,
-        createdAt: true
-      }
+        createdAt: true,
+      },
     });
 
     res.json({
       success: true,
       hasVoted: !!existingVote,
-      voteDate: existingVote?.createdAt || null
+      voteDate: existingVote?.createdAt || null,
     });
   } catch (error) {
     next(error);
@@ -155,8 +166,8 @@ export const getVoteCount = async (req, res, next) => {
     res.json({
       success: true,
       data: {
-        totalVotes
-      }
+        totalVotes,
+      },
     });
   } catch (error) {
     next(error);
@@ -176,7 +187,7 @@ export const getAllVotes = async (req, res, next) => {
       take: parseInt(limit),
       skip: parseInt(offset),
       orderBy: {
-        createdAt: 'desc'
+        createdAt: "desc",
       },
       select: {
         id: true,
@@ -187,8 +198,8 @@ export const getAllVotes = async (req, res, next) => {
         thirdPlace: true,
         fourthPlace: true,
         fifthPlace: true,
-        createdAt: true
-      }
+        createdAt: true,
+      },
     });
 
     const totalVotes = await prisma.vote.count();
@@ -200,8 +211,8 @@ export const getAllVotes = async (req, res, next) => {
         total: totalVotes,
         limit: parseInt(limit),
         offset: parseInt(offset),
-        hasMore: parseInt(offset) + votes.length < totalVotes
-      }
+        hasMore: parseInt(offset) + votes.length < totalVotes,
+      },
     });
   } catch (error) {
     next(error);

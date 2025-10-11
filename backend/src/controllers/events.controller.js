@@ -1,4 +1,4 @@
-import { getPrisma } from '../utils/prisma.js';
+import { getPrisma } from "../utils/prisma.js";
 
 /**
  * Get all events
@@ -9,21 +9,20 @@ export const getAllEvents = async (req, res, next) => {
     const prisma = getPrisma(req.tenantId);
     const { active } = req.query;
 
-    const whereClause = active !== undefined
-      ? { active: active === 'true' }
-      : {};
+    const whereClause =
+      active !== undefined ? { active: active === "true" } : {};
 
     const events = await prisma.event.findMany({
       where: whereClause,
       orderBy: {
-        startDate: 'desc'
-      }
+        startDate: "desc",
+      },
     });
 
     res.json({
       success: true,
       count: events.length,
-      data: events
+      data: events,
     });
   } catch (error) {
     next(error);
@@ -43,23 +42,23 @@ export const getCurrentEvent = async (req, res, next) => {
       where: {
         active: true,
         startDate: { lte: now },
-        endDate: { gte: now }
+        endDate: { gte: now },
       },
       orderBy: {
-        startDate: 'desc'
-      }
+        startDate: "desc",
+      },
     });
 
     if (!currentEvent) {
       return res.status(404).json({
         success: false,
-        message: 'No hay eventos activos en este momento'
+        message: "No hay eventos activos en este momento",
       });
     }
 
     res.json({
       success: true,
-      data: currentEvent
+      data: currentEvent,
     });
   } catch (error) {
     next(error);
@@ -76,19 +75,19 @@ export const getEventById = async (req, res, next) => {
     const { id } = req.params;
 
     const event = await prisma.event.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!event) {
       return res.status(404).json({
         success: false,
-        message: 'Evento no encontrado'
+        message: "Evento no encontrado",
       });
     }
 
     res.json({
       success: true,
-      data: event
+      data: event,
     });
   } catch (error) {
     next(error);
@@ -110,14 +109,14 @@ export const createEvent = async (req, res, next) => {
         description,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        votingOpen: votingOpen || false
-      }
+        votingOpen: votingOpen || false,
+      },
     });
 
     res.status(201).json({
       success: true,
-      message: 'Evento creado exitosamente',
-      data: event
+      message: "Evento creado exitosamente",
+      data: event,
     });
   } catch (error) {
     next(error);
@@ -132,16 +131,17 @@ export const updateEvent = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
     const { id } = req.params;
-    const { name, description, startDate, endDate, active, votingOpen } = req.body;
+    const { name, description, startDate, endDate, active, votingOpen } =
+      req.body;
 
     const existingEvent = await prisma.event.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingEvent) {
       return res.status(404).json({
         success: false,
-        message: 'Evento no encontrado'
+        message: "Evento no encontrado",
       });
     }
 
@@ -153,14 +153,14 @@ export const updateEvent = async (req, res, next) => {
         ...(startDate !== undefined && { startDate: new Date(startDate) }),
         ...(endDate !== undefined && { endDate: new Date(endDate) }),
         ...(active !== undefined && { active }),
-        ...(votingOpen !== undefined && { votingOpen })
-      }
+        ...(votingOpen !== undefined && { votingOpen }),
+      },
     });
 
     res.json({
       success: true,
-      message: 'Evento actualizado exitosamente',
-      data: event
+      message: "Evento actualizado exitosamente",
+      data: event,
     });
   } catch (error) {
     next(error);
@@ -177,23 +177,23 @@ export const deleteEvent = async (req, res, next) => {
     const { id } = req.params;
 
     const existingEvent = await prisma.event.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingEvent) {
       return res.status(404).json({
         success: false,
-        message: 'Evento no encontrado'
+        message: "Evento no encontrado",
       });
     }
 
     await prisma.event.delete({
-      where: { id }
+      where: { id },
     });
 
     res.json({
       success: true,
-      message: 'Evento eliminado exitosamente'
+      message: "Evento eliminado exitosamente",
     });
   } catch (error) {
     next(error);
@@ -210,27 +210,118 @@ export const toggleVotingStatus = async (req, res, next) => {
     const { id } = req.params;
 
     const event = await prisma.event.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!event) {
       return res.status(404).json({
         success: false,
-        message: 'Evento no encontrado'
+        message: "Evento no encontrado",
       });
     }
 
     const updatedEvent = await prisma.event.update({
       where: { id },
       data: {
-        votingOpen: !event.votingOpen
-      }
+        votingOpen: !event.votingOpen,
+      },
     });
 
     res.json({
       success: true,
-      message: `Votación ${updatedEvent.votingOpen ? 'abierta' : 'cerrada'} exitosamente`,
-      data: updatedEvent
+      message: `Votación ${updatedEvent.votingOpen ? "abierta" : "cerrada"} exitosamente`,
+      data: updatedEvent,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Get stats (total votes, hourly turnout, top 5 candidates.)
+ * @route GET /api/events/:idEvent/stats
+ */
+export const getEventStats = async (req, res, next) => {
+  const prisma = getPrisma(req.tenantId);
+  const { eventId } = req.params;
+  const POINTS = {
+    firstPlace: 5,
+    secondPlace: 4,
+    thirdPlace: 3,
+    fourthPlace: 2,
+    fifthPlace: 1,
+  };
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Evento no encontrado",
+      });
+    }
+    // Total de votos
+    const votes = await prisma.vote.findMany({
+      where: { eventId: Number(eventId) },
+    });
+
+    // Votos por hora y calculo de puntajes por candidatos
+    const votesByHour = {};
+    const pointsByCandidate = {};
+    for (const vote of votes) {
+      const hour = vote.createdAt.getHours();
+      votesByHour[hour] = (votesByHour[hour] || 0) + 1;
+
+      pointsByCandidate[vote.firstPlace] =
+        (pointsByCandidate[vote.firstPlace] || 0) + POINTS.firstPlace;
+      pointsByCandidate[vote.secondPlace] =
+        (pointsByCandidate[vote.secondPlace] || 0) + POINTS.secondPlace;
+      pointsByCandidate[vote.thirdPlace] =
+        (pointsByCandidate[vote.thirdPlace] || 0) + POINTS.thirdPlace;
+      pointsByCandidate[vote.fourthPlace] =
+        (pointsByCandidate[vote.fourthPlace] || 0) + POINTS.fourthPlace;
+      pointsByCandidate[vote.fifthPlace] =
+        (pointsByCandidate[vote.fifthPlace] || 0) + POINTS.fifthPlace;
+    }
+
+    // Top 5 candidatos
+    const topCandidatesArray = Object.entries(pointsByCandidate)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    const pointsMap = new Map(topCandidatesArray);
+
+    const candidateIds = Array.from(pointsMap.keys());
+    const candidateDetails = await prisma.candidate.findMany({
+      where: { id: { in: candidateIds } },
+      select: {
+        id: true,
+        name: true,
+        municipality: true,
+        photoUrl: true,
+        bio: true,
+      },
+    });
+
+    const candidatesWithPoints = candidateDetails.map((detail) => {
+      return {
+        ...detail,
+        points: pointsMap.get(detail.id) || 0,
+      };
+    });
+
+    const candidates = candidatesWithPoints.sort((a, b) => b.points - a.points);
+
+    res.json({
+      success: true,
+      data: {
+        totalVotes: votes.length,
+        votesByHour,
+        topCandidates: candidates,
+      },
     });
   } catch (error) {
     next(error);

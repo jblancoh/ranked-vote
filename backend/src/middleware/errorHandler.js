@@ -5,39 +5,39 @@
 
 export const errorHandler = (err, req, res, next) => {
   // Log error for debugging
-  console.error('Error:', {
+  console.error("Error:", {
     message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
     url: req.originalUrl,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
   });
 
   // Prisma errors
-  if (err.code && err.code.startsWith('P')) {
+  if (err.code && err.code.startsWith("P")) {
     return handlePrismaError(err, res);
   }
 
   // Zod validation errors
-  if (err.name === 'ZodError') {
+  if (err.name === "ZodError") {
     return res.status(400).json({
       success: false,
-      message: 'Error de validación',
-      errors: err.errors.map(e => ({
-        field: e.path.join('.'),
-        message: e.message
-      }))
+      message: "Error de validación",
+      errors: err.errors.map((e) => ({
+        field: e.path.join("."),
+        message: e.message,
+      })),
     });
   }
 
   // Default error response
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Error interno del servidor';
+  const message = err.message || "Error interno del servidor";
 
   res.status(statusCode).json({
     success: false,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 };
 
@@ -46,30 +46,30 @@ export const errorHandler = (err, req, res, next) => {
  */
 const handlePrismaError = (err, res) => {
   switch (err.code) {
-    case 'P2002':
+    case "P2002":
       return res.status(409).json({
         success: false,
-        message: 'Ya existe un registro con estos datos',
-        field: err.meta?.target
+        message: "Ya existe un registro con estos datos",
+        field: err.meta?.target,
       });
 
-    case 'P2026':
+    case "P2026":
       return res.status(404).json({
         success: false,
-        message: 'Registro no encontrado'
+        message: "Registro no encontrado",
       });
 
-    case 'P2003':
+    case "P2003":
       return res.status(400).json({
         success: false,
-        message: 'Relación inválida entre registros'
+        message: "Relación inválida entre registros",
       });
 
     default:
       return res.status(500).json({
         success: false,
-        message: 'Error en la base de datos',
-        code: err.code
+        message: "Error en la base de datos",
+        code: err.code,
       });
   }
 };
@@ -81,7 +81,7 @@ export class AppError extends Error {
   constructor(message, statusCode = 500) {
     super(message);
     this.statusCode = statusCode;
-    this.name = 'AppError';
+    this.name = "AppError";
     Error.captureStackTrace(this, this.constructor);
   }
 }

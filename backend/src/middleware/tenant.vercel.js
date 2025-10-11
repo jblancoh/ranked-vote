@@ -5,7 +5,7 @@
  * No AsyncLocalStorage - uses request object directly
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -23,7 +23,7 @@ export const extractTenantMiddleware = async (req, res, next) => {
     let tenantIdentifier = null;
 
     // Strategy 1: Header (best for API clients)
-    tenantIdentifier = req.get('X-Tenant-Slug') || req.get('X-Tenant-Id');
+    tenantIdentifier = req.get("X-Tenant-Slug") || req.get("X-Tenant-Id");
 
     // Strategy 2: Query param (useful for development/testing)
     if (!tenantIdentifier && req.query.tenant) {
@@ -32,23 +32,25 @@ export const extractTenantMiddleware = async (req, res, next) => {
 
     // Strategy 3: Subdomain
     if (!tenantIdentifier) {
-      const host = req.get('host') || '';
+      const host = req.get("host") || "";
       // Remove port from host if present
-      const hostWithoutPort = host.split(':')[0];
-      const subdomain = hostWithoutPort.split('.')[0];
+      const hostWithoutPort = host.split(":")[0];
+      const subdomain = hostWithoutPort.split(".")[0];
 
-      if (subdomain &&
-          subdomain !== 'localhost' &&
-          subdomain !== 'www' &&
-          subdomain !== 'api' &&
-          subdomain !== '127') {
+      if (
+        subdomain &&
+        subdomain !== "localhost" &&
+        subdomain !== "www" &&
+        subdomain !== "api" &&
+        subdomain !== "127"
+      ) {
         tenantIdentifier = subdomain;
       }
     }
 
     // Strategy 4: Default tenant
     if (!tenantIdentifier) {
-      tenantIdentifier = process.env.DEFAULT_TENANT || 'default';
+      tenantIdentifier = process.env.DEFAULT_TENANT || "default";
     }
 
     // Look up tenant in database
@@ -57,18 +59,18 @@ export const extractTenantMiddleware = async (req, res, next) => {
         OR: [
           { id: tenantIdentifier },
           { slug: tenantIdentifier },
-          { subdomain: tenantIdentifier }
+          { subdomain: tenantIdentifier },
         ],
-        active: true
-      }
+        active: true,
+      },
     });
 
     if (!tenant) {
       return res.status(404).json({
         success: false,
-        error: 'Tenant not found',
+        error: "Tenant not found",
         message: `No active tenant found for identifier: ${tenantIdentifier}`,
-        hint: 'Check X-Tenant-Slug header or use ?tenant=slug query parameter'
+        hint: "Check X-Tenant-Slug header or use ?tenant=slug query parameter",
       });
     }
 
@@ -78,11 +80,11 @@ export const extractTenantMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Tenant middleware error:', error);
+    console.error("Tenant middleware error:", error);
     return res.status(500).json({
       success: false,
-      error: 'Failed to identify tenant',
-      message: error.message
+      error: "Failed to identify tenant",
+      message: error.message,
     });
   }
 };
@@ -97,7 +99,7 @@ export const extractTenantMiddleware = async (req, res, next) => {
  */
 export function getTenantPrisma(tenantId) {
   if (!tenantId) {
-    throw new Error('tenantId is required for getTenantPrisma');
+    throw new Error("tenantId is required for getTenantPrisma");
   }
 
   // Extend Prisma client with automatic tenant filtering
@@ -123,7 +125,7 @@ export function getTenantPrisma(tenantId) {
         },
         async createMany({ args, query }) {
           if (Array.isArray(args.data)) {
-            args.data = args.data.map(item => ({ ...item, tenantId }));
+            args.data = args.data.map((item) => ({ ...item, tenantId }));
           }
           return query(args);
         },
@@ -142,7 +144,7 @@ export function getTenantPrisma(tenantId) {
         async deleteMany({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
+        },
       },
       vote: {
         async findMany({ args, query }) {
@@ -164,7 +166,7 @@ export function getTenantPrisma(tenantId) {
         async delete({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
+        },
       },
       event: {
         async findMany({ args, query }) {
@@ -182,7 +184,7 @@ export function getTenantPrisma(tenantId) {
         async update({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
+        },
       },
       result: {
         async findMany({ args, query }) {
@@ -195,16 +197,16 @@ export function getTenantPrisma(tenantId) {
         },
         async createMany({ args, query }) {
           if (Array.isArray(args.data)) {
-            args.data = args.data.map(item => ({ ...item, tenantId }));
+            args.data = args.data.map((item) => ({ ...item, tenantId }));
           }
           return query(args);
         },
         async deleteMany({ args, query }) {
           args.where = { ...args.where, tenantId };
           return query(args);
-        }
-      }
-    }
+        },
+      },
+    },
   });
 }
 
@@ -223,8 +225,9 @@ export const attachTenantPrismaMiddleware = (req, res, next) => {
   if (!req.tenantId) {
     return res.status(500).json({
       success: false,
-      error: 'Tenant context not set',
-      message: 'extractTenantMiddleware must run before attachTenantPrismaMiddleware'
+      error: "Tenant context not set",
+      message:
+        "extractTenantMiddleware must run before attachTenantPrismaMiddleware",
     });
   }
 
@@ -240,8 +243,8 @@ export const requireTenant = (req, res, next) => {
   if (!req.tenant || !req.tenantId) {
     return res.status(401).json({
       success: false,
-      error: 'Tenant required',
-      message: 'This endpoint requires tenant identification'
+      error: "Tenant required",
+      message: "This endpoint requires tenant identification",
     });
   }
   next();
@@ -251,5 +254,5 @@ export default {
   extractTenantMiddleware,
   getTenantPrisma,
   attachTenantPrismaMiddleware,
-  requireTenant
+  requireTenant,
 };

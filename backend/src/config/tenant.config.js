@@ -9,9 +9,9 @@
  * Precedence: Database > JSON > Environment > Hardcoded defaults
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,40 +24,40 @@ const DEFAULT_CONFIG = {
   voting: {
     positions: 5,
     pointsSystem: {
-      '1st': 5,
-      '2nd': 4,
-      '3rd': 3,
-      '4th': 2,
-      '5th': 1
+      "1st": 5,
+      "2nd": 4,
+      "3rd": 3,
+      "4th": 2,
+      "5th": 1,
     },
     allowDuplicates: false,
     ipValidation: true,
     emailVerification: false,
-    requireVoterName: true
+    requireVoterName: true,
   },
   candidates: {
-    requiredFields: ['name', 'municipality'],
-    customFields: []
+    requiredFields: ["name", "municipality"],
+    customFields: [],
   },
   branding: {
-    eventTitle: 'Ranked Vote Event',
-    description: 'Vote for your favorites',
+    eventTitle: "Ranked Vote Event",
+    description: "Vote for your favorites",
     logoUrl: null,
-    primaryColor: '#dc2626',
-    secondaryColor: '#f97316'
+    primaryColor: "#dc2626",
+    secondaryColor: "#f97316",
   },
   features: {
     publicResults: true,
     anonymousVoting: true,
     realTimeResults: true,
-    allowRevote: false
-  }
+    allowRevote: false,
+  },
 };
 
 /**
  * Load JSON configuration file
  */
-export function loadJSONConfig(configName = 'default') {
+export function loadJSONConfig(configName = "default") {
   try {
     const configPath = path.join(__dirname, `../../config/${configName}.json`);
 
@@ -66,7 +66,7 @@ export function loadJSONConfig(configName = 'default') {
       return null;
     }
 
-    const configData = fs.readFileSync(configPath, 'utf8');
+    const configData = fs.readFileSync(configPath, "utf8");
     return JSON.parse(configData);
   } catch (error) {
     console.error(`Error loading JSON config: ${error.message}`);
@@ -81,7 +81,7 @@ function deepMerge(target, source) {
   const output = { ...target };
 
   if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {
         if (!(key in target)) {
           Object.assign(output, { [key]: source[key] });
@@ -98,7 +98,7 @@ function deepMerge(target, source) {
 }
 
 function isObject(item) {
-  return item && typeof item === 'object' && !Array.isArray(item);
+  return item && typeof item === "object" && !Array.isArray(item);
 }
 
 /**
@@ -112,13 +112,13 @@ export function getTenantConfig(tenant) {
   let config = { ...DEFAULT_CONFIG };
 
   // Layer 2: Merge JSON config if exists
-  const jsonConfig = loadJSONConfig(tenant?.slug || 'default');
+  const jsonConfig = loadJSONConfig(tenant?.slug || "default");
   if (jsonConfig) {
     config = deepMerge(config, jsonConfig);
   }
 
   // Layer 3: Merge tenant-specific database config (highest priority)
-  if (tenant?.config && typeof tenant.config === 'object') {
+  if (tenant?.config && typeof tenant.config === "object") {
     config = deepMerge(config, tenant.config);
   }
 
@@ -135,11 +135,11 @@ export function getTenantConfig(tenant) {
 export function getConfigValue(tenant, path, defaultValue = undefined) {
   const config = getTenantConfig(tenant);
 
-  const keys = path.split('.');
+  const keys = path.split(".");
   let value = config;
 
   for (const key of keys) {
-    if (value && typeof value === 'object' && key in value) {
+    if (value && typeof value === "object" && key in value) {
       value = value[key];
     } else {
       return defaultValue;
@@ -153,15 +153,15 @@ export function getConfigValue(tenant, path, defaultValue = undefined) {
  * Get voting points system for a tenant
  */
 export function getVotingPoints(tenant) {
-  const pointsConfig = getConfigValue(tenant, 'voting.pointsSystem');
+  const pointsConfig = getConfigValue(tenant, "voting.pointsSystem");
 
   // Convert to standard format
   return {
-    firstPlace: pointsConfig['1st'] || 5,
-    secondPlace: pointsConfig['2nd'] || 4,
-    thirdPlace: pointsConfig['3rd'] || 3,
-    fourthPlace: pointsConfig['4th'] || 2,
-    fifthPlace: pointsConfig['5th'] || 1
+    firstPlace: pointsConfig["1st"] || 5,
+    secondPlace: pointsConfig["2nd"] || 4,
+    thirdPlace: pointsConfig["3rd"] || 3,
+    fourthPlace: pointsConfig["4th"] || 2,
+    fifthPlace: pointsConfig["5th"] || 1,
   };
 }
 
@@ -173,31 +173,41 @@ export function validateTenantConfig(config) {
 
   // Validate voting config
   if (config.voting) {
-    if (typeof config.voting.positions !== 'number' || config.voting.positions < 1 || config.voting.positions > 10) {
-      errors.push('voting.positions must be a number between 1 and 10');
+    if (
+      typeof config.voting.positions !== "number" ||
+      config.voting.positions < 1 ||
+      config.voting.positions > 10
+    ) {
+      errors.push("voting.positions must be a number between 1 and 10");
     }
 
     if (config.voting.pointsSystem) {
       const points = Object.values(config.voting.pointsSystem);
-      if (points.some(p => typeof p !== 'number' || p < 0)) {
-        errors.push('voting.pointsSystem values must be positive numbers');
+      if (points.some((p) => typeof p !== "number" || p < 0)) {
+        errors.push("voting.pointsSystem values must be positive numbers");
       }
     }
   }
 
   // Validate branding
   if (config.branding) {
-    if (config.branding.primaryColor && !isValidColor(config.branding.primaryColor)) {
-      errors.push('branding.primaryColor must be a valid hex color');
+    if (
+      config.branding.primaryColor &&
+      !isValidColor(config.branding.primaryColor)
+    ) {
+      errors.push("branding.primaryColor must be a valid hex color");
     }
-    if (config.branding.secondaryColor && !isValidColor(config.branding.secondaryColor)) {
-      errors.push('branding.secondaryColor must be a valid hex color');
+    if (
+      config.branding.secondaryColor &&
+      !isValidColor(config.branding.secondaryColor)
+    ) {
+      errors.push("branding.secondaryColor must be a valid hex color");
     }
   }
 
   return {
     valid: errors.length === 0,
-    errors
+    errors,
   };
 }
 
@@ -212,8 +222,8 @@ function isValidColor(color) {
  * Create default config file if it doesn't exist
  */
 export function ensureDefaultConfigFile() {
-  const configDir = path.join(__dirname, '../../config');
-  const defaultConfigPath = path.join(configDir, 'default.json');
+  const configDir = path.join(__dirname, "../../config");
+  const defaultConfigPath = path.join(configDir, "default.json");
 
   // Create config directory if it doesn't exist
   if (!fs.existsSync(configDir)) {
@@ -225,7 +235,7 @@ export function ensureDefaultConfigFile() {
     fs.writeFileSync(
       defaultConfigPath,
       JSON.stringify(DEFAULT_CONFIG, null, 2),
-      'utf8'
+      "utf8",
     );
     console.log(`Created default config file: ${defaultConfigPath}`);
   }
@@ -238,5 +248,5 @@ export default {
   getConfigValue,
   getVotingPoints,
   validateTenantConfig,
-  ensureDefaultConfigFile
+  ensureDefaultConfigFile,
 };
