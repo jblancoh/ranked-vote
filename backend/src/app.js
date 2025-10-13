@@ -12,6 +12,7 @@ dotenv.config();
 import routes from './routes/index.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { extractTenantMiddleware } from './middleware/tenant.vercel.js';
+import { specs, swaggerUi, swaggerUiOptions } from './config/swagger.config.js';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -75,6 +76,9 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Swagger Documentation (no tenant required)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
+
 // Tenant middleware (extract tenant from request)
 // This runs BEFORE all API routes
 app.use('/api', extractTenantMiddleware);
@@ -101,6 +105,7 @@ app.listen(PORT, () => {
   Environment: ${process.env.NODE_ENV || 'development'}
   Server running on: http://${process.env.HOST || 'localhost'}:${PORT}
   Health check: http://${process.env.HOST || 'localhost'}:${PORT}/health
+  API Documentation: http://${process.env.HOST || 'localhost'}:${PORT}/api-docs
   API Base URL: http://${process.env.HOST || 'localhost'}:${PORT}/api
   Default Tenant: ${process.env.DEFAULT_TENANT || 'default'}
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

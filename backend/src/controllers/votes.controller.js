@@ -12,8 +12,98 @@ const getClientIp = (req) => {
 };
 
 /**
- * Submit a vote
- * @route POST /api/votes
+ * @swagger
+ * /api/votes:
+ *   post:
+ *     summary: Enviar voto
+ *     description: Registra un voto con ranking de candidatos (1º a 5º lugar)
+ *     tags: [Votes]
+ *     security:
+ *       - TenantHeader: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstPlace
+ *               - secondPlace
+ *               - thirdPlace
+ *               - fourthPlace
+ *               - fifthPlace
+ *             properties:
+ *               firstPlace:
+ *                 type: string
+ *                 format: uuid
+ *                 description: ID del candidato en 1º lugar
+ *                 example: 123e4567-e89b-12d3-a456-426614174000
+ *               secondPlace:
+ *                 type: string
+ *                 format: uuid
+ *                 description: ID del candidato en 2º lugar
+ *                 example: 123e4567-e89b-12d3-a456-426614174001
+ *               thirdPlace:
+ *                 type: string
+ *                 format: uuid
+ *                 description: ID del candidato en 3º lugar
+ *                 example: 123e4567-e89b-12d3-a456-426614174002
+ *               fourthPlace:
+ *                 type: string
+ *                 format: uuid
+ *                 description: ID del candidato en 4º lugar
+ *                 example: 123e4567-e89b-12d3-a456-426614174003
+ *               fifthPlace:
+ *                 type: string
+ *                 format: uuid
+ *                 description: ID del candidato en 5º lugar
+ *                 example: 123e4567-e89b-12d3-a456-426614174004
+ *               voterEmail:
+ *                 type: string
+ *                 format: email
+ *                 description: Email del votante (opcional)
+ *                 example: votante@example.com
+ *               voterName:
+ *                 type: string
+ *                 description: Nombre del votante (opcional)
+ *                 example: Juan Pérez
+ *     responses:
+ *       201:
+ *         description: Voto registrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: '¡Voto registrado exitosamente! Gracias por participar.'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: '2024-01-01T00:00:00.000Z'
+ *       400:
+ *         description: Error en la validación del voto
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const submitVote = async (req, res, next) => {
   try {
@@ -112,8 +202,41 @@ export const submitVote = async (req, res, next) => {
 };
 
 /**
- * Check if IP has already voted
- * @route GET /api/votes/check
+ * @swagger
+ * /api/votes/check:
+ *   get:
+ *     summary: Verificar estado de voto
+ *     description: Verifica si la IP actual ya ha votado
+ *     tags: [Votes]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Estado de voto obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 hasVoted:
+ *                   type: boolean
+ *                   description: Indica si ya se ha votado desde esta IP
+ *                   example: false
+ *                 voteDate:
+ *                   type: string
+ *                   format: date-time
+ *                   nullable: true
+ *                   description: Fecha del voto si ya se ha votado
+ *                   example: '2024-01-01T00:00:00.000Z'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const checkVoteStatus = async (req, res, next) => {
   try {
@@ -144,8 +267,37 @@ export const checkVoteStatus = async (req, res, next) => {
 };
 
 /**
- * Get total vote count
- * @route GET /api/votes/count
+ * @swagger
+ * /api/votes/count:
+ *   get:
+ *     summary: Obtener conteo total de votos
+ *     description: Retorna el número total de votos registrados
+ *     tags: [Votes]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Conteo de votos obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalVotes:
+ *                       type: integer
+ *                       example: 150
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getVoteCount = async (req, res, next) => {
   try {
@@ -164,8 +316,67 @@ export const getVoteCount = async (req, res, next) => {
 };
 
 /**
- * Get all votes (admin only - should be protected)
- * @route GET /api/votes
+ * @swagger
+ * /api/votes:
+ *   get:
+ *     summary: Obtener todos los votos (Admin)
+ *     description: Retorna una lista paginada de todos los votos registrados
+ *     tags: [Votes]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 100
+ *           maximum: 1000
+ *         description: Número máximo de votos a retornar
+ *         example: 100
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *           minimum: 0
+ *         description: Número de votos a omitir
+ *         example: 0
+ *     responses:
+ *       200:
+ *         description: Lista de votos obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Vote'
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                       example: 150
+ *                     limit:
+ *                       type: integer
+ *                       example: 100
+ *                     offset:
+ *                       type: integer
+ *                       example: 0
+ *                     hasMore:
+ *                       type: boolean
+ *                       example: true
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getAllVotes = async (req, res, next) => {
   try {
