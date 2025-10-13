@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { CheckCircle, AlertCircle, Vote as VoteIcon, X } from 'lucide-react'
 import { useCandidates } from '../hooks/useCandidates'
 import { useVote } from '../hooks/useVote'
-import Card from '../components/ui/Card' // Import Card component for consistent styling
+import Card from '../components/ui/Card'
 
 const Vote = () => {
   const [selectedCandidates, setSelectedCandidates] = useState({
@@ -212,7 +212,7 @@ const Vote = () => {
                   Haz clic en una candidata para seleccionarla en tu top 5
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"> {/* Responsive grid: 1 col mobile, 2 tablet, 3 desktop */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                   {candidates?.map((candidate) => {
                     const selected = isSelected(candidate.id)
                     const position = getPosition(candidate.id)
@@ -238,20 +238,20 @@ const Vote = () => {
                         }`}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl flex-shrink-0"> {/* Responsive avatar: smaller on mobile */}
+                          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl flex-shrink-0">
                             {candidate.name.charAt(0)}
                           </div>
                           <div className="flex-grow min-w-0">
-                            <h3 className="font-display font-bold text-gray-900 text-sm sm:text-base truncate"> {/* Responsive text: smaller on mobile */}
+                            <h3 className="font-display font-bold text-gray-900 text-sm sm:text-base truncate">
                               {candidate.name}
                             </h3>
-                            <p className="text-xs sm:text-sm text-gray-600 truncate"> {/* Responsive municipality text */}
+                            <p className="text-xs sm:text-sm text-gray-600 truncate">
                               {candidate.municipality}
                             </p>
                           </div>
                           {selected && (
-                            <div className="flex items-center space-x-2 flex-shrink-0"> {/* Prevent shrinking of selected elements */}
-                              <span className="badge badge-primary text-xs px-2 py-1"> {/* Responsive badge padding */}
+                            <div className="flex items-center space-x-2 flex-shrink-0">
+                              <span className="badge badge-primary text-xs px-2 py-1">
                                 {position}
                               </span>
                               <button
