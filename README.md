@@ -4,7 +4,8 @@
 
 [![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-orange.svg)](https://hacktoberfest.com)
-[![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)](docs/CONTRIBUTING.md)
+
 
 Ranked Vote es una aplicación web moderna que permite a las comunidades organizar votaciones con ranking para cualquier tipo de evento o concurso. Ya sea que estés eligiendo el mejor platillo local, representante comunitario o símbolo cultural, Ranked Vote lo hace fácil y transparente.
 
@@ -173,7 +174,8 @@ Potenciado por tecnologías open-source
 📞 Contacto y Comunidad
 
 GitHub: [@jblancoh](https://github.com/jblancoh)
-Issues: [Reporta un bug o solicita una función]([URL](https://github.com/jblancoh/ranked-vote/issues))
+Issues: [Reporta un bug o solicita una función](https://github.com/jblancoh/ranked-vote/issues)
+
 Comunidad: Dev Night Talk - Todos los jueves 7-10 PM
 
 🗺️ Hoja de Ruta
@@ -197,4 +199,3 @@ Si encuentras útil este proyecto, por favor considera:
 📢 Compartir con tu comunidad
 
 Hecho con ❤️ por la comunidad Dev Night Talk en Villahermosa, Tabasco 🇲🇽
-
