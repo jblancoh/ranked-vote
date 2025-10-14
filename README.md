@@ -63,7 +63,7 @@ La forma más fácil de empezar. Solo necesitas **Node.js 18+** instalado.
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/dev-night-talk/ranked-vote.git
+git clone https://github.com/jblancoh/ranked-vote.git
 cd ranked-vote
 
 # 2. Ejecutar instalación automática
@@ -83,8 +83,8 @@ El script te guiará paso a paso para:
 ```
 
 ¡Eso es todo! Abre tu navegador en:
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:5001
+- **Frontend**: <http://localhost:5173>
+- **Backend API**: <http://localhost:5001>
 
 ### 📚 Más Información
 
@@ -164,7 +164,7 @@ Supabase (tier gratuito)
 <!-- Ver [Guía de Despliegue](docs/DEPLOYMENT.md) para instrucciones detalladas. -->
 
 📄 Licencia
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para detalles.
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 🙏 Agradecimientos
 
 Creado por la comunidad [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/)

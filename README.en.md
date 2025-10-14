@@ -8,6 +8,8 @@
 
 Ranked Vote is a modern web application that allows communities to organize ranked voting for any type of event or contest. Whether you're choosing the best local dish, community representative, or cultural symbol, Ranked Vote makes it easy and transparent.
 
+If you prefer Spanish, read this documentation in Spanish clic [here](README.md).
+
 ## ✨ Features
 
 - 🎯 **Ranked Voting** - Voters rank their 5 favorite options by preference
@@ -60,7 +62,7 @@ The easiest way to get started. You only need **Node.js 18+** installed.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/dev-night-talk/ranked-vote.git
+git clone https://github.com/jblancoh/ranked-vote.git
 cd ranked-vote
 
 # 2. Run automatic installation
@@ -82,8 +84,8 @@ The script will guide you step by step to:
 
 That's it! Open your browser at:
 
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:5001
+- **Frontend**: <http://localhost:5173>
+- **Backend API**: <http://localhost:5001>
 
 ### 📚 More Information
 
@@ -165,7 +167,7 @@ Supabase (free tier)
 <!-- See [Deployment Guide](docs/DEPLOYMENT.md) for detailed instructions. -->
 
 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 🙏 Acknowledgments
 
 Created by the [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/) community
