@@ -294,8 +294,7 @@ const Vote = () => {
                           )}
                         </div>
                       </Card>
-                    )
-                  })}
+                    )}))}
                 </div>
               </div>
             </div>
