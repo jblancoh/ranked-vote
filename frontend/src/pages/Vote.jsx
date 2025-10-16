@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { CheckCircle, AlertCircle, Vote as VoteIcon, X } from 'lucide-react'
 import { useCandidates } from '../hooks/useCandidates'
 import { useVote } from '../hooks/useVote'
+import Card from '../components/ui/Card'
 
 const Vote = () => {
   const [selectedCandidates, setSelectedCandidates] = useState({
@@ -246,19 +247,20 @@ const Vote = () => {
                     return (
                       <Card
                         key={candidate.id}
+                        padding="sm"
+                        interactive={true}
                         onClick={() => {
                           // Select in first available position
-                          const firstAvailable = positions.find(
-                            p => !selectedCandidates[p.key]
-                          )
+                          const firstAvailable = positions.find((p) => !selectedCandidates[p.key])
                           if (firstAvailable && !selected) {
                             handleSelectCandidate(firstAvailable.key, candidate.id)
                           }
                         }}
-                        className={`card p-4 cursor-pointer transition-all duration-200 ${selected
+                        className={`card p-4 cursor-pointer transition-all duration-200 ${
+                          selected
                             ? 'ring-2 ring-primary-500 bg-primary-50'
                             : 'hover:shadow-lg hover:scale-[1.02]'
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center space-x-3">
                           <div className="w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
