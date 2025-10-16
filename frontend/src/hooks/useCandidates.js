@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useDebounce } from 'use-debounce'
 import { candidatesApi } from '../services/candidates'
 
@@ -15,7 +15,7 @@ export const useCandidates = (eventId = null, filter = null) => {
   // Debounce filter to avoid excessive API calls
   const [debouncedFilter] = useDebounce(filter, 300)
 
-  const fetchCandidates = async () => {
+  const fetchCandidates = useCallback(async () => {
     try {
       // Use different loading states for initial load vs filtering
       if (isInitialLoad) {
@@ -46,7 +46,7 @@ export const useCandidates = (eventId = null, filter = null) => {
         setFiltering(false)
       }
     }
-  }
+  }, [eventId, debouncedFilter, isInitialLoad])
 
   const getCandidateById = async (id) => {
     try {
@@ -60,8 +60,7 @@ export const useCandidates = (eventId = null, filter = null) => {
 
   useEffect(() => {
     fetchCandidates()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventId, debouncedFilter])
+  }, [fetchCandidates])
 
   return {
     candidates,
