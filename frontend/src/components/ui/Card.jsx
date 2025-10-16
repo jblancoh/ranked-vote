@@ -11,7 +11,7 @@ const Card = ({
   onClick,
 }) => {
   const baseClasses = 'card'
-  
+
   const variants = {
     default: '',
     elevated: 'shadow-xl',

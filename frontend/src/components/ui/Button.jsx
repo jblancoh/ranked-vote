@@ -14,8 +14,9 @@ const Button = ({
   type = 'button',
   className = '',
 }) => {
-  const baseClasses = 'btn transition-all duration-200 inline-flex items-center justify-center font-medium rounded-lg'
-  
+  const baseClasses =
+    'btn transition-all duration-200 inline-flex items-center justify-center font-medium rounded-lg'
+
   const variants = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',

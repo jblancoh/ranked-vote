@@ -34,11 +34,11 @@ const Vote = () => {
 
   const getColorClasses = (color) => {
     const colors = {
-      gold: 'bg-yellow-50 border-yellow-400 text-yellow-700',
-      silver: 'bg-gray-50 border-gray-400 text-gray-700',
-      bronze: 'bg-orange-50 border-orange-400 text-orange-700',
-      blue: 'bg-blue-50 border-blue-400 text-blue-700',
-      green: 'bg-green-50 border-green-400 text-green-700',
+      gold: 'bg-yellow-50 border-yellow-400 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-500 dark:text-yellow-300',
+      silver: 'bg-gray-50 border-gray-400 text-gray-700 dark:bg-gray-900 dark:border-gray-500 dark:text-gray-200',
+      bronze: 'bg-orange-50 border-orange-400 text-orange-700 dark:bg-orange-900/30 dark:border-orange-500 dark:text-orange-300',
+      blue: 'bg-blue-50 border-blue-400 text-blue-700 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-300',
+      green: 'bg-green-50 border-green-400 text-green-700 dark:bg-green-900/30 dark:border-green-500 dark:text-green-300',
     }
     return colors[color] || colors.blue
   }
@@ -119,10 +119,10 @@ const Vote = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
         <div className="text-center">
           <div className="spinner mb-4"></div>
-          <p className="text-gray-600">Cargando candidatas...</p>
+          <p className="text-gray-600 dark:text-gray-400">Cargando candidatas...</p>
         </div>
       </div>
     )
@@ -130,14 +130,14 @@ const Vote = () => {
 
   if (hasVoted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
         <div className="max-w-md w-full mx-4">
           <div className="card p-8 text-center">
-            <CheckCircle size={64} className="mx-auto text-green-500 mb-4" />
+            <CheckCircle size={64} className="mx-auto text-green-500 dark:text-green-400 mb-4" />
             <h2 className="text-2xl font-display font-bold mb-2">
               ¡Ya has votado!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Gracias por participar. Ya registraste tu predicción para el
               Certamen Flor de Tabasco 2026.
             </p>
@@ -152,14 +152,14 @@ const Vote = () => {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 animate-fade-in">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 animate-fade-in transition-colors duration-300">
         <div className="max-w-md w-full mx-4">
           <div className="card p-8 text-center">
-            <CheckCircle size={64} className="mx-auto text-green-500 mb-4 animate-bounce-in" />
+            <CheckCircle size={64} className="mx-auto text-green-500 dark:text-green-400 mb-4 animate-bounce-in" />
             <h2 className="text-2xl font-display font-bold mb-2">
               ¡Voto Registrado!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Tu predicción ha sido guardada exitosamente.
               Gracias por participar en Ranked Vote 2026.
             </p>
@@ -178,14 +178,14 @@ const Vote = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 transition-colors duration-300">
       <div className="container-custom">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
             🗳️ Haz tu Predicción
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors duration-300">
             Selecciona tus 5 candidatas favoritas del 1er al 5to lugar para el
             Certamen Flor de Tabasco 2026
           </p>
@@ -207,7 +207,7 @@ const Vote = () => {
                 <h2 className="text-xl font-display font-bold mb-4">
                   Candidatas
                 </h2>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   Haz clic en una candidata para seleccionarla en tu top 5
                 </p>
 
@@ -238,10 +238,10 @@ const Vote = () => {
                             {candidate.name.charAt(0)}
                           </div>
                           <div className="flex-grow">
-                            <h3 className="font-display font-bold text-gray-900">
+                            <h3 className="font-display font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">
                               {candidate.name}
                             </h3>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
                               {candidate.municipality}
                             </p>
                           </div>
@@ -295,7 +295,7 @@ const Vote = () => {
                         key={position.key}
                         className={`p-3 border-2 rounded-lg transition-all ${candidate
                             ? getColorClasses(position.color)
-                            : 'border-gray-200 bg-gray-50'
+                            : 'border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-700'
                           }`}
                       >
                         <div className="flex items-center justify-between">
@@ -315,7 +315,7 @@ const Vote = () => {
                               </button>
                             </div>
                           ) : (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                               Sin seleccionar
                             </span>
                           )}
@@ -352,7 +352,7 @@ const Vote = () => {
                       className="input"
                       placeholder="tu@email.com"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       Para notificaciones futuras
                     </p>
                   </div>
@@ -391,12 +391,12 @@ const Vote = () => {
                 {/* Progress */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600">Progreso</span>
+                    <span className="text-gray-600 dark:text-gray-400">Progreso</span>
                     <span className="font-bold text-primary-600">
                       {Object.values(selectedCandidates).filter(v => v !== null).length}/5
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 transition-colors duration-300">
                     <div
                       className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                       style={{
