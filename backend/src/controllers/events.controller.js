@@ -236,3 +236,94 @@ export const toggleVotingStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Get stats (total votes, hourly turnout, top 5 candidates.)
+ * @route GET /api/events/:id/stats
+ */
+export const getEventStats = async (req, res, next) => {
+  const prisma = getPrisma(req.tenantId);
+  const { id } = req.params;
+  const POINTS = {
+    firstPlace: 5,
+    secondPlace: 4,
+    thirdPlace: 3,
+    fourthPlace: 2,
+    fifthPlace: 1,
+  };
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: id },
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Evento no encontrado",
+      });
+    }
+    // Total de votos
+    const votes = await prisma.vote.findMany({
+      where: { eventId: Number(id) },
+    });
+
+    // Votos por hora y calculo de puntajes por candidatos
+    const votesByHour = {};
+    const pointsByCandidate = {};
+    for (const vote of votes) {
+      const hour = vote.createdAt.getHours();
+      votesByHour[hour] = (votesByHour[hour] || 0) + 1;
+
+      pointsByCandidate[vote.firstPlace] =
+        (pointsByCandidate[vote.firstPlace] || 0) + POINTS.firstPlace;
+      pointsByCandidate[vote.secondPlace] =
+        (pointsByCandidate[vote.secondPlace] || 0) + POINTS.secondPlace;
+      pointsByCandidate[vote.thirdPlace] =
+        (pointsByCandidate[vote.thirdPlace] || 0) + POINTS.thirdPlace;
+      pointsByCandidate[vote.fourthPlace] =
+        (pointsByCandidate[vote.fourthPlace] || 0) + POINTS.fourthPlace;
+      pointsByCandidate[vote.fifthPlace] =
+        (pointsByCandidate[vote.fifthPlace] || 0) + POINTS.fifthPlace;
+    }
+
+    // Top 5 candidatos
+    const topCandidatesArray = Object.entries(pointsByCandidate)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    const pointsMap = new Map(topCandidatesArray);
+
+    const candidateIds = Array.from(pointsMap.keys());
+    const candidateDetails = await prisma.candidate.findMany({
+      where: { id: { in: candidateIds } },
+      select: {
+        id: true,
+        name: true,
+        municipality: true,
+        photoUrl: true,
+        bio: true,
+      },
+    });
+
+    const candidatesWithPoints = candidateDetails.map((detail) => {
+      return {
+        ...detail,
+        points: pointsMap.get(detail.id) || 0,
+      };
+    });
+
+    const candidates = candidatesWithPoints.sort((a, b) => b.points - a.points);
+
+    res.json({
+      success: true,
+      data: {
+        totalVotes: votes.length,
+        votesByHour,
+        topCandidates: candidates,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
