@@ -7,11 +7,28 @@ import { getPrisma } from '../utils/prisma.js';
 export const getAllCandidates = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
-    const { active } = req.query;
+    const { filter } = req.query;
 
-    const whereClause = active !== undefined
-      ? { active: active === 'true' }
-      : {};
+    // Build dynamic where clause
+    const whereClause = {};
+    
+    // Filter with OR logic for name and municipality
+    if (filter && filter.trim().length > 0) {
+      whereClause.OR = [
+        {
+          name: {
+            contains: filter.trim(),
+            mode: 'insensitive'
+          }
+        },
+        {
+          municipality: {
+            contains: filter.trim(),
+            mode: 'insensitive'
+          }
+        }
+      ];
+    }
 
     const candidates = await prisma.candidate.findMany({
       where: whereClause,
