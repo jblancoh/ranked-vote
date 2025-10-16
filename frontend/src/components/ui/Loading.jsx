@@ -15,9 +15,7 @@ const Loading = ({ size = 'md', text = 'Cargando...', className = '' }) => {
       <div
         className={`${sizes[size]} border-gray-200 border-t-primary-600 rounded-full animate-spin`}
       ></div>
-      {text && (
-        <p className="mt-4 text-gray-600 text-sm">{text}</p>
-      )}
+      {text && <p className="mt-4 text-gray-600 text-sm">{text}</p>}
     </div>
   )
 }
