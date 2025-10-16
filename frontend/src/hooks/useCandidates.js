@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useDebounce } from 'use-debounce'
 import { candidatesApi } from '../services/candidates'
 
 /**
@@ -10,6 +11,9 @@ export const useCandidates = (eventId = null, filter = null) => {
   const [filtering, setFiltering] = useState(false)
   const [error, setError] = useState(null)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
+  
+  // Debounce filter to avoid excessive API calls
+  const [debouncedFilter] = useDebounce(filter, 300)
 
   const fetchCandidates = async () => {
     try {
@@ -23,8 +27,8 @@ export const useCandidates = (eventId = null, filter = null) => {
       
       // Only send filter if it's not empty after trimming
       const params = { eventId }
-      if (filter && filter.trim()) {
-        params.filter = filter.trim()
+      if (debouncedFilter && debouncedFilter.trim()) {
+        params.filter = debouncedFilter.trim()
       }
       const data = await candidatesApi.getAll(params)
       setCandidates(data)
@@ -57,7 +61,7 @@ export const useCandidates = (eventId = null, filter = null) => {
   useEffect(() => {
     fetchCandidates()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventId, filter])
+  }, [eventId, debouncedFilter])
 
   return {
     candidates,
