@@ -13,17 +13,17 @@ export const getAllCandidates = async (req, res, next) => {
     const whereClause = {};
     
     // Filter with OR logic for name and municipality
-    if (filter) {
+    if (filter && filter.trim().length > 0) {
       whereClause.OR = [
         {
           name: {
-            contains: filter,
+            contains: filter.trim(),
             mode: 'insensitive'
           }
         },
         {
           municipality: {
-            contains: filter,
+            contains: filter.trim(),
             mode: 'insensitive'
           }
         }
