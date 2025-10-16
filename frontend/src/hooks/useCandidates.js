@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useDebounce } from 'use-debounce'
 import { candidatesApi } from '../services/candidates'
 
@@ -10,15 +10,17 @@ export const useCandidates = (eventId = null, filter = null) => {
   const [loading, setLoading] = useState(true)
   const [filtering, setFiltering] = useState(false)
   const [error, setError] = useState(null)
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const isInitialLoadRef = useRef(true)
   
   // Debounce filter to avoid excessive API calls
   const [debouncedFilter] = useDebounce(filter, 300)
 
   const fetchCandidates = useCallback(async () => {
+    const wasInitialLoad = isInitialLoadRef.current
+    
     try {
       // Use different loading states for initial load vs filtering
-      if (isInitialLoad) {
+      if (wasInitialLoad) {
         setLoading(true)
       } else {
         setFiltering(true)
@@ -33,20 +35,20 @@ export const useCandidates = (eventId = null, filter = null) => {
       const data = await candidatesApi.getAll(params)
       setCandidates(data)
       
-      if (isInitialLoad) {
-        setIsInitialLoad(false)
+      if (wasInitialLoad) {
+        isInitialLoadRef.current = false
       }
     } catch (err) {
       setError(err.message || 'Error al cargar candidatas')
       console.error('Error fetching candidates:', err)
     } finally {
-      if (isInitialLoad) {
+      if (wasInitialLoad) {
         setLoading(false)
       } else {
         setFiltering(false)
       }
     }
-  }, [eventId, debouncedFilter, isInitialLoad])
+  }, [eventId, debouncedFilter])
 
   const getCandidateById = async (id) => {
     try {
