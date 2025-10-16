@@ -21,8 +21,7 @@ router.get('/', getAllCandidates);
 
 /**
  * @route   GET /api/candidates/:id
- * @desc    Get candidate by ID with optional filter
- * @query   filter - (optional) Search text that applies to name OR municipality (partial match)
+ * @desc    Get candidate by ID
  * @access  Public
  */
 router.get('/:id', getCandidateById);
