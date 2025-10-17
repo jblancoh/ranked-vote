@@ -11,7 +11,7 @@ const Card = ({
   onClick,
 }) => {
   const baseClasses = 'card'
-  
+
   const variants = {
     default: '',
     elevated: 'shadow-xl',
@@ -21,10 +21,9 @@ const Card = ({
 
   const paddings = {
     none: '',
-    sm: 'p-3',
-    md: 'p-6',
-    lg: 'p-8',
-    xl: 'p-12',
+    sm: 'p-2 sm:p-3',
+    md: 'p-4 sm:p-6',
+    xl: 'p-8 sm:p-12',
   }
 
   const interactiveClass = interactive ? 'card-interactive' : ''

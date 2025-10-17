@@ -95,6 +95,8 @@ model Candidate {
 
   @@index([tenantId])
   @@index([tenantId, active])
+  @@index([tenantId, name])
+  @@index([tenantId, municipality])
   @@map("candidates")
 }
 
