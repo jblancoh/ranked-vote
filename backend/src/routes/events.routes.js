@@ -6,7 +6,8 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-  toggleVotingStatus
+  toggleVotingStatus,
+  getEventStats
 } from '../controllers/events.controller.js';
 
 const router = express.Router();
@@ -59,5 +60,12 @@ router.delete('/:id', deleteEvent);
  * @access  Private (should add auth middleware)
  */
 router.patch('/:id/voting', toggleVotingStatus);
+
+/**
+ * @route   GET /api/events/:id/stats
+ * @desc    Get stats (total votes, hourly turnout, top 5 candidates.)
+ * @access  Public
+ */
+router.get("/:id/stats", getEventStats);
 
 export default router;
