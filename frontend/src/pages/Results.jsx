@@ -13,11 +13,14 @@ import {
   Cell,
 } from 'recharts'
 import { useResults } from '../hooks/useResults'
+import ExportButton from '../components/admin/ExportButton'
+import votesApi from '../services/votes'
 
 const Results = () => {
   const { results, loading, error, refreshResults } = useResults()
   const [selectedPosition, setSelectedPosition] = useState('all')
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [votes, setVotes] = useState([])
 
   const positions = [
     { key: 'all', label: 'Todas las Posiciones' },
@@ -38,6 +41,13 @@ const Results = () => {
     '#06b6d4',
     '#3b82f6',
   ]
+
+  // Cargar votos para exportación
+  useEffect(() => {
+    votesApi.getAll({ limit: 10000 })
+      .then(res => res.success && setVotes(res.data || []))
+      .catch(err => console.error('Error loading votes:', err))
+  }, [])
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
@@ -388,6 +398,21 @@ const Results = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Export Data Section */}
+        <div className="mt-12 text-center card p-8">
+          <h3 className="text-2xl font-display font-bold mb-4">
+            📥 Exportar Datos
+          </h3>
+          <p className="text-gray-600 mb-6">
+            Descarga los resultados y votos individuales en formato CSV o Excel
+          </p>
+          <ExportButton
+            results={results}
+            votes={votes}
+            eventName="Flor de Tabasco 2026"
+          />
         </div>
 
         {/* Call to Action */}

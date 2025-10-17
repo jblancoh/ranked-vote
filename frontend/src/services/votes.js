@@ -38,6 +38,19 @@ export const votesApi = {
     } catch (error) {
       throw error
     }
+  },
+
+  /**
+   * Get all votes (for export/admin)
+   */
+  getAll: async (params = {}) => {
+    try {
+      const queryParams = new URLSearchParams(params).toString()
+      const response = await api.get(`/votes${queryParams ? '?' + queryParams : ''}`)
+      return response // Interceptor already returns response.data
+    } catch (error) {
+      throw error
+    }
   }
 }
 
