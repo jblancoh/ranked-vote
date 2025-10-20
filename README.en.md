@@ -8,7 +8,7 @@
 
 Ranked Vote is a modern web application that allows communities to organize ranked voting for any type of event or contest. Whether you're choosing the best local dish, community representative, or cultural symbol, Ranked Vote makes it easy and transparent.
 
-Si deseas consultar la versión en inglés de esta documentación, puedes verla en [README.en.md](README.en.md).
+If you want to view the English version of this documentation, see [README.en.md](README.en.md).
 
 ## ✨ Features
 
