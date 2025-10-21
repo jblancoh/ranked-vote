@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -19,6 +20,7 @@ export default {
           700: '#b91c1c',
           800: '#991b1b',
           900: '#7f1d1d',
+          dark: '#f87171', // Rojo más brillante para modo oscuro
         },
         secondary: {
           50: '#f0fdf4',
@@ -31,6 +33,7 @@ export default {
           700: '#15803d',
           800: '#166534',
           900: '#14532d',
+          dark: '#4ade80', // Verde más brillante para modo oscuro
         },
       },
       fontFamily: {
