@@ -181,14 +181,14 @@ const Results = () => {
                 Basado en sistema de puntos
               </p>
 
-               const staggerClasses = ['animate-stagger-1', 'animate-stagger-2', 'animate-stagger-3', 'animate-stagger-4', 'animate-stagger-5']
-
-               <div className="space-y-3">
-                 {results?.results?.slice(0, 10).map((item, index) => (
-                   <div
-                     key={item.candidateId}
+              <div className="space-y-3">
+                {results?.results?.slice(0, 10).map((item, index) => {
+                  const staggerClasses = ['animate-stagger-1', 'animate-stagger-2', 'animate-stagger-3', 'animate-stagger-4', 'animate-stagger-5']
+                   return (
+                  <div
+                    key={item.candidateId}
                     className={`p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${staggerClasses[index % 5]}`}
-                   >
+                  >
                     <div className="flex items-center space-x-3">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
@@ -247,7 +247,7 @@ const Results = () => {
                       )}
                     </div>
                   </div>
-                ))}
+                )})}
               </div>
             </div>
           </div>
@@ -351,13 +351,13 @@ const Results = () => {
                     </tr>
                   </thead>
                   <tbody>
-                   const staggerClasses = ['animate-stagger-1', 'animate-stagger-2', 'animate-stagger-3', 'animate-stagger-4', 'animate-stagger-5']
-
-                   {results?.results?.map((item, index) => (
-                     <tr
-                       key={item.candidateId}
-                       className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors ${staggerClasses[index % 5]}`}
-                     >
+                    {results?.results?.map((item, index) => {
+                      const staggerClasses = ['animate-stagger-1', 'animate-stagger-2', 'animate-stagger-3', 'animate-stagger-4', 'animate-stagger-5']
+                      return (
+                      <tr
+                        key={item.candidateId}
+                        className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors ${staggerClasses[index % 5]}`}
+                      >
                         <td className="py-3 px-2 text-sm font-bold text-gray-700 dark:text-gray-200">
                           {item.position}
                         </td>
@@ -386,7 +386,7 @@ const Results = () => {
                           {item.totalPoints}
                         </td>
                       </tr>
-                    ))}
+                    )})}
                   </tbody>
                 </table>
               </div>
