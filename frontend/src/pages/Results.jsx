@@ -171,7 +171,7 @@ const Results = () => {
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Top Candidates - Left Panel */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 animate-slide-in-left">
             <div className="card p-6 sticky top-20">
               <h2 className="text-xl font-display font-bold mb-4 flex items-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
                 <Trophy className="mr-2 text-yellow-500 dark:text-yellow-400" size={24} />
@@ -185,7 +185,7 @@ const Results = () => {
                 {results?.results?.slice(0, 10).map((item, index) => (
                   <div
                     key={item.candidateId}
-                    className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className={`p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors animate-stagger-${(index % 5) + 1}`}
                   >
                     <div className="flex items-center space-x-3">
                       <div
@@ -251,7 +251,7 @@ const Results = () => {
           </div>
 
           {/* Charts - Right Panel */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-8 animate-slide-in-right">
             {/* Bar Chart */}
             <div className="card p-6">
               <h2 className="text-xl font-display font-bold mb-4 flex items-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -349,10 +349,10 @@ const Results = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {results?.results?.map((item) => (
+                    {results?.results?.map((item, index) => (
                       <tr
                         key={item.candidateId}
-                        className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+                        className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors animate-stagger-${(index % 5) + 1}`}
                       >
                         <td className="py-3 px-2 text-sm font-bold text-gray-700 dark:text-gray-200">
                           {item.position}
@@ -391,7 +391,7 @@ const Results = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 text-center card p-8">
+        <div className="mt-12 text-center card p-8 animate-slide-up">
           <h3 className="text-2xl font-display font-bold mb-4 text-gray-900 dark:text-gray-100 transition-colors duration-300">
             ¿Aún no has votado?
           </h3>
