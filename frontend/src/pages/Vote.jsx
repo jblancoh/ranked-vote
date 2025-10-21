@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { CheckCircle, AlertCircle, Vote as VoteIcon, X } from 'lucide-react'
 import { useCandidates } from '../hooks/useCandidates'
 import { useVote } from '../hooks/useVote'
+import Card from '../components/ui/Card'
 
 const Vote = () => {
   const [selectedCandidates, setSelectedCandidates] = useState({
@@ -16,8 +17,9 @@ const Vote = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [error, setError] = useState(null)
+  const [filterText, setFilterText] = useState('')
 
-  const { candidates, loading, error: candidatesError } = useCandidates()
+  const { candidates, loading, filtering, error: candidatesError } = useCandidates(null, filterText)
   const { submitVote, hasVoted, checkIfVoted } = useVote()
 
   useEffect(() => {
@@ -34,11 +36,11 @@ const Vote = () => {
 
   const getColorClasses = (color) => {
     const colors = {
-      gold: 'bg-yellow-50 border-yellow-400 text-yellow-700',
-      silver: 'bg-gray-50 border-gray-400 text-gray-700',
-      bronze: 'bg-orange-50 border-orange-400 text-orange-700',
-      blue: 'bg-blue-50 border-blue-400 text-blue-700',
-      green: 'bg-green-50 border-green-400 text-green-700',
+      gold: 'bg-yellow-50 border-yellow-400 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-500 dark:text-yellow-300',
+      silver: 'bg-gray-50 border-gray-400 text-gray-700 dark:bg-gray-900 dark:border-gray-500 dark:text-gray-200',
+      bronze: 'bg-orange-50 border-orange-400 text-orange-700 dark:bg-orange-900/30 dark:border-orange-500 dark:text-orange-300',
+      blue: 'bg-blue-50 border-blue-400 text-blue-700 dark:bg-blue-900/30 dark:border-blue-500 dark:text-blue-300',
+      green: 'bg-green-50 border-green-400 text-green-700 dark:bg-green-900/30 dark:border-green-500 dark:text-green-300',
     }
     return colors[color] || colors.blue
   }
@@ -119,10 +121,10 @@ const Vote = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
         <div className="text-center">
           <div className="spinner mb-4"></div>
-          <p className="text-gray-600">Cargando candidatas...</p>
+          <p className="text-gray-600 dark:text-gray-400">Cargando candidatas...</p>
         </div>
       </div>
     )
@@ -130,14 +132,14 @@ const Vote = () => {
 
   if (hasVoted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
         <div className="max-w-md w-full mx-4">
           <div className="card p-8 text-center">
-            <CheckCircle size={64} className="mx-auto text-green-500 mb-4" />
+            <CheckCircle size={64} className="mx-auto text-green-500 dark:text-green-400 mb-4" />
             <h2 className="text-2xl font-display font-bold mb-2">
               ¡Ya has votado!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Gracias por participar. Ya registraste tu predicción para el
               Certamen Flor de Tabasco 2026.
             </p>
@@ -152,14 +154,14 @@ const Vote = () => {
 
   if (showSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 animate-fade-in">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 animate-fade-in transition-colors duration-300">
         <div className="max-w-md w-full mx-4">
           <div className="card p-8 text-center">
-            <CheckCircle size={64} className="mx-auto text-green-500 mb-4 animate-bounce-in" />
+            <CheckCircle size={64} className="mx-auto text-green-500 dark:text-green-400 mb-4 animate-bounce-in" />
             <h2 className="text-2xl font-display font-bold mb-2">
               ¡Voto Registrado!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Tu predicción ha sido guardada exitosamente.
               Gracias por participar en Ranked Vote 2026.
             </p>
@@ -178,14 +180,14 @@ const Vote = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 transition-colors duration-300">
       <div className="container-custom">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
           <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
             🗳️ Haz tu Predicción
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto transition-colors duration-300">
             Selecciona tus 5 candidatas favoritas del 1er al 5to lugar para el
             Certamen Flor de Tabasco 2026
           </p>
@@ -204,44 +206,71 @@ const Vote = () => {
             {/* Candidatas List */}
             <div className="lg:col-span-2">
               <div className="card p-6 mb-6">
-                <h2 className="text-xl font-display font-bold mb-4">
-                  Candidatas
-                </h2>
-                <p className="text-sm text-gray-600 mb-4">
-                  Haz clic en una candidata para seleccionarla en tu top 5
-                </p>
+                <div className="flex justify-between items-center mb-4 flex-wrap">
+                  <div className="flex flex-1 flex-col justify-between">
+                    <h2 className="text-xl font-display font-bold mb-4">
+                      Candidatas
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Haz clic en una candidata para seleccionarla en tu top 5
+                    </p>
+                  </div>
+                  <div className="flex flex-[0.7] items-center justify-end">
+                    <input
+                      type="text"
+                      placeholder="Filtrar candidatas..."
+                      className="input w-full max-w-xs"
+                      value={filterText}
+                      onChange={e => setFilterText(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {candidates?.map((candidate) => {
-                    const selected = isSelected(candidate.id)
-                    const position = getPosition(candidate.id)
+                <div className={`grid sm:grid-cols-2 gap-4 transition-opacity duration-200 ${filtering ? 'opacity-70' : 'opacity-100'}`}>
+                  {candidates?.length === 0 && !filtering && filterText ? (
+                    <div className="col-span-2 text-center py-8">
+                      <p className="text-gray-500 mb-2">
+                        No se encontraron candidatas con &quot;{filterText}&quot;
+                      </p>
+                      <button
+                        onClick={() => setFilterText('')}
+                        className="text-primary-600 hover:text-primary-700 text-sm"
+                      >
+                        Limpiar filtro
+                      </button>
+                    </div>
+                  ) : (
+                    candidates?.map((candidate) => {
+                      const selected = isSelected(candidate.id)
+                      const position = getPosition(candidate.id)
 
                     return (
-                      <div
+                      <Card
                         key={candidate.id}
+                        padding="sm"
+                        interactive={true}
                         onClick={() => {
                           // Select in first available position
-                          const firstAvailable = positions.find(
-                            p => !selectedCandidates[p.key]
-                          )
+                          const firstAvailable = positions.find((p) => !selectedCandidates[p.key])
                           if (firstAvailable && !selected) {
                             handleSelectCandidate(firstAvailable.key, candidate.id)
                           }
                         }}
-                        className={`card p-4 cursor-pointer transition-all duration-200 ${selected
+                        className={`card p-4 cursor-pointer transition-all duration-200 ${
+                          selected
                             ? 'ring-2 ring-primary-500 bg-primary-50'
                             : 'hover:shadow-lg hover:scale-[1.02]'
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center space-x-3">
                           <div className="w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
                             {candidate.name.charAt(0)}
                           </div>
                           <div className="flex-grow">
-                            <h3 className="font-display font-bold text-gray-900">
+                            <h3 className="font-display font-bold text-gray-900 dark:text-gray-100 transition-colors duration-300">
                               {candidate.name}
                             </h3>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
                               {candidate.municipality}
                             </p>
                           </div>
@@ -270,9 +299,8 @@ const Vote = () => {
                             </div>
                           )}
                         </div>
-                      </div>
-                    )
-                  })}
+                      </Card>
+                    )}))}
                 </div>
               </div>
             </div>
@@ -295,7 +323,7 @@ const Vote = () => {
                         key={position.key}
                         className={`p-3 border-2 rounded-lg transition-all ${candidate
                             ? getColorClasses(position.color)
-                            : 'border-gray-200 bg-gray-50'
+                            : 'border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-700'
                           }`}
                       >
                         <div className="flex items-center justify-between">
@@ -315,7 +343,7 @@ const Vote = () => {
                               </button>
                             </div>
                           ) : (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                               Sin seleccionar
                             </span>
                           )}
@@ -352,7 +380,7 @@ const Vote = () => {
                       className="input"
                       placeholder="tu@email.com"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       Para notificaciones futuras
                     </p>
                   </div>
@@ -391,12 +419,12 @@ const Vote = () => {
                 {/* Progress */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600">Progreso</span>
+                    <span className="text-gray-600 dark:text-gray-400">Progreso</span>
                     <span className="font-bold text-primary-600">
                       {Object.values(selectedCandidates).filter(v => v !== null).length}/5
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2 transition-colors duration-300">
                     <div
                       className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                       style={{

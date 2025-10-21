@@ -25,6 +25,26 @@ export const getAllCandidates = async (req, res, next) => {
     const whereClause = active !== undefined
       ? { active: active === 'true' }
       : {};
+    const { filter } = req.query;
+
+    
+    // Filter with OR logic for name and municipality
+    if (filter && filter.trim().length > 0) {
+      whereClause.OR = [
+        {
+          name: {
+            contains: filter.trim(),
+            mode: 'insensitive'
+          }
+        },
+        {
+          municipality: {
+            contains: filter.trim(),
+            mode: 'insensitive'
+          }
+        }
+      ];
+    }
 
     // Get total count for pagination metadata
     const totalCount = await prisma.candidate.count({
