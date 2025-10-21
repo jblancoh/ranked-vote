@@ -1,4 +1,4 @@
-import { getPrisma } from '../utils/prisma.js';
+import { getPrisma } from "../utils/prisma.js";
 
 /**
  * Get all candidates
@@ -7,7 +7,7 @@ import { getPrisma } from '../utils/prisma.js';
 export const getAllCandidates = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
-    const { active, page = 1, limit = 10 } = req.query;
+    const { active, page = 1, limit = 20 } = req.query;
 
     // Parse pagination parameters
     const pageNumber = parseInt(page, 10);
@@ -18,24 +18,24 @@ export const getAllCandidates = async (req, res, next) => {
     if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
       return res.status(400).json({
         success: false,
-        message: 'Parámetros de paginación inválidos. page debe ser >= 1, limit debe estar entre 1 y 100'
+        message:
+          "Parámetros de paginación inválidos. page debe ser >= 1, limit debe estar entre 1 y 100",
       });
     }
 
-    const whereClause = active !== undefined
-      ? { active: active === 'true' }
-      : {};
+    const whereClause =
+      active !== undefined ? { active: active === "true" } : {};
 
     // Get total count for pagination metadata
     const totalCount = await prisma.candidate.count({
-      where: whereClause
+      where: whereClause,
     });
 
     // Get paginated candidates
     const candidates = await prisma.candidate.findMany({
       where: whereClause,
       orderBy: {
-        order: 'asc'
+        order: "asc",
       },
       select: {
         id: true,
@@ -48,11 +48,11 @@ export const getAllCandidates = async (req, res, next) => {
         createdAt: true,
         updatedAt: true,
         _count: {
-          select: { votes: true }
-        }
+          select: { votes: true },
+        },
       },
       skip,
-      take: limitNumber
+      take: limitNumber,
     });
 
     // Calculate pagination metadata
@@ -71,9 +71,9 @@ export const getAllCandidates = async (req, res, next) => {
         hasNextPage,
         hasPrevPage,
         nextPage: hasNextPage ? pageNumber + 1 : null,
-        prevPage: hasPrevPage ? pageNumber - 1 : null
+        prevPage: hasPrevPage ? pageNumber - 1 : null,
       },
-      data: candidates
+      data: candidates,
     });
   } catch (error) {
     next(error);
@@ -93,21 +93,21 @@ export const getCandidateById = async (req, res, next) => {
       where: { id },
       include: {
         _count: {
-          select: { votes: true }
-        }
-      }
+          select: { votes: true },
+        },
+      },
     });
 
     if (!candidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
     res.json({
       success: true,
-      data: candidate
+      data: candidate,
     });
   } catch (error) {
     next(error);
@@ -129,14 +129,14 @@ export const createCandidate = async (req, res, next) => {
         municipality,
         photoUrl,
         bio,
-        order: order || undefined
-      }
+        order: order || undefined,
+      },
     });
 
     res.status(201).json({
       success: true,
-      message: 'Candidato creado exitosamente',
-      data: candidate
+      message: "Candidato creado exitosamente",
+      data: candidate,
     });
   } catch (error) {
     next(error);
@@ -155,13 +155,13 @@ export const updateCandidate = async (req, res, next) => {
 
     // Check if candidate exists
     const existingCandidate = await prisma.candidate.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingCandidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
@@ -173,14 +173,14 @@ export const updateCandidate = async (req, res, next) => {
         ...(photoUrl !== undefined && { photoUrl }),
         ...(bio !== undefined && { bio }),
         ...(order !== undefined && { order }),
-        ...(active !== undefined && { active })
-      }
+        ...(active !== undefined && { active }),
+      },
     });
 
     res.json({
       success: true,
-      message: 'Candidato actualizado exitosamente',
-      data: candidate
+      message: "Candidato actualizado exitosamente",
+      data: candidate,
     });
   } catch (error) {
     next(error);
@@ -198,23 +198,23 @@ export const deleteCandidate = async (req, res, next) => {
 
     // Check if candidate exists
     const existingCandidate = await prisma.candidate.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingCandidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
     await prisma.candidate.delete({
-      where: { id }
+      where: { id },
     });
 
     res.json({
       success: true,
-      message: 'Candidato eliminado exitosamente'
+      message: "Candidato eliminado exitosamente",
     });
   } catch (error) {
     next(error);
@@ -231,27 +231,27 @@ export const toggleCandidateStatus = async (req, res, next) => {
     const { id } = req.params;
 
     const candidate = await prisma.candidate.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!candidate) {
       return res.status(404).json({
         success: false,
-        message: 'Candidato no encontrado'
+        message: "Candidato no encontrado",
       });
     }
 
     const updatedCandidate = await prisma.candidate.update({
       where: { id },
       data: {
-        active: !candidate.active
-      }
+        active: !candidate.active,
+      },
     });
 
     res.json({
       success: true,
-      message: `Candidato ${updatedCandidate.active ? 'activado' : 'desactivado'} exitosamente`,
-      data: updatedCandidate
+      message: `Candidato ${updatedCandidate.active ? "activado" : "desactivado"} exitosamente`,
+      data: updatedCandidate,
     });
   } catch (error) {
     next(error);
