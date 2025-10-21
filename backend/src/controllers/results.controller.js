@@ -17,8 +17,83 @@ const POINTS = {
 };
 
 /**
- * Calculate results based on ranked voting
- * @route GET /api/results/calculate
+ * @swagger
+ * /api/results/calculate:
+ *   get:
+ *     summary: Calcular resultados de votación
+ *     description: Calcula los resultados basados en el sistema de votación por ranking (1º=5pts, 2º=4pts, etc.)
+ *     tags: [Results]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Resultados calculados exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalVotes:
+ *                       type: integer
+ *                       example: 150
+ *                       description: Número total de votos
+ *                     maxPossiblePoints:
+ *                       type: integer
+ *                       example: 750
+ *                       description: Puntos máximos posibles
+ *                     calculatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: '2024-01-01T00:00:00.000Z'
+ *                     results:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           candidateId:
+ *                             type: string
+ *                             format: uuid
+ *                           candidateName:
+ *                             type: string
+ *                           municipality:
+ *                             type: string
+ *                           photoUrl:
+ *                             type: string
+ *                             format: uri
+ *                           totalPoints:
+ *                             type: integer
+ *                           percentage:
+ *                             type: number
+ *                             format: float
+ *                           position:
+ *                             type: integer
+ *                           votes:
+ *                             type: object
+ *                             properties:
+ *                               firstPlace:
+ *                                 type: integer
+ *                               secondPlace:
+ *                                 type: integer
+ *                               thirdPlace:
+ *                                 type: integer
+ *                               fourthPlace:
+ *                                 type: integer
+ *                               fifthPlace:
+ *                                 type: integer
+ *                               total:
+ *                                 type: integer
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const calculateResults = async (req, res, next) => {
   try {
@@ -144,8 +219,61 @@ export const calculateResults = async (req, res, next) => {
 };
 
 /**
- * Get top candidates
- * @route GET /api/results/top
+ * @swagger
+ * /api/results/top:
+ *   get:
+ *     summary: Obtener candidatos top
+ *     description: Retorna los candidatos mejor posicionados en los resultados
+ *     tags: [Results]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *           minimum: 1
+ *           maximum: 20
+ *         description: Número de candidatos top a retornar
+ *         example: 5
+ *     responses:
+ *       200:
+ *         description: Candidatos top obtenidos exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalVotes:
+ *                       type: integer
+ *                       example: 150
+ *                     calculatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                     top:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         description: Candidato con su posición y estadísticas
+ *       404:
+ *         description: No hay resultados disponibles
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getTopCandidates = async (req, res, next) => {
   try {
@@ -183,8 +311,58 @@ export const getTopCandidates = async (req, res, next) => {
 };
 
 /**
- * Get candidate ranking position
- * @route GET /api/results/candidate/:id
+ * @swagger
+ * /api/results/candidate/{id}:
+ *   get:
+ *     summary: Obtener resultado de candidato específico
+ *     description: Retorna la posición y estadísticas de un candidato específico
+ *     tags: [Results]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del candidato
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Resultado del candidato obtenido exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalVotes:
+ *                       type: integer
+ *                       example: 150
+ *                     calculatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                     result:
+ *                       type: object
+ *                       description: Resultado detallado del candidato
+ *       404:
+ *         description: Candidato no encontrado o sin votos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getCandidateResult = async (req, res, next) => {
   try {
@@ -245,8 +423,51 @@ export const getCandidateResult = async (req, res, next) => {
 };
 
 /**
- * Save/persist results snapshot
- * @route POST /api/results/save
+ * @swagger
+ * /api/results/save:
+ *   post:
+ *     summary: Guardar snapshot de resultados
+ *     description: Calcula y guarda una instantánea de los resultados actuales en la base de datos
+ *     tags: [Results]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Resultados guardados exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Resultados guardados exitosamente'
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     savedResults:
+ *                       type: integer
+ *                       example: 5
+ *                       description: Número de resultados guardados
+ *                     calculatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: '2024-01-01T00:00:00.000Z'
+ *       404:
+ *         description: No hay resultados para guardar
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const saveResults = async (req, res, next) => {
   try {
@@ -296,8 +517,68 @@ export const saveResults = async (req, res, next) => {
 };
 
 /**
- * Get saved results
- * @route GET /api/results
+ * @swagger
+ * /api/results:
+ *   get:
+ *     summary: Obtener resultados guardados
+ *     description: Retorna los resultados que han sido guardados previamente como snapshot
+ *     tags: [Results]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Resultados guardados obtenidos exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 5
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       candidateId:
+ *                         type: string
+ *                         format: uuid
+ *                       position:
+ *                         type: integer
+ *                       votes:
+ *                         type: integer
+ *                       percentage:
+ *                         type: number
+ *                         format: float
+ *                       candidate:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             format: uuid
+ *                           name:
+ *                             type: string
+ *                           municipality:
+ *                             type: string
+ *                           photoUrl:
+ *                             type: string
+ *                             format: uri
+ *       404:
+ *         description: No hay resultados guardados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getSavedResults = async (req, res, next) => {
   try {
