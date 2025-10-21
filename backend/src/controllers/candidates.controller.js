@@ -7,10 +7,26 @@ import { getPrisma } from '../utils/prisma.js';
 export const getAllCandidates = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
+    const { active, page = 1, limit = 10 } = req.query;
+
+    // Parse pagination parameters
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // Validate pagination parameters
+    if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
+      return res.status(400).json({
+        success: false,
+        message: 'Parámetros de paginación inválidos. page debe ser >= 1, limit debe estar entre 1 y 100'
+      });
+    }
+
+    const whereClause = active !== undefined
+      ? { active: active === 'true' }
+      : {};
     const { filter } = req.query;
 
-    // Build dynamic where clause
-    const whereClause = {};
     
     // Filter with OR logic for name and municipality
     if (filter && filter.trim().length > 0) {
@@ -30,6 +46,12 @@ export const getAllCandidates = async (req, res, next) => {
       ];
     }
 
+    // Get total count for pagination metadata
+    const totalCount = await prisma.candidate.count({
+      where: whereClause
+    });
+
+    // Get paginated candidates
     const candidates = await prisma.candidate.findMany({
       where: whereClause,
       orderBy: {
@@ -48,12 +70,29 @@ export const getAllCandidates = async (req, res, next) => {
         _count: {
           select: { votes: true }
         }
-      }
+      },
+      skip,
+      take: limitNumber
     });
+
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / limitNumber);
+    const hasNextPage = pageNumber < totalPages;
+    const hasPrevPage = pageNumber > 1;
 
     res.json({
       success: true,
       count: candidates.length,
+      totalCount,
+      pagination: {
+        currentPage: pageNumber,
+        totalPages,
+        limit: limitNumber,
+        hasNextPage,
+        hasPrevPage,
+        nextPage: hasNextPage ? pageNumber + 1 : null,
+        prevPage: hasPrevPage ? pageNumber - 1 : null
+      },
       data: candidates
     });
   } catch (error) {
