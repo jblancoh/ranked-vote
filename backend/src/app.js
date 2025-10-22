@@ -9,10 +9,10 @@ import rateLimit from "express-rate-limit";
 dotenv.config();
 
 // Import routes
-import routes from './routes/index.js';
-import { errorHandler } from './middleware/errorHandler.js';
-import { extractTenantMiddleware } from './middleware/tenant.vercel.js';
-import { specs, swaggerUi, swaggerUiOptions } from './config/swagger.config.js';
+import routes from "./routes/index.js";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { extractTenantMiddleware } from "./middleware/tenant.vercel.js";
+import { specs, swaggerUi, swaggerUiOptions } from "./config/swagger.config.js";
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -28,16 +28,28 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
+    // Parse CORS_ORIGIN which can contain multiple domains separated by comma
+    const corsOriginEnv = process.env.CORS_ORIGIN || "";
+    const corsOriginList = corsOriginEnv
+      .split(",")
+      .map((o) => o.trim())
+      .filter(Boolean);
+
     const allowedOrigins = [
       "http://localhost:3000",
       "http://localhost:5173",
       "http://localhost:5174",
-      process.env.CORS_ORIGIN,
-    ].filter(Boolean);
+      ...corsOriginList,
+    ];
 
-    if (allowedOrigins.indexOf(origin) !== -1 || NODE_ENV === "development") {
+    const isAllowed =
+      allowedOrigins.indexOf(origin) !== -1 || NODE_ENV === "development";
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      console.error(`CORS blocked request from origin: ${origin}`);
+      console.error(`Allowed origins: ${allowedOrigins.join(", ")}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
@@ -84,7 +96,7 @@ app.get("/health", (req, res) => {
 });
 
 // Swagger Documentation (no tenant required)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
 
 // Tenant middleware (extract tenant from request)
 // This runs BEFORE all API routes
@@ -114,7 +126,7 @@ if (NODE_ENV !== "production" || process.env.PORT) {
   Environment: ${NODE_ENV}
   Server running on port: ${PORT}
   Health check: http://${HOST}:${PORT}/health
-  API Documentation: http://${process.env.HOST || 'localhost'}:${PORT}/api-docs
+  API Documentation: http://${process.env.HOST || "localhost"}:${PORT}/api-docs
   API Base URL: http://${HOST}:${PORT}/api
   Default Tenant: ${process.env.DEFAULT_TENANT || "default"}
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
