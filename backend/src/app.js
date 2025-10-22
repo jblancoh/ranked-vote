@@ -15,6 +15,8 @@ import { extractTenantMiddleware } from "./middleware/tenant.vercel.js";
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+const HOST = process.env.HOST || "localhost";
+const NODE_ENV = process.env.NODE_ENV || "development";
 
 // Security middleware
 app.use(helmet());
@@ -32,10 +34,7 @@ const corsOptions = {
       process.env.CORS_ORIGIN,
     ].filter(Boolean);
 
-    if (
-      allowedOrigins.indexOf(origin) !== -1 ||
-      process.env.NODE_ENV === "development"
-    ) {
+    if (allowedOrigins.indexOf(origin) !== -1 || NODE_ENV === "development") {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -66,7 +65,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Logging middleware
-if (process.env.NODE_ENV !== "production") {
+if (NODE_ENV !== "production") {
   app.use(morgan("dev"));
 } else {
   app.use(morgan("combined"));
@@ -78,7 +77,7 @@ app.get("/health", (req, res) => {
     status: "ok",
     message: "Ranked Vote API is running",
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
+    environment: NODE_ENV,
     multiTenant: true,
   });
 });
@@ -101,21 +100,42 @@ app.use((req, res) => {
 // Error handling middleware
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`
+// Start server - Only listen in development or if PORT is defined
+let server;
+if (NODE_ENV !== "production" || process.env.PORT) {
+  server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(`
   🗳️  Ranked Vote API Server (Multi-Tenant)
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Environment: ${process.env.NODE_ENV || "development"}
-  Server running on: http://${process.env.HOST || "localhost"}:${PORT}
-  Health check: http://${process.env.HOST || "localhost"}:${PORT}/health
-  API Base URL: http://${process.env.HOST || "localhost"}:${PORT}/api
+  Environment: ${NODE_ENV}
+  Server running on port: ${PORT}
+  Health check: http://${HOST}:${PORT}/health
+  API Base URL: http://${HOST}:${PORT}/api
   Default Tenant: ${process.env.DEFAULT_TENANT || "default"}
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Multi-tenant enabled!
   Use header: X-Tenant-Slug: default
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   `);
-});
+  });
+
+  // Graceful shutdown for Render
+  process.on("SIGTERM", () => {
+    console.log("SIGTERM received, shutting down gracefully...");
+    server.close(() => {
+      console.log("Server closed");
+      process.exit(0);
+    });
+  });
+} else {
+  console.log(`
+  🗳️  Ranked Vote API Server (Multi-Tenant)
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Environment: ${NODE_ENV}
+  ⚠️  No PORT defined - server not listening
+  App ready to be used as middleware
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  `);
+}
 
 export default app;
