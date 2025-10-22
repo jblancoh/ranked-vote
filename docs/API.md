@@ -90,7 +90,7 @@ Obtiene un evento específico por ID.
 
 #### GET /api/events/:id/stats
 
-Obtiene las estadisticas de un evento por ID (el total de votos, votos por hora y el top de los 5 candidatos con más votos).
+Obtiene las estadísticas de un evento por ID (el total de votos, votos por hora y el top de los 5 candidatos con más votos).
 
 **Response:**
 ```json

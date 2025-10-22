@@ -1,5 +1,5 @@
 import { getPrisma } from '../utils/prisma.js';
-
+import { POINTS } from '../constants/points.js';
 /**
  * Get all events
  * @route GET /api/events
@@ -238,91 +238,87 @@ export const toggleVotingStatus = async (req, res, next) => {
 };
 
 /**
- * Get stats (total votes, hourly turnout, top 5 candidates.)
- * @route GET /api/events/:id/stats
- */
+  * Get stats (total votes, hourly turnout, top 5 candidates.)
+  * @route GET /api/events/:id/stats
+  */
 export const getEventStats = async (req, res, next) => {
   const prisma = getPrisma(req.tenantId);
   const { id } = req.params;
-  const POINTS = {
-    firstPlace: 5,
-    secondPlace: 4,
-    thirdPlace: 3,
-    fourthPlace: 2,
-    fifthPlace: 1,
-  };
 
   try {
-    const event = await prisma.event.findUnique({
-      where: { id: id },
-    });
+    const [event, totalVotes, topCandidatesAgg, votesByHourAgg] = await prisma.$transaction([
+      prisma.event.findUnique({ where: { id } }),
+
+      prisma.vote.count({ where: { eventId: id } }),
+
+      prisma.$queryRaw`
+        SELECT candidateId AS "candidateId", SUM(points)::integer AS points
+        FROM (
+          SELECT "firstPlace" AS candidateId, ${POINTS.firstPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "secondPlace" AS candidateId, ${POINTS.secondPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "thirdPlace" AS candidateId, ${POINTS.thirdPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "fourthPlace" AS candidateId, ${POINTS.fourthPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "fifthPlace" AS candidateId, ${POINTS.fifthPlace} AS points FROM votes WHERE "eventId" = ${id}
+            ) AS unpivoted_votes
+          WHERE candidateId IS NOT NULL
+          GROUP BY candidateId
+          ORDER BY points DESC
+          LIMIT 5
+      `,
+      
+      prisma.$queryRaw`
+        SELECT EXTRACT(hour FROM "createdAt")::integer AS hour, COUNT(*)::integer AS count
+        FROM votes
+        WHERE "eventId" = ${id}
+        GROUP BY hour
+      `
+    ]);
 
     if (!event) {
       return res.status(404).json({
         success: false,
-        message: "Evento no encontrado",
+        message: 'Evento no encontrado',
       });
     }
-    // Total de votos
-    const votes = await prisma.vote.findMany({
-      where: { eventId: Number(id) },
-    });
 
-    // Votos por hora y calculo de puntajes por candidatos
-    const votesByHour = {};
-    const pointsByCandidate = {};
-    for (const vote of votes) {
-      const hour = vote.createdAt.getHours();
-      votesByHour[hour] = (votesByHour[hour] || 0) + 1;
+    const votesByHour = votesByHourAgg.reduce((acc, row) => {
+      acc[row.hour] = row.count;
+      return acc;
+    }, {});
+    
+    let topCandidates = [];
+    if (topCandidatesAgg.length > 0) {
+      
+      const candidateIds = topCandidatesAgg.map(c => c.candidateId);
 
-      pointsByCandidate[vote.firstPlace] =
-        (pointsByCandidate[vote.firstPlace] || 0) + POINTS.firstPlace;
-      pointsByCandidate[vote.secondPlace] =
-        (pointsByCandidate[vote.secondPlace] || 0) + POINTS.secondPlace;
-      pointsByCandidate[vote.thirdPlace] =
-        (pointsByCandidate[vote.thirdPlace] || 0) + POINTS.thirdPlace;
-      pointsByCandidate[vote.fourthPlace] =
-        (pointsByCandidate[vote.fourthPlace] || 0) + POINTS.fourthPlace;
-      pointsByCandidate[vote.fifthPlace] =
-        (pointsByCandidate[vote.fifthPlace] || 0) + POINTS.fifthPlace;
+      const candidateDetails = await prisma.candidate.findMany({
+        where: { id: { in: candidateIds } },
+        select: { id: true, name: true, municipality: true, photoUrl: true, bio: true }
+      });
+
+      const pointsMap = new Map(topCandidatesAgg.map(c => [c.candidateId, c.points]));
+      
+      topCandidates = candidateDetails
+        .map(detail => ({
+          ...detail,
+          points: pointsMap.get(detail.id) || 0,
+        }))
+        .sort((a, b) => b.points - a.points); //ordenamos por si findMany no respeta el orden
     }
-
-    // Top 5 candidatos
-    const topCandidatesArray = Object.entries(pointsByCandidate)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-
-    const pointsMap = new Map(topCandidatesArray);
-
-    const candidateIds = Array.from(pointsMap.keys());
-    const candidateDetails = await prisma.candidate.findMany({
-      where: { id: { in: candidateIds } },
-      select: {
-        id: true,
-        name: true,
-        municipality: true,
-        photoUrl: true,
-        bio: true,
-      },
-    });
-
-    const candidatesWithPoints = candidateDetails.map((detail) => {
-      return {
-        ...detail,
-        points: pointsMap.get(detail.id) || 0,
-      };
-    });
-
-    const candidates = candidatesWithPoints.sort((a, b) => b.points - a.points);
 
     res.json({
       success: true,
       data: {
-        totalVotes: votes.length,
+        totalVotes,
         votesByHour,
-        topCandidates: candidates,
+        topCandidates,
       },
     });
+
   } catch (error) {
     next(error);
   }
