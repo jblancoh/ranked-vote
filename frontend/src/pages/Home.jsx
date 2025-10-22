@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Section */}
-      <section className="gradient-primary text-white py-20">
+      <section className="gradient-primary text-white py-20 animate-slide-up">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
@@ -38,44 +38,44 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 dark:bg-gray-900 animate-slide-in-left">
         <div className="container-custom">
-          <h2 className="text-3xl font-display font-bold text-center mb-12">
+          <h2 className="text-3xl font-display font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
             ¿Cómo Funciona?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="card p-6 text-center">
+            <div className="card p-6 text-center animate-stagger-1">
               <div className="w-16 h-16 gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-display font-bold mb-2">
+              <h3 className="text-xl font-display font-bold mb-2 text-gray-900 dark:text-gray-100">
                 1. Conoce a las Candidatas
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Revisa los perfiles de todas las embajadoras municipales participantes
               </p>
             </div>
 
-            <div className="card p-6 text-center">
+            <div className="card p-6 text-center animate-stagger-2">
               <div className="w-16 h-16 gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <VoteIcon className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-display font-bold mb-2">
+              <h3 className="text-xl font-display font-bold mb-2 text-gray-900 dark:text-gray-100">
                 2. Vota tu Top 5
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Selecciona tus 5 candidatas favoritas del 1er al 5to lugar
               </p>
             </div>
 
-            <div className="card p-6 text-center">
+            <div className="card p-6 text-center animate-stagger-3">
               <div className="w-16 h-16 gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="text-white" size={32} />
               </div>
-              <h3 className="text-xl font-display font-bold mb-2">
+              <h3 className="text-xl font-display font-bold mb-2 text-gray-900 dark:text-gray-100">
                 3. Comparte y Compite
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Ve las predicciones de la comunidad y comparte las tuyas
               </p>
             </div>
@@ -84,19 +84,19 @@ const Home = () => {
       </section>
 
       {/* About Event Section */}
-      <section className="py-16">
+      <section className="py-16 dark:bg-gray-950 animate-slide-in-right">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-display font-bold mb-6">
+            <h2 className="text-3xl font-display font-bold mb-6 text-gray-900 dark:text-gray-100">
               Sobre el Certamen Flor de Tabasco
             </h2>
-            <p className="text-lg text-gray-700 mb-4">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
               El Certamen Flor de Tabasco es una tradición que celebra la belleza,
               cultura y representación de los municipios de nuestro estado. Durante
               la época de Pre-feria, las embajadoras municipales participan en diversos
               eventos culminando en la elección de la Flor de Tabasco.
             </p>
-            <p className="text-lg text-gray-700 mb-8">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
               Este sistema de votación comunitaria te permite participar activamente
               haciendo tus predicciones y compartiéndolas con otros tabasqueños.
             </p>
@@ -108,13 +108,13 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary-50">
+      <section className="py-16 bg-primary-50 dark:bg-gray-900 animate-slide-up">
         <div className="container-custom text-center">
-          <Heart className="mx-auto mb-4 text-primary-600" size={48} />
-          <h2 className="text-3xl font-display font-bold mb-4">
+          <Heart className="mx-auto mb-4 text-primary-600 dark:text-primary-400" size={48} />
+          <h2 className="text-3xl font-display font-bold mb-4 text-gray-900 dark:text-gray-100">
             ¿Listo para participar?
           </h2>
-          <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
             Únete a la comunidad y comparte tu predicción para el
             Certamen Flor de Tabasco 2026
           </p>

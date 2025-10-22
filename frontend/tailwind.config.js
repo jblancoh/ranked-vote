@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -19,6 +20,7 @@ export default {
           700: '#b91c1c',
           800: '#991b1b',
           900: '#7f1d1d',
+          dark: '#f87171', // Rojo más brillante para modo oscuro
         },
         secondary: {
           50: '#f0fdf4',
@@ -31,6 +33,7 @@ export default {
           700: '#15803d',
           800: '#166534',
           900: '#14532d',
+          dark: '#4ade80', // Verde más brillante para modo oscuro
         },
       },
       fontFamily: {
@@ -40,6 +43,15 @@ export default {
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.5s ease-out',
+        'slide-down': 'slideDown 0.5s ease-out',
+        'slide-in-left': 'slideInLeft 0.5s ease-out',
+        'slide-in-right': 'slideInRight 0.5s ease-out',
+        'bounce-in': 'bounceIn 0.6s ease-out',
+        'stagger-1': 'fadeIn 0.5s ease-out 0.1s both',
+        'stagger-2': 'fadeIn 0.5s ease-out 0.2s both',
+        'stagger-3': 'fadeIn 0.5s ease-out 0.3s both',
+        'stagger-4': 'fadeIn 0.5s ease-out 0.4s both',
+        'stagger-5': 'fadeIn 0.5s ease-out 0.5s both',
       },
       keyframes: {
         fadeIn: {
@@ -49,6 +61,24 @@ export default {
         slideUp: {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideDown: {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideInLeft: {
+          '0%': { transform: 'translateX(-20px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        slideInRight: {
+          '0%': { transform: 'translateX(20px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        bounceIn: {
+          '0%': { transform: 'scale(0.3)', opacity: '0' },
+          '50%': { transform: 'scale(1.05)', opacity: '1' },
+          '70%': { transform: 'scale(0.9)' },
+          '100%': { transform: 'scale(1)' },
         },
       },
     },
