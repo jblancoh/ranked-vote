@@ -92,7 +92,6 @@ export const requireTenant = (req, res, next) => {
 
 export default {
   extractTenantMiddleware,
-  getTenantPrisma,
   attachTenantPrismaMiddleware,
   requireTenant,
 };
