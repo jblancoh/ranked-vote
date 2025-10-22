@@ -9,9 +9,10 @@ import rateLimit from "express-rate-limit";
 dotenv.config();
 
 // Import routes
-import routes from "./routes/index.js";
-import { errorHandler } from "./middleware/errorHandler.js";
-import { extractTenantMiddleware } from "./middleware/tenant.vercel.js";
+import routes from './routes/index.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { extractTenantMiddleware } from './middleware/tenant.vercel.js';
+import { specs, swaggerUi, swaggerUiOptions } from './config/swagger.config.js';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -82,6 +83,9 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Swagger Documentation (no tenant required)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, swaggerUiOptions));
+
 // Tenant middleware (extract tenant from request)
 // This runs BEFORE all API routes
 app.use("/api", extractTenantMiddleware);
@@ -110,6 +114,7 @@ if (NODE_ENV !== "production" || process.env.PORT) {
   Environment: ${NODE_ENV}
   Server running on port: ${PORT}
   Health check: http://${HOST}:${PORT}/health
+  API Documentation: http://${process.env.HOST || 'localhost'}:${PORT}/api-docs
   API Base URL: http://${HOST}:${PORT}/api
   Default Tenant: ${process.env.DEFAULT_TENANT || "default"}
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
