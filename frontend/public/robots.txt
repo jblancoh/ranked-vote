@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vota-flor.vercel.app/sitemap.xml
