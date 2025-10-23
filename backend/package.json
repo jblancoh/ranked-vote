@@ -16,7 +16,9 @@
     "lint": "eslint src --ext js",
     "lint:fix": "eslint src --ext js --fix",
     "format": "prettier --write \"src/**/*.js\"",
-    "format:check": "prettier --check \"src/**/*.js\""
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "docs:generate": "jsdoc -c jsdoc.conf.json",
+    "docs:serve": "npx http-server ./docs/jsdoc -p 8081 -o"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
