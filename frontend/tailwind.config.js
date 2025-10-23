@@ -1,10 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+
+import plugin from 'tailwindcss/plugin'
+import { parseColor } from 'tailwindcss/lib/util/color'
+import { generateVariantStyle } from './src/utils'
+
+/* Converts HEX color to RGB */
+const toRGB = (value) => parseColor(value).color.join(' ')
+
 export default {
   darkMode: 'class',
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -21,6 +26,23 @@ export default {
           800: '#991b1b',
           900: '#7f1d1d',
           dark: '#f87171', // Rojo más brillante para modo oscuro
+          green: '#00A750',
+          yellow: '#FFD100',
+          red: '#E63946',
+          orange: '#F4A261',
+          lime: '#A3E635',
+          emerald: '#10B981',
+          teal: '#14B8A6',
+          cyan: '#06B6D4',
+          sky: '#38BDF8',
+          blue: '#3B82F6',
+          purple: '#A855F7',
+          pink: '#EC4899',
+          rose: '#F43F5E',
+          fuchsia: '#D946EF',
+          amber: '#EAB308',
+          stone: '#E5E7EB',
+          slate: '#64748B',
         },
         secondary: {
           50: '#f0fdf4',
@@ -35,6 +57,8 @@ export default {
           900: '#14532d',
           dark: '#4ade80', // Verde más brillante para modo oscuro
         },
+        'accent-purple': '#6B46C1', // Purple
+        'card-dark': '#2D3748', // Darker Blue/Gray
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -56,5 +80,9 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents, theme }) {
+      addComponents(generateVariantStyle(theme, toRGB))
+    }),
+  ],
 }
