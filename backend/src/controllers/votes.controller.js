@@ -1,7 +1,23 @@
 import { getPrisma } from '../utils/prisma.js';
 
 /**
- * Get client IP address
+ * Extrae la dirección IP del cliente de la solicitud.
+ * Verifica múltiples headers comunes para obtener la IP real del cliente,
+ * considerando proxies y load balancers.
+ * 
+ * @function getClientIp
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {Object} req.headers - Headers HTTP de la solicitud
+ * @param {string} [req.headers.x-forwarded-for] - IP del cliente tras proxy (formato: IP1, IP2)
+ * @param {string} [req.headers.x-real-ip] - IP real del cliente
+ * @param {Object} [req.connection] - Información de conexión
+ * @param {string} [req.socket] - Socket de conexión
+ * @param {string} [req.ip] - IP de la solicitud
+ * @returns {string} Dirección IP del cliente
+ * 
+ * @example
+ * const clientIp = getClientIp(req);
+ * // returns "192.168.1.1"
  */
 const getClientIp = (req) => {
   return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
@@ -104,6 +120,51 @@ const getClientIp = (req) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Registra un voto con ranking de candidatos (1º a 5º lugar).
+ * Valida que no haya duplicados y que los candidatos sean válidos y activos.
+ * Previene múltiples votos por IP.
+ * 
+ * @async
+ * @function submitVote
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.body - Cuerpo de la solicitud
+ * @param {string} req.body.firstPlace - ID del candidato en 1º lugar (requerido)
+ * @param {string} req.body.secondPlace - ID del candidato en 2º lugar (requerido)
+ * @param {string} req.body.thirdPlace - ID del candidato en 3º lugar (requerido)
+ * @param {string} req.body.fourthPlace - ID del candidato en 4º lugar (requerido)
+ * @param {string} req.body.fifthPlace - ID del candidato en 5º lugar (requerido)
+ * @param {string} [req.body.voterEmail] - Email del votante (opcional)
+ * @param {string} [req.body.voterName] - Nombre del votante (opcional)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON 201 con ID del voto creado
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Enviar voto
+ * POST /api/votes
+ * {
+ *   "firstPlace": "cmgk803tm000csajt6o5g9vem",
+ *   "secondPlace": "cmgk803tm000csajt6o5g9vfm",
+ *   "thirdPlace": "cmgk803tm000csajt6o5g9vgm",
+ *   "fourthPlace": "cmgk803tm000csajt6o5g9vhm",
+ *   "fifthPlace": "cmgk803tm000csajt6o5g9vim",
+ *   "voterEmail": "votante@example.com"
+ * }
+ * 
+ * // Respuesta exitosa (201)
+ * {
+ *   "success": true,
+ *   "message": "¡Voto registrado exitosamente! Gracias por participar.",
+ *   "data": {
+ *     "id": "vote_id_123",
+ *     "createdAt": "2025-10-23T10:30:00Z"
+ *   }
+ * }
  */
 export const submitVote = async (req, res, next) => {
   try {
@@ -238,6 +299,30 @@ export const submitVote = async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Verifica si la IP actual ya ha votado en el tenant actual.
+ * 
+ * @async
+ * @function checkVoteStatus
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con estado del voto
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Verificar estado de voto
+ * GET /api/votes/check
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "hasVoted": false,
+ *   "voteDate": null
+ * }
+ */
 export const checkVoteStatus = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
@@ -298,6 +383,31 @@ export const checkVoteStatus = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Obtiene el número total de votos registrados en el tenant.
+ * 
+ * @async
+ * @function getVoteCount
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con conteo total de votos
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener conteo de votos
+ * GET /api/votes/count
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "data": {
+ *     "totalVotes": 150
+ *   }
+ * }
  */
 export const getVoteCount = async (req, res, next) => {
   try {
@@ -377,6 +487,46 @@ export const getVoteCount = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Obtiene una lista paginada de todos los votos registrados (Admin).
+ * Retorna los votos ordenados por fecha de creación (más recientes primero).
+ * 
+ * @async
+ * @function getAllVotes
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.query - Parámetros de consulta
+ * @param {number} [req.query.limit=100] - Número máximo de votos a retornar (máximo 1000)
+ * @param {number} [req.query.offset=0] - Número de votos a omitir
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con lista paginada de votos
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener todos los votos
+ * GET /api/votes?limit=100&offset=0
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "data": [
+ *     {
+ *       "id": "vote_id_1",
+ *       "voterIp": "192.168.1.1",
+ *       "firstPlace": "candidate_id_1",
+ *       ...
+ *     }
+ *   ],
+ *   "pagination": {
+ *     "total": 150,
+ *     "limit": 100,
+ *     "offset": 0,
+ *     "hasMore": true
+ *   }
+ * }
  */
 export const getAllVotes = async (req, res, next) => {
   try {
