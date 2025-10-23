@@ -1,12 +1,20 @@
 import { getPrisma } from '../utils/prisma.js';
 
 /**
- * Point system for ranked voting
- * 1st place = 5 points
- * 2nd place = 4 points
- * 3rd place = 3 points
- * 4th place = 2 points
- * 5th place = 1 point
+ * Sistema de puntuación para votación por ranking.
+ * Define los puntos asignados a cada posición en el ranking.
+ * 
+ * @constant {Object} POINTS
+ * @property {number} firstPlace=5 - Puntos para 1º lugar
+ * @property {number} secondPlace=4 - Puntos para 2º lugar
+ * @property {number} thirdPlace=3 - Puntos para 3º lugar
+ * @property {number} fourthPlace=2 - Puntos para 4º lugar
+ * @property {number} fifthPlace=1 - Puntos para 5º lugar
+ * 
+ * @example
+ * // Obtener puntos para una posición
+ * const pointsFor1st = POINTS.firstPlace; // 5
+ * const totalMaxPoints = Object.values(POINTS).reduce((a, b) => a + b); // 15
  */
 const POINTS = {
   firstPlace: 5,
@@ -94,6 +102,51 @@ const POINTS = {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Calcula los resultados de la votación basado en el sistema de ranking.
+ * Sistema de puntos: 1º=5pts, 2º=4pts, 3º=3pts, 4º=2pts, 5º=1pt.
+ * 
+ * @async
+ * @function calculateResults
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con resultados calculados
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Calcular resultados de votación
+ * GET /api/results/calculate
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "data": {
+ *     "totalVotes": 150,
+ *     "maxPossiblePoints": 750,
+ *     "calculatedAt": "2025-10-23T10:30:00Z",
+ *     "results": [
+ *       {
+ *         "candidateId": "id1",
+ *         "candidateName": "Juan Pérez",
+ *         "totalPoints": 425,
+ *         "percentage": 56.67,
+ *         "position": 1,
+ *         "votes": {
+ *           "firstPlace": 50,
+ *           "secondPlace": 40,
+ *           "thirdPlace": 30,
+ *           "fourthPlace": 20,
+ *           "fifthPlace": 10,
+ *           "total": 150
+ *         }
+ *       }
+ *     ]
+ *   }
+ * }
  */
 export const calculateResults = async (req, res, next) => {
   try {
@@ -275,6 +328,43 @@ export const calculateResults = async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Obtiene los candidatos mejor posicionados en los resultados.
+ * Retorna los N candidatos con más puntos.
+ * 
+ * @async
+ * @function getTopCandidates
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.query - Parámetros de consulta
+ * @param {number} [req.query.limit=5] - Número de candidatos top a retornar (1-20)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con candidatos top
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener top 3 candidatos
+ * GET /api/results/top?limit=3
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "data": {
+ *     "totalVotes": 150,
+ *     "calculatedAt": "2025-10-23T10:30:00Z",
+ *     "top": [
+ *       {
+ *         "candidateId": "id1",
+ *         "candidateName": "Juan Pérez",
+ *         "totalPoints": 425,
+ *         "position": 1
+ *       }
+ *     ]
+ *   }
+ * }
+ */
 export const getTopCandidates = async (req, res, next) => {
   try {
     const { limit = 5 } = req.query;
@@ -363,6 +453,42 @@ export const getTopCandidates = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Obtiene la posición y estadísticas de un candidato específico.
+ * 
+ * @async
+ * @function getCandidateResult
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.params - Parámetros de ruta
+ * @param {string} req.params.id - ID único del candidato
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con resultado del candidato
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener resultado de candidato específico
+ * GET /api/results/candidate/cmgk803tm000csajt6o5g9vem
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "data": {
+ *     "totalVotes": 150,
+ *     "calculatedAt": "2025-10-23T10:30:00Z",
+ *     "result": {
+ *       "candidateId": "cmgk803tm000csajt6o5g9vem",
+ *       "candidateName": "Juan Pérez",
+ *       "totalPoints": 425,
+ *       "percentage": 56.67,
+ *       "position": 1,
+ *       "votes": { ... }
+ *     }
+ *   }
+ * }
  */
 export const getCandidateResult = async (req, res, next) => {
   try {
@@ -468,6 +594,34 @@ export const getCandidateResult = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Calcula y guarda una instantánea de los resultados actuales en la base de datos.
+ * Reemplaza los resultados anteriores guardados con los nuevos cálculos.
+ * 
+ * @async
+ * @function saveResults
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON 200 con confirmación y número de resultados guardados
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Guardar resultados
+ * POST /api/results/save
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "message": "Resultados guardados exitosamente",
+ *   "data": {
+ *     "savedResults": 5,
+ *     "calculatedAt": "2025-10-23T10:30:00Z"
+ *   }
+ * }
  */
 export const saveResults = async (req, res, next) => {
   try {
@@ -579,6 +733,44 @@ export const saveResults = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Obtiene los resultados que han sido guardados previamente como snapshot.
+ * Retorna los resultados en orden de posición.
+ * 
+ * @async
+ * @function getSavedResults
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con resultados guardados
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener resultados guardados
+ * GET /api/results
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "count": 5,
+ *   "data": [
+ *     {
+ *       "candidateId": "id1",
+ *       "position": 1,
+ *       "votes": 425,
+ *       "percentage": 56.67,
+ *       "candidate": {
+ *         "id": "id1",
+ *         "name": "Juan Pérez",
+ *         "municipality": "Villahermosa",
+ *         "photoUrl": "https://example.com/photo.jpg"
+ *       }
+ *     }
+ *   ]
+ * }
  */
 export const getSavedResults = async (req, res, next) => {
   try {
