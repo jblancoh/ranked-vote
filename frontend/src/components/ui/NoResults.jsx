@@ -5,7 +5,7 @@ const NoResults = ({ refresh }) => {
   return (
     <div className="container-custom pt-20 pb-28 2xl:pt-32">
       <div className="max-w-md flex flex-col items-center gap-6 text-center m-auto animate-fade-in duration-1000">
-        <span className="material-symbols-outlined text-8xl text-primary">🗳️</span>
+        <span className="text-8xl text-primary">🗳️</span>
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-gray-900 dark:text-gray-100 text-2xl font-bold leading-tight tracking-tight">
             Aún no hay votos
@@ -15,8 +15,8 @@ const NoResults = ({ refresh }) => {
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <Link to="/vote" className="btn-primary w-full">
-            <span className="truncate">Hacer mi Prediccion</span>
+          <Link to="/vote" className="btn-primary">
+            <span className="truncate">Hacer mi Predicción</span>
           </Link>
           <Button variant="outline" onClick={refresh}>
             <span className="truncate">Actualizar</span>

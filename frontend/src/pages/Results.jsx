@@ -40,6 +40,14 @@ const Results = () => {
     '#3b82f6',
   ]
 
+  const STAGGER_CLASSES = [
+    'animate-stagger-1',
+    'animate-stagger-2',
+    'animate-stagger-3',
+    'animate-stagger-4',
+    'animate-stagger-5',
+  ]
+
   const handleRefresh = async () => {
     setIsRefreshing(true)
     await refreshResults()
@@ -188,17 +196,10 @@ const Results = () => {
 
               <div className="space-y-3">
                 {results?.results?.slice(0, 10).map((item, index) => {
-                  const staggerClasses = [
-                    'animate-stagger-1',
-                    'animate-stagger-2',
-                    'animate-stagger-3',
-                    'animate-stagger-4',
-                    'animate-stagger-5',
-                  ]
                   return (
                     <div
                       key={item.candidateId}
-                      className={`p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${staggerClasses[index % 5]}`}
+                      className={`p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${STAGGER_CLASSES[index % 5]}`}
                     >
                       <div className="flex items-center space-x-3">
                         <div
@@ -368,17 +369,10 @@ const Results = () => {
                   </thead>
                   <tbody>
                     {results?.results?.map((item, index) => {
-                      const staggerClasses = [
-                        'animate-stagger-1',
-                        'animate-stagger-2',
-                        'animate-stagger-3',
-                        'animate-stagger-4',
-                        'animate-stagger-5',
-                      ]
                       return (
                         <tr
                           key={item.candidateId}
-                          className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors ${staggerClasses[index % 5]}`}
+                          className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors ${STAGGER_CLASSES[index % 5]}`}
                         >
                           <td className="py-3 px-2 text-sm font-bold text-gray-700 dark:text-gray-200">
                             {item.position}
