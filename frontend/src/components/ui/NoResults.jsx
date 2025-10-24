@@ -4,7 +4,7 @@ import Button from './Button'
 const NoResults = ({ refresh }) => {
   return (
     <div className="container-custom pt-20 pb-28 2xl:pt-32">
-      <div className="max-w-md flex flex-col items-center gap-6 text-center m-auto">
+      <div className="max-w-md flex flex-col items-center gap-6 text-center m-auto animate-fade-in duration-1000">
         <span className="material-symbols-outlined text-8xl text-primary">🗳️</span>
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-gray-900 dark:text-gray-100 text-2xl font-bold leading-tight tracking-tight">
