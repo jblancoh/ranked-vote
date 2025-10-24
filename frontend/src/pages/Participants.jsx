@@ -1,10 +1,12 @@
 import { useCandidates } from '../hooks/useCandidates'
 import { CandidateCard, CardImage, CardContent, CardFooter } from '../components/ui/CandidateCard'
 import Loading from '../components/ui/Loading'
-import { generateVariantStyle } from '../utils/variants-styles'
+import { getVariantsKeys } from '../utils'
 
 const Participants = () => {
   const { candidates, loading } = useCandidates()
+
+  const variantKeys = getVariantsKeys()
 
   if (loading) {
     return <Loading className="min-h-screen" text="Cargando candidatas..." />
@@ -28,13 +30,16 @@ const Participants = () => {
         {/* List of participants */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 gap-y-16 mt-16">
           {/* Card */}
-          {candidates?.map((candidate, index) => {
-            const variants = generateVariantStyle()
-            const variantKeys = Object.keys(variants).map((key) => key.slice(1))
+          {candidates?.map((candidate) => {
             const variantIndex = Math.floor(Math.random() * variantKeys.length)
 
             return (
-              <CandidateCard key={index} hoverable borderless className={variantKeys[variantIndex]}>
+              <CandidateCard
+                key={candidate.id}
+                hoverable
+                elevated
+                className={variantKeys[variantIndex]}
+              >
                 <div className="relative w-48 h-48 mx-auto">
                   <div className="card-photo-gradient absolute inset-0 bg-gradient-to-br rounded-full opacity-20 dark:opacity-40" />
                   <CardImage

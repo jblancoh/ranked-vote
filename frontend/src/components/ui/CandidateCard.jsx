@@ -22,7 +22,7 @@ const card = tv({
         base: 'border-none shadow',
       },
     },
-    elavated: {
+    elevated: {
       true: {
         base: 'shadow',
       },
@@ -44,12 +44,12 @@ const card = tv({
 export const CandidateCard = ({
   hoverable = false,
   borderless = false,
-  elavated = false,
+  elevated = false,
   padding = 'md',
   children,
   className,
 }) => {
-  const { base } = card({ hoverable, borderless, elavated, padding })
+  const { base } = card({ hoverable, borderless, elevated, padding })
 
   return <div className={cn(base(), className)}>{children}</div>
 }

@@ -1,11 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 
 import plugin from 'tailwindcss/plugin'
-import { parseColor } from 'tailwindcss/lib/util/color'
 import { generateVariantStyle } from './src/utils'
 
 /* Converts HEX color to RGB */
-const toRGB = (value) => parseColor(value).color.join(' ')
+// const toRGB = (value) => parseColor(value).color.join(' ')
 
 export default {
   darkMode: 'class',
@@ -82,7 +81,7 @@ export default {
   },
   plugins: [
     plugin(function ({ addComponents, theme }) {
-      addComponents(generateVariantStyle(theme, toRGB))
+      addComponents(generateVariantStyle(theme))
     }),
   ],
 }
