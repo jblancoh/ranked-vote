@@ -22,6 +22,9 @@ dist/
 build/
 *.tsbuildinfo
 
+# Documentation generated
+backend/docs/jsdoc/
+
 # Logs
 logs/
 *.log
