@@ -1,4 +1,5 @@
 import { getPrisma } from '../utils/prisma.js';
+import { POINTS } from '../constants/points.js';
 
 /**
  * Sistema de puntuación para votación por ranking.
@@ -16,13 +17,6 @@ import { getPrisma } from '../utils/prisma.js';
  * const pointsFor1st = POINTS.firstPlace; // 5
  * const totalMaxPoints = Object.values(POINTS).reduce((a, b) => a + b); // 15
  */
-const POINTS = {
-  firstPlace: 5,
-  secondPlace: 4,
-  thirdPlace: 3,
-  fourthPlace: 2,
-  fifthPlace: 1
-};
 
 /**
  * @swagger

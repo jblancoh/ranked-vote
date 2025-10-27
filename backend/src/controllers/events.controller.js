@@ -1,5 +1,5 @@
 import { getPrisma } from '../utils/prisma.js';
-
+import { POINTS } from '../constants/points.js';
 /**
  * @swagger
  * /api/events:
@@ -623,6 +623,93 @@ export const toggleVotingStatus = async (req, res, next) => {
       message: `Votación ${updatedEvent.votingOpen ? 'abierta' : 'cerrada'} exitosamente`,
       data: updatedEvent
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+  * Get stats (total votes, hourly turnout, top 5 candidates.)
+  * @route GET /api/events/:id/stats
+  */
+export const getEventStats = async (req, res, next) => {
+  const prisma = getPrisma(req.tenantId);
+  const { id } = req.params;
+
+  try {
+    const [event, totalVotes, topCandidatesAgg, votesByHourAgg] = await prisma.$transaction([
+      prisma.event.findUnique({ where: { id } }),
+
+      prisma.vote.count({ where: { eventId: id } }),
+
+      prisma.$queryRaw`
+        SELECT candidateId AS "candidateId", SUM(points)::integer AS points
+        FROM (
+          SELECT "firstPlace" AS candidateId, ${POINTS.firstPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "secondPlace" AS candidateId, ${POINTS.secondPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "thirdPlace" AS candidateId, ${POINTS.thirdPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "fourthPlace" AS candidateId, ${POINTS.fourthPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "fifthPlace" AS candidateId, ${POINTS.fifthPlace} AS points FROM votes WHERE "eventId" = ${id}
+            ) AS unpivoted_votes
+          WHERE candidateId IS NOT NULL
+          GROUP BY candidateId
+          ORDER BY points DESC
+          LIMIT 5
+      `,
+      
+      prisma.$queryRaw`
+        SELECT EXTRACT(hour FROM "createdAt")::integer AS hour, COUNT(*)::integer AS count
+        FROM votes
+        WHERE "eventId" = ${id}
+        GROUP BY hour
+      `
+    ]);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Evento no encontrado',
+      });
+    }
+
+    const votesByHour = votesByHourAgg.reduce((acc, row) => {
+      acc[row.hour] = row.count;
+      return acc;
+    }, {});
+    
+    let topCandidates = [];
+    if (topCandidatesAgg.length > 0) {
+      
+      const candidateIds = topCandidatesAgg.map(c => c.candidateId);
+
+      const candidateDetails = await prisma.candidate.findMany({
+        where: { id: { in: candidateIds } },
+        select: { id: true, name: true, municipality: true, photoUrl: true, bio: true }
+      });
+
+      const pointsMap = new Map(topCandidatesAgg.map(c => [c.candidateId, c.points]));
+      
+      topCandidates = candidateDetails
+        .map(detail => ({
+          ...detail,
+          points: pointsMap.get(detail.id) || 0,
+        }))
+        .sort((a, b) => b.points - a.points); //ordenamos por si findMany no respeta el orden
+    }
+
+    res.json({
+      success: true,
+      data: {
+        totalVotes,
+        votesByHour,
+        topCandidates,
+      },
+    });
+
   } catch (error) {
     next(error);
   }
