@@ -6,6 +6,7 @@ import Vote from './pages/Vote'
 import Results from './pages/Results'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
+import { Participants } from './pages'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/participants" element={<Participants />} />
             <Route path="/vote" element={<Vote />} />
             <Route path="/results" element={<Results />} />
             <Route path="/about" element={<About />} />

@@ -149,6 +149,41 @@ import { getPrisma } from "../utils/prisma.js";
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Obtiene todos los candidatos con soporte para paginación y filtrado.
+ * 
+ * @async
+ * @function getAllCandidates
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.query - Parámetros de consulta
+ * @param {boolean} [req.query.active] - Filtrar por estado activo (true/false)
+ * @param {number} [req.query.page=1] - Número de página (mínimo 1)
+ * @param {number} [req.query.limit=20] - Elementos por página (1-100)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con lista de candidatos y metadatos de paginación
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener candidatos activos, página 2, 10 por página
+ * GET /api/candidates?active=true&page=2&limit=10
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "count": 10,
+ *   "totalCount": 25,
+ *   "pagination": {
+ *     "currentPage": 2,
+ *     "totalPages": 3,
+ *     "hasNextPage": true,
+ *     "hasPrevPage": true
+ *   },
+ *   "data": [...]
+ * }
+ */
 export const getAllCandidates = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
@@ -269,6 +304,37 @@ export const getAllCandidates = async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Obtiene un candidato específico por su ID.
+ * 
+ * @async
+ * @function getCandidateById
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.params - Parámetros de ruta
+ * @param {string} req.params.id - ID único del candidato (CUID)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con detalles del candidato o error 404
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Obtener candidato por ID
+ * GET /api/candidates/cmgk803tm000csajt6o5g9vem
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "data": {
+ *     "id": "cmgk803tm000csajt6o5g9vem",
+ *     "name": "Embajadora Nacajuca",
+ *     "municipality": "Nacajuca",
+ *     "bio": "Representante del municipio",
+ *     "_count": { "votes": 10 }
+ *   }
+ * }
+ */
 export const getCandidateById = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
@@ -367,6 +433,43 @@ export const getCandidateById = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Crea un nuevo candidato en el sistema.
+ * 
+ * @async
+ * @function createCandidate
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.body - Cuerpo de la solicitud
+ * @param {string} req.body.name - Nombre completo del candidato (requerido)
+ * @param {string} req.body.municipality - Municipio del candidato (requerido)
+ * @param {string} [req.body.photoUrl] - URL de la foto del candidato (opcional)
+ * @param {string} [req.body.bio] - Biografía del candidato (opcional)
+ * @param {number} [req.body.order] - Orden de aparición del candidato (opcional)
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON 201 con candidato creado
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Crear nuevo candidato
+ * POST /api/candidates
+ * {
+ *   "name": "Juan Pérez",
+ *   "municipality": "Villahermosa",
+ *   "photoUrl": "https://example.com/photo.jpg",
+ *   "bio": "Descripción del candidato",
+ *   "order": 1
+ * }
+ * 
+ * // Respuesta exitosa (201)
+ * {
+ *   "success": true,
+ *   "message": "Candidato creado exitosamente",
+ *   "data": { ... }
+ * }
  */
 export const createCandidate = async (req, res, next) => {
   try {
@@ -478,6 +581,43 @@ export const createCandidate = async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Actualiza los datos de un candidato existente.
+ * 
+ * @async
+ * @function updateCandidate
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.params - Parámetros de ruta
+ * @param {string} req.params.id - ID único del candidato
+ * @param {Object} req.body - Cuerpo de la solicitud (todos los campos opcionales)
+ * @param {string} [req.body.name] - Nombre completo del candidato
+ * @param {string} [req.body.municipality] - Municipio del candidato
+ * @param {string} [req.body.photoUrl] - URL de la foto del candidato
+ * @param {string} [req.body.bio] - Biografía del candidato
+ * @param {number} [req.body.order] - Orden de aparición del candidato
+ * @param {boolean} [req.body.active] - Estado activo del candidato
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con candidato actualizado
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Actualizar candidato
+ * PUT /api/candidates/cmgk803tm000csajt6o5g9vem
+ * {
+ *   "bio": "Nueva biografía",
+ *   "active": false
+ * }
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "message": "Candidato actualizado exitosamente",
+ *   "data": { ... }
+ * }
+ */
 export const updateCandidate = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
@@ -563,6 +703,31 @@ export const updateCandidate = async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * Elimina un candidato del sistema.
+ * 
+ * @async
+ * @function deleteCandidate
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.params - Parámetros de ruta
+ * @param {string} req.params.id - ID único del candidato a eliminar
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON 200 confirmar eliminación
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Eliminar candidato
+ * DELETE /api/candidates/cmgk803tm000csajt6o5g9vem
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "message": "Candidato eliminado exitosamente"
+ * }
+ */
 export const deleteCandidate = async (req, res, next) => {
   try {
     const prisma = getPrisma(req.tenantId);
@@ -639,6 +804,32 @@ export const deleteCandidate = async (req, res, next) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * Alterna el estado activo/inactivo de un candidato.
+ * 
+ * @async
+ * @function toggleCandidateStatus
+ * @param {Object} req - Objeto de solicitud Express
+ * @param {string} req.tenantId - ID del tenant (multi-tenancy)
+ * @param {Object} req.params - Parámetros de ruta
+ * @param {string} req.params.id - ID único del candidato
+ * @param {Object} res - Objeto de respuesta Express
+ * @param {Function} next - Función middleware de siguiente
+ * @returns {void} Envía respuesta JSON con candidato actualizado
+ * @throws {Error} Pasa errores al middleware de manejo de errores
+ * 
+ * @example
+ * // Alternar estado del candidato
+ * PATCH /api/candidates/cmgk803tm000csajt6o5g9vem/toggle
+ * 
+ * // Respuesta exitosa (200)
+ * {
+ *   "success": true,
+ *   "message": "Candidato activado exitosamente",
+ *   "data": { "id": "...", "active": true, ... }
+ * }
  */
 export const toggleCandidateStatus = async (req, res, next) => {
   try {
