@@ -4,6 +4,12 @@
  * Automatically filters all queries by tenantId to ensure data isolation
  * between different tenants in a multi-tenant architecture.
  */
+/**
+ * Códigos de error del middleware de tenant
+ * - TENANT_NOT_FOUND: No existe un tenant con el identificador proporcionado
+ * - TENANT_INACTIVE: El tenant existe pero está inactivo
+ * - TENANT_IDENTIFICATION_FAILED: Error inesperado al identificar el tenant
+ */
 
 // Models that have tenantId field
 const TENANT_MODELS = [
@@ -129,7 +135,7 @@ export const extractTenantMiddleware = async (req, res, next) => {
     const { PrismaClient } = await import('@prisma/client');
     const prisma = new PrismaClient();
 
-    // Look up tenant by slug or ID
+    // Buscar tenant activo primero
     const tenant = await prisma.tenant.findFirst({
       where: {
         OR: [
@@ -142,11 +148,44 @@ export const extractTenantMiddleware = async (req, res, next) => {
     });
 
     if (!tenant) {
+      // Verificar si existe pero está inactivo
+      const tenantExists = await prisma.tenant.findFirst({
+        where: {
+          OR: [
+            { id: tenantIdentifier },
+            { slug: tenantIdentifier },
+            { subdomain: tenantIdentifier }
+          ]
+        }
+      });
+
+      if (tenantExists && tenantExists.active === false) {
+        return res.status(403).json({
+          success: false,
+          code: 'TENANT_INACTIVE',
+          error: 'Tenant inactivo',
+          message: 'El tenant existe pero está inactivo. Contacta al administrador para reactivarlo.',
+          detalles: {
+            identificador: tenantIdentifier,
+            metodoIdentificacion: identificationMethod
+          }
+        });
+      }
+
       return res.status(404).json({
         success: false,
-        error: 'Tenant not found',
-        message: `No active tenant found for: ${tenantIdentifier}`,
-        identificationMethod
+        code: 'TENANT_NOT_FOUND',
+        error: 'Tenant no encontrado',
+        message: 'No se encontró un tenant con el identificador proporcionado.',
+        sugerencias: [
+          'Verifica el valor del encabezado X-Tenant-Slug o X-Tenant-Id',
+          'Prueba con el parámetro ?tenant=slug en la URL',
+          'Confirma que el tenant esté creado y activo en el sistema'
+        ],
+        detalles: {
+          identificador: tenantIdentifier,
+          metodoIdentificacion: identificationMethod
+        }
       });
     }
 
@@ -162,8 +201,12 @@ export const extractTenantMiddleware = async (req, res, next) => {
     console.error('Tenant middleware error:', error);
     return res.status(500).json({
       success: false,
-      error: 'Failed to identify tenant',
-      message: error.message
+      code: 'TENANT_IDENTIFICATION_FAILED',
+      error: 'Error al identificar el tenant',
+      message: 'Ocurrió un error inesperado al procesar el tenant.',
+      detalles: {
+        causa: error.message
+      }
     });
   }
 };
