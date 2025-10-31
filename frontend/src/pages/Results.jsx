@@ -14,7 +14,7 @@ import {
 } from 'recharts'
 import { useResults } from '../hooks/useResults'
 import ExportButton from '../components/admin/ExportButton'
-import votesApi from '../services/votes'
+import { votesApi } from '../services/votes'
 
 const Results = () => {
   const { results, loading, error, refreshResults } = useResults()
