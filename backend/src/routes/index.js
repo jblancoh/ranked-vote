@@ -3,6 +3,7 @@ import candidatesRoutes from './candidates.routes.js';
 import votesRoutes from './votes.routes.js';
 import resultsRoutes from './results.routes.js';
 import eventsRoutes from './events.routes.js';
+import statsRoutes from './stats.routes.js';
 
 const router = express.Router();
 
@@ -62,7 +63,8 @@ router.get('/', (req, res) => {
       events: '/api/events',
       candidates: '/api/candidates',
       votes: '/api/votes',
-      results: '/api/results'
+      results: '/api/results',
+      admin: '/api/admin/stats'
     },
     documentation: 'https://github.com/dev-night-talk/vota-flor/blob/main/docs/API.md'
   });
@@ -73,5 +75,6 @@ router.use('/events', eventsRoutes);
 router.use('/candidates', candidatesRoutes);
 router.use('/votes', votesRoutes);
 router.use('/results', resultsRoutes);
+router.use('/admin/stats', statsRoutes);
 
 export default router;
