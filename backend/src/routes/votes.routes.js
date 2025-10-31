@@ -5,6 +5,8 @@ import {
   getVoteCount,
   getAllVotes
 } from '../controllers/votes.controller.js';
+import { validate } from "../middleware/validateSchema.js";
+import { voteSchema } from "../schemas/vote.schema.js";
 
 const router = express.Router();
 
@@ -13,7 +15,7 @@ const router = express.Router();
  * @desc    Submit a vote
  * @access  Public
  */
-router.post('/', submitVote);
+router.post('/', validate(voteSchema), submitVote);
 
 /**
  * @route   GET /api/votes/check
