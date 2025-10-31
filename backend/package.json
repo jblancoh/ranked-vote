@@ -16,24 +16,28 @@
     "lint": "eslint src --ext js",
     "lint:fix": "eslint src --ext js --fix",
     "format": "prettier --write \"src/**/*.js\"",
-    "format:check": "prettier --check \"src/**/*.js\""
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "docs:generate": "jsdoc -c jsdoc.conf.json",
+    "docs:serve": "npx http-server ./docs/jsdoc -p 8081 -o"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "zod": "^3.23.8",
     "@prisma/client": "^5.18.0",
     "@supabase/supabase-js": "^2.45.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
-    "winston": "^3.14.2"
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.14.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4",
-    "prisma": "^5.18.0",
     "eslint": "^8.57.0",
-    "prettier": "^3.3.3"
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3",
+    "prisma": "^5.18.0"
   }
 }

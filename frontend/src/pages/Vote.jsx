@@ -204,7 +204,7 @@ const Vote = () => {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Candidatas List */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 animate-slide-in-left">
               <div className="card p-6 mb-6">
                 <div className="flex justify-between items-center mb-4 flex-wrap">
                   <div className="flex flex-1 flex-col justify-between">
@@ -306,7 +306,7 @@ const Vote = () => {
             </div>
 
             {/* Selection Panel */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 animate-slide-in-right">
               <div className="card p-6 sticky top-20">
                 <h2 className="text-xl font-display font-bold mb-4">
                   Tu Top 5
@@ -314,14 +314,14 @@ const Vote = () => {
 
                 {/* Positions */}
                 <div className="space-y-3 mb-6">
-                  {positions.map((position) => {
+                  {positions.map((position, index) => {
                     const candidateId = selectedCandidates[position.key]
                     const candidate = candidates?.find(c => c.id === candidateId)
 
                     return (
                       <div
                         key={position.key}
-                        className={`p-3 border-2 rounded-lg transition-all ${candidate
+                        className={`p-3 border-2 rounded-lg transition-all animate-stagger-${index + 1} ${candidate
                             ? getColorClasses(position.color)
                             : 'border-gray-200 bg-gray-50 dark:bg-gray-900 dark:border-gray-700'
                           }`}

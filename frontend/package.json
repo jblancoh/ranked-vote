@@ -15,6 +15,7 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css}\""
   },
   "dependencies": {
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.7.4",
     "clsx": "^2.1.1",
     "lucide-react": "^0.436.0",
@@ -24,6 +25,8 @@
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^6.26.0",
     "recharts": "^2.12.7",
+    "tailwind-merge": "^3.3.1",
+    "tailwind-variants": "^3.1.1",
     "use-debounce": "^10.0.6"
   },
   "devDependencies": {

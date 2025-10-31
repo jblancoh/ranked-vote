@@ -4,9 +4,12 @@
 
 [![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-orange.svg)](https://hacktoberfest.com)
-[![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)](CONTRIBUTING.md)
+[![PRs Bienvenidos](https://img.shields.io/badge/PRs-bienvenidos-brightgreen.svg)](docs/CONTRIBUTING.md)
+
 
 Ranked Vote es una aplicación web moderna que permite a las comunidades organizar votaciones con ranking para cualquier tipo de evento o concurso. Ya sea que estés eligiendo el mejor platillo local, representante comunitario o símbolo cultural, Ranked Vote lo hace fácil y transparente.
+
+Si deseas consultar la versión en inglés de esta documentación, puedes verla en [README.en.md](README.en.md).
 
 ## ✨ Características
 
@@ -60,7 +63,7 @@ La forma más fácil de empezar. Solo necesitas **Node.js 18+** instalado.
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/dev-night-talk/ranked-vote.git
+git clone https://github.com/jblancoh/ranked-vote.git
 cd ranked-vote
 
 # 2. Ejecutar instalación automática
@@ -80,8 +83,8 @@ El script te guiará paso a paso para:
 ```
 
 ¡Eso es todo! Abre tu navegador en:
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:5001
+- **Frontend**: <http://localhost:5173>
+- **Backend API**: <http://localhost:5001>
 
 ### 📚 Más Información
 
@@ -161,7 +164,7 @@ Supabase (tier gratuito)
 <!-- Ver [Guía de Despliegue](docs/DEPLOYMENT.md) para instrucciones detalladas. -->
 
 📄 Licencia
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para detalles.
+Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
 🙏 Agradecimientos
 
 Creado por la comunidad [Dev Night Talk](https://www.meetup.com/es-ES/dev-night-talks/)
@@ -171,7 +174,8 @@ Potenciado por tecnologías open-source
 📞 Contacto y Comunidad
 
 GitHub: [@jblancoh](https://github.com/jblancoh)
-Issues: [Reporta un bug o solicita una función]([URL](https://github.com/jblancoh/ranked-vote/issues))
+Issues: [Reporta un bug o solicita una función](https://github.com/jblancoh/ranked-vote/issues)
+
 Comunidad: Dev Night Talk - Todos los jueves 7-10 PM
 
 🗺️ Hoja de Ruta
@@ -195,4 +199,3 @@ Si encuentras útil este proyecto, por favor considera:
 📢 Compartir con tu comunidad
 
 Hecho con ❤️ por la comunidad Dev Night Talk en Villahermosa, Tabasco 🇲🇽
-

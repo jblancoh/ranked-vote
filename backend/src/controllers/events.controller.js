@@ -1,8 +1,95 @@
 import { getPrisma } from '../utils/prisma.js';
-
+import { POINTS } from '../constants/points.js';
 /**
- * Get all events
- * @route GET /api/events
+ * @swagger
+ * /api/events:
+ *   get:
+ *     summary: Obtener todos los eventos
+ *     description: Retorna una lista de eventos con opción de filtrar por estado activo
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: query
+ *         name: active
+ *         schema:
+ *           type: boolean
+ *         description: Filtrar eventos por estado activo (true/false)
+ *         example: true
+ *     responses:
+ *       200:
+ *         description: Lista de eventos obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 1
+ *                   description: Número de eventos en la respuesta
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "cmgk803u00010sajt87w66zpv"
+ *                         description: ID único del evento
+ *                       tenantId:
+ *                         type: string
+ *                         example: "cmgk803t00000sajte670dar0"
+ *                         description: ID del tenant (multi-tenant)
+ *                       name:
+ *                         type: string
+ *                         example: "Certamen Flor de Tabasco 2026"
+ *                         description: Nombre del evento
+ *                       description:
+ *                         type: string
+ *                         example: "Elección de la representante floral de Tabasco"
+ *                         description: Descripción del evento
+ *                       startDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2026-04-01T00:00:00.000Z"
+ *                         description: Fecha y hora de inicio del evento
+ *                       endDate:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2026-04-30T23:59:59.000Z"
+ *                         description: Fecha y hora de fin del evento
+ *                       active:
+ *                         type: boolean
+ *                         example: true
+ *                         description: Estado activo del evento
+ *                       votingOpen:
+ *                         type: boolean
+ *                         example: true
+ *                         description: Estado de la votación (abierta/cerrada)
+ *                       config:
+ *                         type: object
+ *                         example: {}
+ *                         description: Configuración adicional del evento
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-10-10T02:21:32.904Z"
+ *                         description: Fecha de creación del evento
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-10-10T02:21:32.904Z"
+ *                         description: Fecha de última actualización del evento
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getAllEvents = async (req, res, next) => {
   try {
@@ -31,8 +118,39 @@ export const getAllEvents = async (req, res, next) => {
 };
 
 /**
- * Get current/active event
- * @route GET /api/events/current
+ * @swagger
+ * /api/events/current:
+ *   get:
+ *     summary: Obtener evento actual
+ *     description: Retorna el evento que está actualmente activo y dentro del rango de fechas
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     responses:
+ *       200:
+ *         description: Evento actual encontrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: No hay eventos activos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getCurrentEvent = async (req, res, next) => {
   try {
@@ -67,8 +185,48 @@ export const getCurrentEvent = async (req, res, next) => {
 };
 
 /**
- * Get event by ID
- * @route GET /api/events/:id
+ * @swagger
+ * /api/events/{id}:
+ *   get:
+ *     summary: Obtener evento por ID
+ *     description: Retorna los detalles de un evento específico por su ID
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Evento encontrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const getEventById = async (req, res, next) => {
   try {
@@ -96,8 +254,75 @@ export const getEventById = async (req, res, next) => {
 };
 
 /**
- * Create new event
- * @route POST /api/events
+ * @swagger
+ * /api/events:
+ *   post:
+ *     summary: Crear nuevo evento
+ *     description: Crea un nuevo evento en el sistema
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - startDate
+ *               - endDate
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nombre del evento
+ *                 example: 'Festival Cultural 2024'
+ *               description:
+ *                 type: string
+ *                 description: Descripción del evento
+ *                 example: 'Evento cultural con votación comunitaria'
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de inicio del evento
+ *                 example: '2024-01-01T00:00:00.000Z'
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de fin del evento
+ *                 example: '2024-01-31T23:59:59.000Z'
+ *               votingOpen:
+ *                 type: boolean
+ *                 description: Estado de la votación
+ *                 example: true
+ *     responses:
+ *       201:
+ *         description: Evento creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Evento creado exitosamente'
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       400:
+ *         description: Datos de entrada inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const createEvent = async (req, res, next) => {
   try {
@@ -125,8 +350,90 @@ export const createEvent = async (req, res, next) => {
 };
 
 /**
- * Update event
- * @route PUT /api/events/:id
+ * @swagger
+ * /api/events/{id}:
+ *   put:
+ *     summary: Actualizar evento
+ *     description: Actualiza los datos de un evento existente
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nombre del evento
+ *                 example: 'Festival Cultural 2024'
+ *               description:
+ *                 type: string
+ *                 description: Descripción del evento
+ *                 example: 'Evento cultural con votación comunitaria'
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de inicio del evento
+ *                 example: '2024-01-01T00:00:00.000Z'
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Fecha y hora de fin del evento
+ *                 example: '2024-01-31T23:59:59.000Z'
+ *               active:
+ *                 type: boolean
+ *                 description: Estado activo del evento
+ *                 example: true
+ *               votingOpen:
+ *                 type: boolean
+ *                 description: Estado de la votación
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Evento actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Evento actualizado exitosamente'
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       400:
+ *         description: Datos de entrada inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const updateEvent = async (req, res, next) => {
   try {
@@ -168,8 +475,49 @@ export const updateEvent = async (req, res, next) => {
 };
 
 /**
- * Delete event
- * @route DELETE /api/events/:id
+ * @swagger
+ * /api/events/{id}:
+ *   delete:
+ *     summary: Eliminar evento
+ *     description: Elimina un evento del sistema
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Evento eliminado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Evento eliminado exitosamente'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const deleteEvent = async (req, res, next) => {
   try {
@@ -201,8 +549,51 @@ export const deleteEvent = async (req, res, next) => {
 };
 
 /**
- * Toggle voting status
- * @route PATCH /api/events/:id/voting
+ * @swagger
+ * /api/events/{id}/voting:
+ *   patch:
+ *     summary: Cambiar estado de votación del evento
+ *     description: Alterna el estado de votación (abierta/cerrada) de un evento
+ *     tags: [Events]
+ *     security:
+ *       - TenantHeader: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: ID único del evento
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: Estado de votación actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Votación abierta exitosamente'
+ *                 data:
+ *                   $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Evento no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export const toggleVotingStatus = async (req, res, next) => {
   try {
@@ -232,6 +623,93 @@ export const toggleVotingStatus = async (req, res, next) => {
       message: `Votación ${updatedEvent.votingOpen ? 'abierta' : 'cerrada'} exitosamente`,
       data: updatedEvent
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+  * Get stats (total votes, hourly turnout, top 5 candidates.)
+  * @route GET /api/events/:id/stats
+  */
+export const getEventStats = async (req, res, next) => {
+  const prisma = getPrisma(req.tenantId);
+  const { id } = req.params;
+
+  try {
+    const [event, totalVotes, topCandidatesAgg, votesByHourAgg] = await prisma.$transaction([
+      prisma.event.findUnique({ where: { id } }),
+
+      prisma.vote.count({ where: { eventId: id } }),
+
+      prisma.$queryRaw`
+        SELECT candidateId AS "candidateId", SUM(points)::integer AS points
+        FROM (
+          SELECT "firstPlace" AS candidateId, ${POINTS.firstPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "secondPlace" AS candidateId, ${POINTS.secondPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "thirdPlace" AS candidateId, ${POINTS.thirdPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "fourthPlace" AS candidateId, ${POINTS.fourthPlace} AS points FROM votes WHERE "eventId" = ${id}
+              UNION ALL
+              SELECT "fifthPlace" AS candidateId, ${POINTS.fifthPlace} AS points FROM votes WHERE "eventId" = ${id}
+            ) AS unpivoted_votes
+          WHERE candidateId IS NOT NULL
+          GROUP BY candidateId
+          ORDER BY points DESC
+          LIMIT 5
+      `,
+      
+      prisma.$queryRaw`
+        SELECT EXTRACT(hour FROM "createdAt")::integer AS hour, COUNT(*)::integer AS count
+        FROM votes
+        WHERE "eventId" = ${id}
+        GROUP BY hour
+      `
+    ]);
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: 'Evento no encontrado',
+      });
+    }
+
+    const votesByHour = votesByHourAgg.reduce((acc, row) => {
+      acc[row.hour] = row.count;
+      return acc;
+    }, {});
+    
+    let topCandidates = [];
+    if (topCandidatesAgg.length > 0) {
+      
+      const candidateIds = topCandidatesAgg.map(c => c.candidateId);
+
+      const candidateDetails = await prisma.candidate.findMany({
+        where: { id: { in: candidateIds } },
+        select: { id: true, name: true, municipality: true, photoUrl: true, bio: true }
+      });
+
+      const pointsMap = new Map(topCandidatesAgg.map(c => [c.candidateId, c.points]));
+      
+      topCandidates = candidateDetails
+        .map(detail => ({
+          ...detail,
+          points: pointsMap.get(detail.id) || 0,
+        }))
+        .sort((a, b) => b.points - a.points); //ordenamos por si findMany no respeta el orden
+    }
+
+    res.json({
+      success: true,
+      data: {
+        totalVotes,
+        votesByHour,
+        topCandidates,
+      },
+    });
+
   } catch (error) {
     next(error);
   }

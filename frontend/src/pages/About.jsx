@@ -39,7 +39,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Hero Section */}
-      <section className="gradient-primary text-white py-20">
+      <section className="gradient-primary text-white py-20 animate-slide-up">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
             <div className="text-6xl mb-6">🗳️</div>
@@ -55,7 +55,7 @@ const About = () => {
       </section>
 
       {/* Historia */}
-      <section className="py-16">
+      <section className="py-16 animate-slide-in-left">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-display font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
@@ -148,7 +148,7 @@ const About = () => {
       </section>
 
       {/* Municipios Participantes */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-950">
+      <section className="py-16 bg-gray-50 dark:bg-gray-950 animate-slide-in-right">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <MapPin className="mx-auto text-primary-600 dark:text-primary-400 mb-4" size={48} />
@@ -184,7 +184,7 @@ const About = () => {
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="card p-6 text-center">
+            <div className="card p-6 text-center animate-stagger-1">
               <div className="w-16 h-16 gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="text-white" size={32} />
               </div>
@@ -196,7 +196,7 @@ const About = () => {
               </p>
             </div>
 
-            <div className="card p-6 text-center">
+            <div className="card p-6 text-center animate-stagger-2">
               <div className="w-16 h-16 gradient-secondary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="text-white" size={32} />
               </div>
@@ -208,7 +208,7 @@ const About = () => {
               </p>
             </div>
 
-            <div className="card p-6 text-center">
+            <div className="card p-6 text-center animate-stagger-3">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="text-white" size={32} />
               </div>
@@ -224,7 +224,7 @@ const About = () => {
       </section>
 
       {/* Sobre Ranked Vote */}
-      <section className="py-16 bg-primary-50 dark:bg-gray-900">
+      <section className="py-16 bg-primary-50 dark:bg-gray-900 animate-slide-up">
         <div className="container-custom">
           <div className="max-w-3xl mx-auto text-center">
             <Award className="mx-auto text-primary-600 dark:text-primary-400 mb-4" size={48} />

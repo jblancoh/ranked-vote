@@ -7,6 +7,8 @@ import {
   deleteCandidate,
   toggleCandidateStatus
 } from '../controllers/candidates.controller.js';
+import { validate } from "../middleware/validateSchema.js";
+import { candidateSchema, candidateUpdateSchema } from "../schemas/candidate.schema.js";
 
 const router = express.Router();
 
@@ -31,14 +33,14 @@ router.get('/:id', getCandidateById);
  * @desc    Create new candidate
  * @access  Private (should add auth middleware)
  */
-router.post('/', createCandidate);
+router.post('/', validate(candidateSchema), createCandidate);
 
 /**
  * @route   PUT /api/candidates/:id
  * @desc    Update candidate
  * @access  Private (should add auth middleware)
  */
-router.put('/:id', updateCandidate);
+router.put('/:id', validate(candidateUpdateSchema), updateCandidate);
 
 /**
  * @route   DELETE /api/candidates/:id

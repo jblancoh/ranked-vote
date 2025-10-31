@@ -15,6 +15,7 @@ import {
 import { useResults } from '../hooks/useResults'
 import ExportButton from '../components/admin/ExportButton'
 import { votesApi } from '../services/votes'
+import NoResults from '../components/ui/NoResults'
 
 const Results = () => {
   const { results, loading, error, refreshResults } = useResults()
@@ -48,6 +49,13 @@ const Results = () => {
       .then(res => res.success && setVotes(res.data || []))
       .catch(err => console.error('Error loading votes:', err))
   }, [])
+  const STAGGER_CLASSES = [
+    'animate-stagger-1',
+    'animate-stagger-2',
+    'animate-stagger-3',
+    'animate-stagger-4',
+    'animate-stagger-5',
+  ]
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
@@ -107,6 +115,10 @@ const Results = () => {
         </div>
       </div>
     )
+  }
+
+  if (results && results?.totalVotes === 0) {
+    return <NoResults refresh={handleRefresh} />
   }
 
   return (
@@ -181,7 +193,7 @@ const Results = () => {
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Top Candidates - Left Panel */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 animate-slide-in-left">
             <div className="card p-6 sticky top-20">
               <h2 className="text-xl font-display font-bold mb-4 flex items-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
                 <Trophy className="mr-2 text-yellow-500 dark:text-yellow-400" size={24} />
@@ -192,45 +204,51 @@ const Results = () => {
               </p>
 
               <div className="space-y-3">
-                {results?.results?.slice(0, 10).map((item, index) => (
-                  <div
-                    key={item.candidateId}
-                    className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                          index === 0
-                            ? 'bg-yellow-500 dark:bg-yellow-400'
-                            : index === 1
-                              ? 'bg-gray-400 dark:bg-gray-500'
-                              : index === 2
-                                ? 'bg-orange-600 dark:bg-orange-500'
-                                : 'bg-primary-500 dark:bg-primary-400'
-                        }`}
-                      >
-                        {item.position}
+                {results?.results?.slice(0, 10).map((item, index) => {
+                  return (
+                    <div
+                      key={item.candidateId}
+                      className={`p-4 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${STAGGER_CLASSES[index % 5]}`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+                            index === 0
+                              ? 'bg-yellow-500 dark:bg-yellow-400'
+                              : index === 1
+                                ? 'bg-gray-400 dark:bg-gray-500'
+                                : index === 2
+                                  ? 'bg-orange-600 dark:bg-orange-500'
+                                  : 'bg-primary-500 dark:bg-primary-400'
+                          }`}
+                        >
+                          {item.position}
+                        </div>
+                        <div className="flex-grow">
+                          <h3 className="font-bold text-gray-900 dark:text-gray-100">
+                            {item.candidateName}
+                          </h3>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            {item.municipality}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-primary-600 dark:text-primary-300">
+                            {item.totalPoints}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">puntos</p>
+                        </div>
                       </div>
-                      <div className="flex-grow">
-                        <h3 className="font-bold text-gray-900 dark:text-gray-100">
-                          {item.candidateName}
-                        </h3>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {item.municipality}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-bold text-primary-600 dark:text-primary-300">
-                          {item.totalPoints}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">puntos</p>
-                      </div>
-                    </div>
 
-                    {/* Breakdown */}
-                    <div className="mt-3 grid grid-cols-5 gap-1">
-                      {['firstPlace', 'secondPlace', 'thirdPlace', 'fourthPlace', 'fifthPlace'].map(
-                        (pos, idx) => (
+                      {/* Breakdown */}
+                      <div className="mt-3 grid grid-cols-5 gap-1">
+                        {[
+                          'firstPlace',
+                          'secondPlace',
+                          'thirdPlace',
+                          'fourthPlace',
+                          'fifthPlace',
+                        ].map((pos, idx) => (
                           <div key={pos} className="text-center">
                             <div
                               className={`text-xs font-bold ${
@@ -251,17 +269,17 @@ const Results = () => {
                               {idx + 1}°
                             </div>
                           </div>
-                        )
-                      )}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>
 
           {/* Charts - Right Panel */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-8 animate-slide-in-right">
             {/* Bar Chart */}
             <div className="card p-6">
               <h2 className="text-xl font-display font-bold mb-4 flex items-center text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -359,40 +377,42 @@ const Results = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {results?.results?.map((item) => (
-                      <tr
-                        key={item.candidateId}
-                        className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
-                      >
-                        <td className="py-3 px-2 text-sm font-bold text-gray-700 dark:text-gray-200">
-                          {item.position}
-                        </td>
-                        <td className="py-3 px-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {item.candidateName}
-                        </td>
-                        <td className="py-3 px-2 text-sm text-gray-600 dark:text-gray-400">
-                          {item.municipality}
-                        </td>
-                        <td className="py-3 px-2 text-center text-sm text-yellow-600 dark:text-yellow-400 font-medium">
-                          {item.votes.firstPlace}
-                        </td>
-                        <td className="py-3 px-2 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
-                          {item.votes.secondPlace}
-                        </td>
-                        <td className="py-3 px-2 text-center text-sm text-orange-600 dark:text-orange-400 font-medium">
-                          {item.votes.thirdPlace}
-                        </td>
-                        <td className="py-3 px-2 text-center text-sm text-blue-600 dark:text-blue-400 font-medium">
-                          {item.votes.fourthPlace}
-                        </td>
-                        <td className="py-3 px-2 text-center text-sm text-green-600 dark:text-green-400 font-medium">
-                          {item.votes.fifthPlace}
-                        </td>
-                        <td className="py-3 px-2 text-right text-sm font-bold text-primary-600 dark:text-primary-300">
-                          {item.totalPoints}
-                        </td>
-                      </tr>
-                    ))}
+                    {results?.results?.map((item, index) => {
+                      return (
+                        <tr
+                          key={item.candidateId}
+                          className={`border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors ${STAGGER_CLASSES[index % 5]}`}
+                        >
+                          <td className="py-3 px-2 text-sm font-bold text-gray-700 dark:text-gray-200">
+                            {item.position}
+                          </td>
+                          <td className="py-3 px-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {item.candidateName}
+                          </td>
+                          <td className="py-3 px-2 text-sm text-gray-600 dark:text-gray-400">
+                            {item.municipality}
+                          </td>
+                          <td className="py-3 px-2 text-center text-sm text-yellow-600 dark:text-yellow-400 font-medium">
+                            {item.votes.firstPlace}
+                          </td>
+                          <td className="py-3 px-2 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
+                            {item.votes.secondPlace}
+                          </td>
+                          <td className="py-3 px-2 text-center text-sm text-orange-600 dark:text-orange-400 font-medium">
+                            {item.votes.thirdPlace}
+                          </td>
+                          <td className="py-3 px-2 text-center text-sm text-blue-600 dark:text-blue-400 font-medium">
+                            {item.votes.fourthPlace}
+                          </td>
+                          <td className="py-3 px-2 text-center text-sm text-green-600 dark:text-green-400 font-medium">
+                            {item.votes.fifthPlace}
+                          </td>
+                          <td className="py-3 px-2 text-right text-sm font-bold text-primary-600 dark:text-primary-300">
+                            {item.totalPoints}
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -416,7 +436,7 @@ const Results = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 text-center card p-8">
+        <div className="mt-12 text-center card p-8 animate-slide-up">
           <h3 className="text-2xl font-display font-bold mb-4 text-gray-900 dark:text-gray-100 transition-colors duration-300">
             ¿Aún no has votado?
           </h3>

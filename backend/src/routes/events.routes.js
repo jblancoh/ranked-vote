@@ -6,8 +6,11 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
-  toggleVotingStatus
+  toggleVotingStatus,
+  getEventStats
 } from '../controllers/events.controller.js';
+import { validate } from "../middleware/validateSchema.js";
+import { eventSchema, eventUpdateSchema } from "../schemas/event.schema.js";
 
 const router = express.Router();
 
@@ -37,14 +40,14 @@ router.get('/:id', getEventById);
  * @desc    Create new event
  * @access  Private (should add auth middleware)
  */
-router.post('/', createEvent);
+router.post('/', validate(eventSchema), createEvent);
 
 /**
  * @route   PUT /api/events/:id
  * @desc    Update event
  * @access  Private (should add auth middleware)
  */
-router.put('/:id', updateEvent);
+router.put('/:id', validate(eventUpdateSchema), updateEvent);
 
 /**
  * @route   DELETE /api/events/:id
@@ -59,5 +62,12 @@ router.delete('/:id', deleteEvent);
  * @access  Private (should add auth middleware)
  */
 router.patch('/:id/voting', toggleVotingStatus);
+
+/**
+ * @route   GET /api/events/:id/stats
+ * @desc    Get stats (total votes, hourly turnout, top 5 candidates.)
+ * @access  Public
+ */
+router.get("/:id/stats", getEventStats);
 
 export default router;
