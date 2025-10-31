@@ -425,7 +425,7 @@ const Results = () => {
           <h3 className="text-2xl font-display font-bold mb-4">
             📥 Exportar Datos
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             Descarga los resultados y votos individuales en formato CSV o Excel
           </p>
           <ExportButton
